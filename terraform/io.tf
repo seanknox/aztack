@@ -10,3 +10,15 @@ variable "master_ips" {
     "2" = "10.0.1.12"
   }
 }
+
+variable "name" {
+  default = "acstack"
+}
+
+variable "cidr" {
+  default = "10.0.0.0/16"
+}
+
+variable "location" {
+  default = "West US 2"
+}
