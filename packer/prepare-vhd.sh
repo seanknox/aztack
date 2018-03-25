@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-kubernetes_release_tag="v1.9.0"
+kubernetes_release_tag="v1.9.6"
 
 ## Install official Kubernetes package
 

@@ -8,9 +8,9 @@ Still WIP
 ### Packer
 Packer step generates an Azure VHD with
 * Ubuntu 17.10
-* kubelet, kubeadm, kubectl, and kubernete-cni from Kubernetes v1.9.0 via official Kubernetes Ubuntu repo
+* kubelet, kubeadm, kubectl, and kubernete-cni via official Kubernetes Ubuntu repo
 * Docker 1.13.1
-* Downloads Kubernetes component Docker images for faster `kubeadm init`
+* Downloads Kubernetes v1.9.6 component Docker images for faster `kubeadm init`
 
 ### Terraform
 Not implemented yet
