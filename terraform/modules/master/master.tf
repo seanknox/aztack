@@ -58,9 +58,12 @@ resource "azurerm_virtual_machine" "master" {
   }
 
   os_profile {
-    computer_name  = "hostname"
-    admin_username = "testadmin"
-    admin_password = "Password1234!"
+    computer_name  = "k8smaster${ count.index + 1 }"
+    admin_username = "ubuntu"
+    admin_password = "Kangaroo-jeremiah-thereon1!"
+
+    # user_data = "${ data.template_file.cloud-config.rendered }"
+    # custom_data = "${ data.template_file.cloud-config.rendered }"
   }
 
   os_profile_linux_config {

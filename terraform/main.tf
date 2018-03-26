@@ -38,3 +38,15 @@ module "master" {
   # modules
   private-subnet-id = "${ module.vnet.private-subnet-id }"
 }
+
+module "bastion" {
+  source     = "./modules/bastion"
+  depends-id = "${ module.vnet.depends-id }"
+
+  # variables
+  name       = "${ var.name }"
+  location   = "${ var.location }"
+
+  # modules
+  private-subnet-id = "${ module.vnet.private-subnet-id }"
+}
