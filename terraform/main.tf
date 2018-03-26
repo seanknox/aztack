@@ -59,7 +59,7 @@ module "node" {
   # variables
   name       = "${ var.name }"
   location   = "${ var.location }"
-  instances  = 3
+  node_count  = "${ var.node_count }"
   master-ips = "${ var.master-ips }"
 
 

@@ -2,9 +2,9 @@ variable "master-ips" {
   default = "10.0.1.10,10.0.1.11,10.0.1.12"
 }
 
-# variable "master-ips" {
-#   default = "10.0.1.10"
-# }
+variable "node_count" {
+  default = 3
+}
 
 variable "name" {
   default = "acstack"

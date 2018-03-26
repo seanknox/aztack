@@ -7,7 +7,7 @@ variable "master-ips" {}
 variable "name" {}
 variable "location" {}
 variable "private-subnet-id" {}
-variable "instances" {}
+variable "node_count" {}
 variable "depends-id" {}
 variable "bastion-ip" { }
 

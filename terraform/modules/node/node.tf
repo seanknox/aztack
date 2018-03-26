@@ -12,7 +12,7 @@ resource "azurerm_network_interface" "node" {
   location            = "${ var.location }"
   resource_group_name = "${ var.name }"
 
-  count = "${ var.instances }"
+  count = "${ var.node_count }"
 
   ip_configuration {
     name                          = "private"
@@ -28,7 +28,7 @@ resource "azurerm_virtual_machine" "node" {
   network_interface_ids = ["${azurerm_network_interface.node.*.id[count.index]}"]
   vm_size               = "Standard_DS1_v2"
 
-  count = "${ var.instances }"
+  count = "${ var.node_count }"
 
   # Uncomment this line to delete the OS disk automatically when deleting the VM
   delete_os_disk_on_termination = true

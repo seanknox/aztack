@@ -1,6 +1,6 @@
 # ACStack
 
-Provision a Kubernetes cluster with [Packer](https://packer.io) and [Terraform](https://www.terraform.io) on Azure Resource Manager. Inspired by Kelsey Hightower's [kubestack](https://github.com/kelseyhightower/kubestack).
+Provision a Kubernetes cluster with [Packer](https://packer.io) and [Terraform](https://www.terraform.io) on Azure Resource Manager. Inspired by Kelsey Hightower's [kubestack](https://github.com/kelseyhightower/kubestack) and the [tack](https://github.com/kz8s/tack) project.
 
 ## Status
 
@@ -23,7 +23,8 @@ Packer step generates an Azure VHD with
 	- [x] bastion
 	- [x] vnet
 	- [x] resource group
-- [x] example of provisioning in module/bastion
+- [x] example of provisioning in modules/bastion
+- [x] example of provisioning in modules/nodes via bastion
 
 ## Prep
 
@@ -77,10 +78,10 @@ terraform apply
 
 ### Resize the number of worker nodes
 
-Edit `terraform/terraform.tfvars`. Set `worker_count` to the desired value:
+Edit `terraform/terraform.tfvars`. Set `node_count` to the desired value:
 
 ```
-worker_count = 3
+node_count = 3
 ```
 
 Apply the changes:
@@ -91,7 +92,7 @@ terraform apply
 ```
 
 ```
-Apply complete! Resources: 10 added, 0 changed, 0 destroyed.
+Apply complete! Resources: 9 added, 0 changed, 0 destroyed.
 
 The state of your infrastructure has been saved to the path
 below. This state is required to modify and destroy your
@@ -100,7 +101,4 @@ use the `terraform show` command.
 
 State path: terraform.tfstate
 
-Outputs:
-
-  kubernetes-api-server = https://203.0.113.158:6443
 ```
