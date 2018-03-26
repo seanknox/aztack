@@ -81,7 +81,7 @@ terraform apply
 Edit `terraform/terraform.tfvars`. Set `node_count` to the desired value:
 
 ```
-node_count = 3
+node_count = 5
 ```
 
 Apply the changes:
@@ -92,7 +92,7 @@ terraform apply
 ```
 
 ```
-Apply complete! Resources: 9 added, 0 changed, 0 destroyed.
+Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
 
 The state of your infrastructure has been saved to the path
 below. This state is required to modify and destroy your
