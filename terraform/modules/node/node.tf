@@ -73,6 +73,11 @@ resource "azurerm_virtual_machine" "node" {
     }]
   }
 
+  boot_diagnostics {
+    enabled     = "true"
+    storage_uri = "${ var.storage_endpoint }"
+  }
+
   connection {
     host                = "${azurerm_network_interface.node.*.private_ip_address[count.index]}"
     bastion_host        = "${ var.bastion-ip }"

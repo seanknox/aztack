@@ -70,6 +70,11 @@ resource "azurerm_virtual_machine" "bastion" {
     }]
   }
 
+	boot_diagnostics {
+		enabled     = "true"
+		storage_uri = "${ var.storage_endpoint }"
+	}
+
   connection {
     host        = "${azurerm_public_ip.bastion.ip_address}"
     user        = "ubuntu"

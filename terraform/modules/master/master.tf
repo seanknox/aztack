@@ -70,6 +70,11 @@ resource "azurerm_virtual_machine" "master" {
     disable_password_authentication = false
   }
 
+	boot_diagnostics {
+		enabled     = "true"
+		storage_uri = "${ var.storage_endpoint }"
+	}
+
   tags {
     environment = "staging"
   }

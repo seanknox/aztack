@@ -10,6 +10,7 @@ variable "private-subnet-id" {}
 variable "node_count" {}
 variable "depends-id" {}
 variable "bastion-ip" { }
+variable "storage_endpoint" { }
 
 output "depends-id" {
   value = "${null_resource.dummy_dependency.id}"
