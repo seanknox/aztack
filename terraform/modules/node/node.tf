@@ -7,36 +7,28 @@ data "azurerm_image" "image" {
   resource_group_name = "${data.azurerm_resource_group.image.name}"
 }
 
-resource "azurerm_public_ip" "bastion" {
-  name                         = "bastion"
-  location                     = "${ var.location }"
-  resource_group_name          = "${ var.name }"
-  public_ip_address_allocation = "static"
-
-  tags {
-    environment = "test"
-  }
-}
-
-resource "azurerm_network_interface" "bastion" {
-  name                = "bastion"
+resource "azurerm_network_interface" "node" {
+  name                = "node${ count.index + 1 }"
   location            = "${ var.location }"
   resource_group_name = "${ var.name }"
+
+  count = "${ var.instances }"
 
   ip_configuration {
     name                          = "private"
     subnet_id                     = "${ var.private-subnet-id }"
     private_ip_address_allocation = "dynamic"
-    public_ip_address_id          = "${azurerm_public_ip.bastion.id}"
   }
 }
 
-resource "azurerm_virtual_machine" "bastion" {
-  name                  = "bastion"
+resource "azurerm_virtual_machine" "node" {
+  name                  = "k8snode${ count.index + 1 }"
   location              = "${ var.location }"
   resource_group_name   = "${ var.name }"
-  network_interface_ids = ["${azurerm_network_interface.bastion.id}"]
+  network_interface_ids = ["${azurerm_network_interface.node.*.id[count.index]}"]
   vm_size               = "Standard_DS1_v2"
+
+  count = "${ var.instances }"
 
   # Uncomment this line to delete the OS disk automatically when deleting the VM
   delete_os_disk_on_termination = true
@@ -49,16 +41,27 @@ resource "azurerm_virtual_machine" "bastion" {
   }
 
   storage_os_disk {
-    name              = "bastionosdisk"
+    name              = "nodeosdisk${ count.index + 1 }"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
   }
 
+  # Optional data disks
+  storage_data_disk {
+    name              = "nodedatadisk${ count.index + 1 }"
+    managed_disk_type = "Standard_LRS"
+    create_option     = "Empty"
+    lun               = 0
+    disk_size_gb      = "1023"
+  }
+
   os_profile {
-    computer_name  = "bastion"
+    computer_name  = "k8snode${ count.index + 1 }"
     admin_username = "ubuntu"
     admin_password = "Kangaroo-jeremiah-thereon1!"
+
+    # custom_data = "${ data.template_file.cloud-config.rendered }"
   }
 
   os_profile_linux_config {
@@ -71,12 +74,14 @@ resource "azurerm_virtual_machine" "bastion" {
   }
 
   connection {
-    host        = "${azurerm_public_ip.bastion.ip_address}"
-    user        = "ubuntu"
-    type        = "ssh"
-    private_key = "${ data.template_file.ssh-private-key.rendered }"
-    timeout     = "2m"
-    agent       = true
+    host                = "${azurerm_network_interface.node.*.private_ip_address[count.index]}"
+    bastion_host        = "${ var.bastion-ip }"
+    bastion_private_key = "${ data.template_file.ssh-private-key.rendered }"
+    user                = "ubuntu"
+    type                = "ssh"
+    private_key         = "${ data.template_file.ssh-private-key.rendered }"
+    timeout             = "2m"
+    agent               = true
   }
 
   provisioner "remote-exec" {
@@ -100,6 +105,6 @@ data "template_file" "ssh-pub-key" {
 
 resource "null_resource" "dummy_dependency" {
   depends_on = [
-    "azurerm_virtual_machine.bastion",
+    "azurerm_virtual_machine.node",
   ]
 }

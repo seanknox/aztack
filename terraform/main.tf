@@ -25,6 +25,18 @@ module "vnet" {
   cidr     = "${ var.cidr }"
 }
 
+module "bastion" {
+  source     = "./modules/bastion"
+  depends-id = "${ module.vnet.depends-id }"
+
+  # variables
+  name     = "${ var.name }"
+  location = "${ var.location }"
+
+  # modules
+  private-subnet-id = "${ module.vnet.private-subnet-id }"
+}
+
 module "master" {
   source     = "./modules/master"
   depends-id = "${ module.vnet.depends-id }"
@@ -39,14 +51,20 @@ module "master" {
   private-subnet-id = "${ module.vnet.private-subnet-id }"
 }
 
-module "bastion" {
-  source     = "./modules/bastion"
-  depends-id = "${ module.vnet.depends-id }"
+module "node" {
+  source     = "./modules/node"
+  depends-id = "${ module.bastion.depends-id }"
+
 
   # variables
   name       = "${ var.name }"
   location   = "${ var.location }"
+  instances  = 3
+  master-ips = "${ var.master-ips }"
+
 
   # modules
   private-subnet-id = "${ module.vnet.private-subnet-id }"
+	bastion-ip = "${ module.bastion.public-ip }"
 }
+

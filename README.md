@@ -13,8 +13,17 @@ Packer step generates an Azure VHD with
 * Downloads Kubernetes v1.9.6 component Docker images for faster `kubeadm init`
 
 ### Terraform
-- basic modules implemented
-- example of provisioning in module/bastion
+- [x] scaffolding of modules implemented:
+	- [x] masters
+	- [ ] etcd
+	- [ ] security groups
+	- [ ] PKI
+	- [ ] Azure DNS
+	- [x] nodes
+	- [x] bastion
+	- [x] vnet
+	- [x] resource group
+- [x] example of provisioning in module/bastion
 
 ## Prep
 
@@ -60,6 +69,7 @@ TBD
 
 ```
 cd terraform
+terraform init
 terraform plan
 terraform apply
 ```
