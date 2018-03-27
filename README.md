@@ -6,11 +6,14 @@ Provision a Kubernetes cluster with [Packer](https://packer.io) and [Terraform](
 
 Still WIP
 ### Packer
-Packer step generates an Azure VHD with
-* Ubuntu 17.10
-* kubelet, kubeadm, kubectl, and kubernete-cni via official Kubernetes Ubuntu repo
-* Docker 1.13.1
-* Downloads Kubernetes v1.9.6 component Docker images for faster `kubeadm init`
+Packer step generates an Azure VHD with:
+
+|   	|   	|
+|---	|---	|
+|Ubuntu   	|17.10   	|
+|Docker   	|1.13.1   	|
+|etcd   	|3.1.0-1   	|
+|kubectl	| 1.9.3		|
 
 ### Terraform
 - [x] scaffolding of modules implemented:

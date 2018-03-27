@@ -14,7 +14,7 @@ apt_flags=(-o "Dpkg::Options::=--force-confnew" -qy)
 apt-get update -q
 apt-get upgrade "${apt_flags[@]}"
 # TODO pin versions here
-apt-get install "${apt_flags[@]}" docker.io kubelet kubeadm kubectl kubernetes-cni
+apt-get install "${apt_flags[@]}" docker.io kubelet kubeadm kubectl kubernetes-cni etcd
 
 ## Also install `jq`, `traceroute`, `ca-certificates`
 

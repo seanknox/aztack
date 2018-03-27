@@ -35,14 +35,47 @@
   ],
   "provisioners": [
     {
+      "type": "shell",
+      "inline": [
+				"sudo mkdir -p /opt/azure/containers",
+				"sudo chown -R $USER /opt/azure/containers"
+      ]
+    },
+    {
       "type": "file",
       "source": "./prepare-vhd.sh",
       "destination": "/home/packer/prepare-vhd.sh"
     },
     {
+      "type": "file",
+      "source": "./acs-engine/kubernetes_mountetcd.sh",
+      "destination": "/opt/azure/containers/kubernetes_mountetcd.sh"
+    },
+		{
+			"type": "file",
+			"source": "./acs-engine/kubernetesmastercustomscript.sh",
+			"destination": "/opt/azure/containers/kubernetesmastercustomscript.sh"
+		},
+    {
+      "type": "file",
+      "source": "./acs-engine/kubernetesmastergenerateproxycertscript.sh",
+      "destination": "/opt/azure/containers/kubernetesmastergenerateproxycertscript.sh"
+    },
+    {
+      "type": "file",
+      "source": "./acs-engine/kubernetesprovisionsource.sh",
+      "destination": "/opt/azure/containers/provision_source.sh"
+		},
+    {
+      "type": "file",
+      "source": "./docker/daemon.json",
+      "destination": "$HOME/daemon.json"
+		},
+    {
       "type": "shell",
       "inline": [
         "sudo /bin/bash -eux /home/packer/prepare-vhd.sh",
+				"sudo mv $HOME/daemon.json /etc/docker",
         "rm /home/packer/prepare-vhd.sh"
       ]
     }
