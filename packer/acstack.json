@@ -16,9 +16,11 @@
       "tenant_id": "{{user `tenant_id`}}",
       "subscription_id": "{{user `subscription_id`}}",
 
-      "managed_image_resource_group_name":
-        "{{user `managed_image_resource_group_name`}}",
-      "managed_image_name": "acstack-ubuntu-17.10-{{timestamp}}",
+      "resource_group_name":
+        "{{user `resource_group_name`}}",
+      "capture_container_name": "acs-vhds",
+      "capture_name_prefix": "acstack-{{timestamp}}",
+      "storage_account": "acstackimages",
 
       "os_type": "Linux",
       "image_publisher": "Canonical",
@@ -37,8 +39,8 @@
     {
       "type": "shell",
       "inline": [
-				"sudo mkdir -p /opt/azure/containers",
-				"sudo chown -R $USER /opt/azure/containers"
+        "sudo mkdir -p /opt/azure/containers",
+        "sudo chown -R $USER /opt/azure/containers"
       ]
     },
     {
@@ -51,11 +53,11 @@
       "source": "./acs-engine/kubernetes_mountetcd.sh",
       "destination": "/opt/azure/containers/kubernetes_mountetcd.sh"
     },
-		{
-			"type": "file",
-			"source": "./acs-engine/kubernetesmastercustomscript.sh",
-			"destination": "/opt/azure/containers/kubernetesmastercustomscript.sh"
-		},
+    {
+      "type": "file",
+      "source": "./acs-engine/kubernetesmastercustomscript.sh",
+      "destination": "/opt/azure/containers/kubernetesmastercustomscript.sh"
+    },
     {
       "type": "file",
       "source": "./acs-engine/kubernetesmastergenerateproxycertscript.sh",
@@ -65,17 +67,17 @@
       "type": "file",
       "source": "./acs-engine/kubernetesprovisionsource.sh",
       "destination": "/opt/azure/containers/provision_source.sh"
-		},
+    },
     {
       "type": "file",
       "source": "./docker/daemon.json",
       "destination": "$HOME/daemon.json"
-		},
+    },
     {
       "type": "shell",
       "inline": [
         "sudo /bin/bash -eux /home/packer/prepare-vhd.sh",
-				"sudo mv $HOME/daemon.json /etc/docker",
+        "sudo mv $HOME/daemon.json /etc/docker",
         "rm /home/packer/prepare-vhd.sh"
       ]
     }

@@ -8,7 +8,7 @@ Still WIP
 ### Packer
 Packer step generates an Azure VHD with:
 
-|   	|   	|
+|Software   	|Version   	|
 |---	|---	|
 |Ubuntu   	|17.10   	|
 |Docker   	|1.13.1   	|
