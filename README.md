@@ -51,7 +51,7 @@ During the build process, Packer creates temporary Azure resources as it builds 
 - `az group create -n myResourceGroup -l westus2`
 
 #### Edit Packer settings
-Edit `package/settings.json` with required settings such as your subscription id.
+Edit `packer/settings.json` with required settings such as your subscription id.
 - To generate credentials: `az ad sp create-for-rbac --query "{ client_id: appId, client_secret: password, tenant_id: tenant }" -o json`
 - To get your subscription id: `az account show --query "{ subscription_id: id }" -o json`
 

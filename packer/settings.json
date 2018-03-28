@@ -1,9 +1,9 @@
 {
-  "client_id": "",
-  "client_secret": "",
-	"tenant_id": "",
-	"subscription_id": "",
-	"resource_group_name": "myResourceGroup",
+  "client_id": "2298a75f-85c4-4593-b54c-0c401772f03b",
+  "client_secret": "2d49a0ca-9538-4ad3-9335-a289867b0c22",
+  "tenant_id": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+	"subscription_id": "e766d9ee-d3d9-4b63-a912-8963dcfdf655",
+	"resource_group_name": "ACStackImages",
 	"location": "West US 2",
 	"vm_size": "Standard_D2_v2"
 }
