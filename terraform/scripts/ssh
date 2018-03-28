@@ -1,0 +1,15 @@
+#!/bin/bash -e
+
+BASTION_IP=`terraform output bastion-ip`
+
+COMMAND=$1
+
+function finish {
+  [ -z ${SSH_AGENT_PID} ] || kill ${SSH_AGENT_PID}
+}
+
+eval `ssh-agent -s`
+trap finish EXIT
+
+ssh-add ${AZURE_VM_KEY_PATH}
+ssh -tA ubuntu@${BASTION_IP} ${COMMAND}
