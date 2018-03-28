@@ -1,3 +1,5 @@
+terraform.tfvars
 terraform.tfstate*
-**/*/.terraform*
-**/*/id_rsa.tpl
+.terraform*
+id_rsa*
+
