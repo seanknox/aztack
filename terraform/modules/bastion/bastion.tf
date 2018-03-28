@@ -62,7 +62,7 @@ resource "azurerm_virtual_machine" "bastion" {
   }
 
   os_profile_linux_config {
-    disable_password_authentication = false
+    disable_password_authentication = true
 
     ssh_keys = [{
       path     = "/home/ubuntu/.ssh/authorized_keys"
@@ -70,10 +70,10 @@ resource "azurerm_virtual_machine" "bastion" {
     }]
   }
 
-	boot_diagnostics {
-		enabled     = "true"
-		storage_uri = "${ var.storage_endpoint }"
-	}
+  boot_diagnostics {
+    enabled     = "true"
+    storage_uri = "${ var.storage_endpoint }"
+  }
 
   connection {
     host        = "${azurerm_public_ip.bastion.ip_address}"
@@ -96,11 +96,11 @@ resource "azurerm_virtual_machine" "bastion" {
 }
 
 data "template_file" "ssh-private-key" {
-  template = "${ file( "${ path.module }/../support/id_rsa.tpl" )}"
+  template = "${ file( "${ path.module }/../../.keypair/acstack-test.pem" )}"
 }
 
 data "template_file" "ssh-pub-key" {
-  template = "${ file( "${ path.module }/../support/id_rsa.pub.tpl" )}"
+  template = "${ file( "${ path.module }/../../.keypair/acstack-test.pem.pub" )}"
 }
 
 resource "null_resource" "dummy_dependency" {

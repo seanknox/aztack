@@ -67,7 +67,7 @@ resource "azurerm_virtual_machine" "master" {
   }
 
   os_profile_linux_config {
-    disable_password_authentication = false
+    disable_password_authentication = true
   }
 
 	boot_diagnostics {
