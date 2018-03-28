@@ -2,4 +2,4 @@ terraform.tfvars
 terraform.tfstate*
 .terraform*
 id_rsa*
-
+*.pem*
