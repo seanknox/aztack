@@ -8,7 +8,7 @@ variable "azure" {
 }
 
 variable "master-ips" {
-  default = "10.0.1.10,10.0.1.11,10.0.1.12"
+  default = "10.0.10.10,10.0.10.11,10.0.10.12"
 }
 
 variable "node_count" {
