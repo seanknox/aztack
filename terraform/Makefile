@@ -26,7 +26,7 @@ export CLUSTER_NAME         ?= test
 
 export AZURE_VM_KEY_NAME    ?= acstack-$(CLUSTER_NAME)
 export AZURE_VM_KEY_PATH    := ${DIR_KEY_PAIR}/${AZURE_VM_KEY_NAME}.pem
-export INTERNAL_TLD         := ${CLUSTER_NAME}.kz8s
+export INTERNAL_TLD         := ${CLUSTER_NAME}.acs
 
 export HYPERKUBE_IMAGE      ?= quay.io/coreos/hyperkube
 export HYPERKUBE_TAG        ?= v1.9.6_coreos.0

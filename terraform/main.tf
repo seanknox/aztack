@@ -1,9 +1,9 @@
 # Configure the Microsoft Azure Provider
 provider "azurerm" {
-  subscription_id = "${ var.subscription_id }"
-  client_id       = "${ var.client_id } "
-  client_secret   = "${ var.client_secret }"
-  tenant_id       = "${ var.tenant_id }"
+  subscription_id = "${var.azure["subscription_id"]}"
+  client_id       = "${var.azure["client_id"]}"
+  client_secret   = "${var.azure["client_secret"]}"
+  tenant_id       = "${var.azure["tenant_id"]}"
 }
 
 module "rg" {
@@ -22,7 +22,7 @@ module "vnet" {
   # variables
   name     = "${ var.name }"
   location = "${ var.location }"
-  cidr     = "${ var.cidr }"
+  cidr     = "${ var.cidr["vnet"] }"
 }
 
 module "storage_account" {
