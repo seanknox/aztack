@@ -73,9 +73,9 @@ TBD
 
 ```
 cd terraform
-terraform init
-terraform plan
-terraform apply
+make init # generates Azure credentials and other required configuration
+make plan # validates configuration and generates Terraform plan
+make apply # executes Terraform plan
 ```
 
 
