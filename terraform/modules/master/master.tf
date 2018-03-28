@@ -68,16 +68,29 @@ resource "azurerm_virtual_machine" "master" {
 
   os_profile_linux_config {
     disable_password_authentication = true
+
+    ssh_keys = [{
+      path     = "/home/ubuntu/.ssh/authorized_keys"
+      key_data = "${ data.template_file.ssh-pub-key.rendered }"
+    }]
   }
 
-	boot_diagnostics {
-		enabled     = "true"
-		storage_uri = "${ var.storage_endpoint }"
-	}
+  boot_diagnostics {
+    enabled     = "true"
+    storage_uri = "${ var.storage_endpoint }"
+  }
 
   tags {
     environment = "staging"
   }
+}
+
+data "template_file" "ssh-private-key" {
+  template = "${ file( "${ path.module }/../../.keypair/acstack-${ var.name }.pem" )}"
+}
+
+data "template_file" "ssh-pub-key" {
+  template = "${ file( "${ path.module }/../../.keypair/acstack-${ var.name }.pem.pub" )}"
 }
 
 resource "null_resource" "dummy_dependency" {

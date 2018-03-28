@@ -101,11 +101,11 @@ resource "azurerm_virtual_machine" "node" {
 }
 
 data "template_file" "ssh-private-key" {
-  template = "${ file( "${ path.module }/../../.keypair/acstack-test.pem" )}"
+  template = "${ file( "${ path.module }/../../.keypair/acstack-${ var.name }.pem" )}"
 }
 
 data "template_file" "ssh-pub-key" {
-  template = "${ file( "${ path.module }/../../.keypair/acstack-test.pem.pub" )}"
+  template = "${ file( "${ path.module }/../../.keypair/acstack-${ var.name }.pem.pub" )}"
 }
 
 resource "null_resource" "dummy_dependency" {
