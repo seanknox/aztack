@@ -9,8 +9,9 @@ variable "location" {}
 variable "private-subnet-id" {}
 variable "node_count" {}
 variable "depends-id" {}
-variable "bastion-ip" { }
-variable "storage_endpoint" { }
+variable "bastion-ip" {}
+variable "storage_endpoint" {}
+variable "azure_image_name" {}
 
 output "depends-id" {
   value = "${null_resource.dummy_dependency.id}"

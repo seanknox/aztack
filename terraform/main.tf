@@ -15,16 +15,6 @@ module "rg" {
   location = "${ var.location }"
 }
 
-module "vnet" {
-  source     = "./modules/vnet"
-  depends-id = "${ module.rg.depends-id }"
-
-  # variables
-  name     = "${ var.name }"
-  location = "${ var.location }"
-  cidr     = "${ var.cidr["vnet"] }"
-}
-
 module "storage_account" {
   source     = "./modules/storage_account"
   depends-id = "${ module.rg.depends-id }"
@@ -34,13 +24,24 @@ module "storage_account" {
   location = "${ var.location }"
 }
 
-module "bastion" {
-  source     = "./modules/bastion"
+module "vnet" {
+  source     = "./modules/vnet"
   depends-id = "${ module.storage_account.depends-id }"
 
   # variables
   name     = "${ var.name }"
   location = "${ var.location }"
+  cidr     = "${ var.cidr["vnet"] }"
+}
+
+module "bastion" {
+  source     = "./modules/bastion"
+  depends-id = "${ module.vnet.depends-id }"
+
+  # variables
+  name             = "${ var.name }"
+  azure_image_name = "${ var.azure_image_name }"
+  location         = "${ var.location }"
 
   # modules
   private-subnet-id = "${ module.vnet.private-subnet-id }"
@@ -52,10 +53,11 @@ module "master" {
   depends-id = "${ module.bastion.depends-id }"
 
   # variables
-  name       = "${ var.name }"
-  location   = "${ var.location }"
-  instances  = "${ length( split(",", var.master-ips) ) }"
-  master-ips = "${ var.master-ips }"
+  name             = "${ var.name }"
+  azure_image_name = "${ var.azure_image_name }"
+  location         = "${ var.location }"
+  instances        = "${ length( split(",", var.master-ips) ) }"
+  master-ips       = "${ var.master-ips }"
 
   # modules
   private-subnet-id = "${ module.vnet.private-subnet-id }"
@@ -67,10 +69,11 @@ module "node" {
   depends-id = "${ module.bastion.depends-id }"
 
   # variables
-  name       = "${ var.name }"
-  location   = "${ var.location }"
-  node_count = "${ var.node_count }"
-  master-ips = "${ var.master-ips }"
+  name             = "${ var.name }"
+  azure_image_name = "${ var.azure_image_name }"
+  location         = "${ var.location }"
+  node_count       = "${ var.node_count }"
+  master-ips       = "${ var.master-ips }"
 
   # modules
   private-subnet-id = "${ module.vnet.private-subnet-id }"

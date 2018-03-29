@@ -7,7 +7,7 @@ resource "random_id" "randomId" {
   byte_length = 8
 }
 
-resource "azurerm_storage_account" "acs" {
+resource "azurerm_storage_account" "diag" {
   name                     = "diag${random_id.randomId.hex}"
   resource_group_name      = "${ var.name }"
   location                 = "${ var.location }"
@@ -21,6 +21,6 @@ resource "azurerm_storage_account" "acs" {
 
 resource "null_resource" "dummy_dependency" {
   depends_on = [
-    "azurerm_storage_account.acs",
+    "azurerm_storage_account.diag",
   ]
 }

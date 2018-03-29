@@ -26,6 +26,7 @@ variable "node_count" {
 }
 
 variable "name" {}
+variable "azure_image_name" {}
 
 variable "cidr" {
   default = {

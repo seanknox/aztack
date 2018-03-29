@@ -26,6 +26,7 @@ export CLUSTER_NAME         ?= mycluster
 
 export AZURE_VM_KEY_NAME    ?= acstack-$(CLUSTER_NAME)
 export AZURE_VM_KEY_PATH    := ${DIR_KEY_PAIR}/${AZURE_VM_KEY_NAME}.pem
+export AZURE_IMAGE_NAME 		?= acstack-ubuntu-17.10-1522339580
 export INTERNAL_TLD         := ${CLUSTER_NAME}.acs
 
 export HYPERKUBE_IMAGE      ?= quay.io/coreos/hyperkube

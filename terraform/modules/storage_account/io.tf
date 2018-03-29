@@ -7,5 +7,5 @@ output "depends-id" {
 }
 
 output "primary_blob_endpoint" {
-  value = "${ azurerm_storage_account.acs.primary_blob_endpoint }"
+  value = "${ azurerm_storage_account.diag.primary_blob_endpoint }"
 }

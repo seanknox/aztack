@@ -5,7 +5,8 @@ CDIR=$(dirname "${BASH_SOURCE}")
 set -x
 
 echo $AZURE_LOCATION
-echo $AWS_EC2_KEY_NAME
+echo $AZURE_VM_KEY_NAME
+echo $AZURE_IMAGE_NAME
 echo $INTERNAL_TLD
 echo $CLUSTER_NAME
 CIDR_ALLOW_SSH=`$CDIR/myip`
@@ -47,6 +48,7 @@ dns-service-ip = "${K8S_DNS_IP}"
 internal-tld = "${INTERNAL_TLD}"
 k8s-service-ip = "${K8S_SERVICE_IP}"
 name = "${CLUSTER_NAME}"
+azure_image_name = "${AZURE_IMAGE_NAME}"
 pki-ip = "${PKI_IP}"
 master-ips = "$MASTER_IPS"
 EOF

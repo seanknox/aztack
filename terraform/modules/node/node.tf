@@ -3,7 +3,7 @@ data "azurerm_resource_group" "image" {
 }
 
 data "azurerm_image" "image" {
-  name                = "acstack-ubuntu-17.10-1521986033"
+  name                = "${ var.azure_image_name }"
   resource_group_name = "${data.azurerm_resource_group.image.name}"
 }
 
