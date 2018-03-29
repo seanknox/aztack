@@ -15,7 +15,7 @@ echo $CIDR_PODS
 echo $CIDR_SERVICE_CLUSTER
 echo $K8S_SERVICE_IP
 echo $K8S_DNS_IP
-echo $MASTER_IPS
+echo $ETCD_IPS
 echo $HYPERKUBE_IMAGE
 echo $HYPERKUBE_TAG
 echo $PKI_IP
@@ -50,7 +50,7 @@ k8s-service-ip = "${K8S_SERVICE_IP}"
 name = "${CLUSTER_NAME}"
 azure_image_name = "${AZURE_IMAGE_NAME}"
 pki-ip = "${PKI_IP}"
-master-ips = "$MASTER_IPS"
+etcd-ips = "$ETCD_IPS"
 EOF
 
 cat terraform.tfvars

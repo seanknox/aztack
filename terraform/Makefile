@@ -39,7 +39,7 @@ export CIDR_SERVICE_CLUSTER ?= 10.3.0.0/24
 export K8S_SERVICE_IP       ?= 10.3.0.1
 export K8S_DNS_IP           ?= 10.3.0.10
 
-export MASTER_IPS           ?= 10.0.10.10,10.0.10.11,10.0.10.12
+export ETCD_IPS           ?= 10.0.10.10,10.0.10.11,10.0.10.12
 
 export PKI_IP               ?= 10.0.10.9
 

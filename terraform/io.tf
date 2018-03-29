@@ -15,7 +15,7 @@ variable "dns-service-ip" {
   default = "10.3.0.10"
 }
 
-variable "master-ips" {
+variable "etcd-ips" {
   default = "10.0.10.10,10.0.10.11,10.0.10.12"
 }
 
@@ -54,7 +54,7 @@ output "dns-service-ip" {
 }
 
 output "master1-ip" {
-  value = "${ element( split(",", var.master-ips), 0 ) }"
+  value = "${ element( split(",", var.etcd-ips), 0 ) }"
 }
 
 output "internal-tld" {

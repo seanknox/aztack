@@ -12,13 +12,13 @@ resource "azurerm_network_interface" "master" {
   location            = "${ var.location }"
   resource_group_name = "${ var.name }"
 
-  count = "${ var.instances }"
+  count = "${ length( split(",", var.etcd-ips) ) }"
 
   ip_configuration {
     name                          = "private"
     subnet_id                     = "${ var.private-subnet-id }"
     private_ip_address_allocation = "static"
-    private_ip_address            = "${ element(split(",", var.master-ips), count.index) }"
+    private_ip_address            = "${ element(split(",", var.etcd-ips), count.index) }"
   }
 }
 
@@ -29,7 +29,7 @@ resource "azurerm_virtual_machine" "master" {
   network_interface_ids = ["${azurerm_network_interface.master.*.id[count.index]}"]
   vm_size               = "Standard_DS1_v2"
 
-  count = "${ var.instances }"
+  count = "${ length( split(",", var.etcd-ips) ) }"
 
   # Uncomment this line to delete the OS disk automatically when deleting the VM
   delete_os_disk_on_termination = true

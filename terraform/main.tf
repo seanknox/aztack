@@ -34,6 +34,16 @@ module "vnet" {
   cidr     = "${ var.cidr["vnet"] }"
 }
 
+module "dns" {
+  source     = "./modules/dns"
+  depends-id = "${ module.vnet.depends-id }"
+
+  # variables
+  etcd-ips     = "${ var.etcd-ips }"
+  internal-tld = "${ var.internal-tld }"
+  name         = "${ var.name }"
+}
+
 module "bastion" {
   source     = "./modules/bastion"
   depends-id = "${ module.vnet.depends-id }"
@@ -56,8 +66,8 @@ module "master" {
   name             = "${ var.name }"
   azure_image_name = "${ var.azure_image_name }"
   location         = "${ var.location }"
-  instances        = "${ length( split(",", var.master-ips) ) }"
-  master-ips       = "${ var.master-ips }"
+  instances        = "${ length( split(",", var.etcd-ips) ) }"
+  etcd-ips         = "${ var.etcd-ips }"
 
   # modules
   private-subnet-id = "${ module.vnet.private-subnet-id }"
@@ -73,7 +83,7 @@ module "node" {
   azure_image_name = "${ var.azure_image_name }"
   location         = "${ var.location }"
   node_count       = "${ var.node_count }"
-  master-ips       = "${ var.master-ips }"
+  etcd-ips         = "${ var.etcd-ips }"
 
   # modules
   private-subnet-id = "${ module.vnet.private-subnet-id }"
