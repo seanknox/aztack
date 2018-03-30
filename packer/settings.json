@@ -4,7 +4,6 @@
   "tenant_id": "72f988bf-86f1-41af-91ab-2d7cd011db47",
 	"subscription_id": "e766d9ee-d3d9-4b63-a912-8963dcfdf655",
 	"resource_group_name": "ACStackImages",
-	"managed_image_resource_group_name": "ACStackImages",
 	"location": "West US 2",
 	"vm_size": "Standard_D2_v2"
 }

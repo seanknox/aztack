@@ -16,9 +16,11 @@
       "tenant_id": "{{user `tenant_id`}}",
       "subscription_id": "{{user `subscription_id`}}",
 
-      "managed_image_resource_group_name":
-				"{{user `managed_image_resource_group_name`}}",
-			"managed_image_name": "acstack-ubuntu-17.10-{{timestamp}}",
+      "resource_group_name":
+        "{{user `resource_group_name`}}",
+      "capture_container_name": "acs-vhds",
+      "capture_name_prefix": "acstack-{{timestamp}}",
+      "storage_account": "acstackimages",
 
       "os_type": "Linux",
       "image_publisher": "Canonical",
