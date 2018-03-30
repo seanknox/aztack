@@ -44,18 +44,28 @@ module "dns" {
   name         = "${ var.name }"
 }
 
-module "bastion" {
-  source     = "./modules/bastion"
-  depends-id = "${ module.vnet.depends-id }"
+module "image" {
+  source     = "./modules/image"
+  depends-id = "${ module.rg.depends-id }"
 
   # variables
-  name             = "${ var.name }"
-  azure_image_name = "${ var.azure_image_name }"
-  location         = "${ var.location }"
+  name          = "${ var.name }"
+  location      = "${ var.location }"
+  azure_vhd_uri = "${ var.azure_vhd_uri }"
+}
+
+module "bastion" {
+  source     = "./modules/bastion"
+  depends-id = "${ module.image.depends-id }"
+
+  # variables
+  name     = "${ var.name }"
+  location = "${ var.location }"
 
   # modules
   private-subnet-id = "${ module.vnet.private-subnet-id }"
   storage_endpoint  = "${ module.storage_account.primary_blob_endpoint }"
+  image_id          = "${ module.image.image_id }"
 }
 
 module "master" {
@@ -63,15 +73,14 @@ module "master" {
   depends-id = "${ module.bastion.depends-id }"
 
   # variables
-  name             = "${ var.name }"
-  azure_image_name = "${ var.azure_image_name }"
-  location         = "${ var.location }"
-  instances        = "${ length( split(",", var.etcd-ips) ) }"
-  etcd-ips         = "${ var.etcd-ips }"
+  name     = "${ var.name }"
+  location = "${ var.location }"
+  etcd-ips = "${ var.etcd-ips }"
 
   # modules
   private-subnet-id = "${ module.vnet.private-subnet-id }"
   storage_endpoint  = "${ module.storage_account.primary_blob_endpoint }"
+  image_id          = "${ module.image.image_id }"
 }
 
 module "node" {
@@ -79,14 +88,14 @@ module "node" {
   depends-id = "${ module.bastion.depends-id }"
 
   # variables
-  name             = "${ var.name }"
-  azure_image_name = "${ var.azure_image_name }"
-  location         = "${ var.location }"
-  node_count       = "${ var.node_count }"
-  etcd-ips         = "${ var.etcd-ips }"
+  name       = "${ var.name }"
+  location   = "${ var.location }"
+  node_count = "${ var.node_count }"
+  etcd-ips   = "${ var.etcd-ips }"
 
   # modules
   private-subnet-id = "${ module.vnet.private-subnet-id }"
   bastion-ip        = "${ module.bastion.public-ip }"
   storage_endpoint  = "${ module.storage_account.primary_blob_endpoint }"
+  image_id          = "${ module.image.image_id }"
 }

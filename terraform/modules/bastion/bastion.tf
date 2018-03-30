@@ -2,11 +2,6 @@ data "azurerm_resource_group" "image" {
   name = "ACStackImages"
 }
 
-data "azurerm_image" "image" {
-  name                = "${ var.azure_image_name }"
-  resource_group_name = "${data.azurerm_resource_group.image.name}"
-}
-
 resource "azurerm_public_ip" "bastion" {
   name                         = "bastion"
   location                     = "${ var.location }"
@@ -45,7 +40,7 @@ resource "azurerm_virtual_machine" "bastion" {
   delete_data_disks_on_termination = true
 
   storage_image_reference {
-    id = "${data.azurerm_image.image.id}"
+    id = "${ var.image_id }"
   }
 
   storage_os_disk {

@@ -6,7 +6,7 @@ set -x
 
 echo $AZURE_LOCATION
 echo $AZURE_VM_KEY_NAME
-echo $AZURE_IMAGE_NAME
+echo $AZURE_VHD_URI
 echo $INTERNAL_TLD
 echo $CLUSTER_NAME
 CIDR_ALLOW_SSH=`$CDIR/myip`
@@ -48,7 +48,7 @@ dns-service-ip = "${K8S_DNS_IP}"
 internal-tld = "${INTERNAL_TLD}"
 k8s-service-ip = "${K8S_SERVICE_IP}"
 name = "${CLUSTER_NAME}"
-azure_image_name = "${AZURE_IMAGE_NAME}"
+azure_vhd_uri = "${AZURE_VHD_URI}"
 pki-ip = "${PKI_IP}"
 etcd-ips = "$ETCD_IPS"
 EOF

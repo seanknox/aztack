@@ -3,7 +3,7 @@ variable "location" {}
 variable "private-subnet-id" {}
 variable "depends-id" {}
 variable "storage_endpoint" {}
-variable "azure_image_name" {}
+variable "image_id" {}
 
 output "depends-id" {
   value = "${null_resource.dummy_dependency.id}"

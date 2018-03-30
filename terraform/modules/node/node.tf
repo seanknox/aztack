@@ -2,11 +2,6 @@ data "azurerm_resource_group" "image" {
   name = "ACStackImages"
 }
 
-data "azurerm_image" "image" {
-  name                = "${ var.azure_image_name }"
-  resource_group_name = "${data.azurerm_resource_group.image.name}"
-}
-
 resource "azurerm_network_interface" "node" {
   name                = "node${ count.index + 1 }"
   location            = "${ var.location }"
@@ -37,7 +32,7 @@ resource "azurerm_virtual_machine" "node" {
   delete_data_disks_on_termination = true
 
   storage_image_reference {
-    id = "${data.azurerm_image.image.id}"
+    id = "${ var.image_id }"
   }
 
   storage_os_disk {

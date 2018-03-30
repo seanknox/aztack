@@ -26,7 +26,7 @@ variable "node_count" {
 }
 
 variable "name" {}
-variable "azure_image_name" {}
+variable "azure_vhd_uri" {}
 
 variable "cidr" {
   default = {
