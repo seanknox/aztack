@@ -27,7 +27,7 @@ export CLUSTER_NAME         ?= mycluster
 
 export AZURE_VM_KEY_NAME    ?= acstack-$(CLUSTER_NAME)
 export AZURE_VM_KEY_PATH    := ${DIR_KEY_PAIR}/${AZURE_VM_KEY_NAME}.pem
-export AZURE_VHD_URI 				?= https://acstackimages.blob.core.windows.net/system/Microsoft.Compute/Images/acs-vhds/acstack-1522124889-osDisk.8d0e099c-0ed0-483e-9d53-053057eb13b0.vhd
+export AZURE_VHD_URI 				?= https://acstackimages.blob.core.windows.net/system/Microsoft.Compute/Images/acs-vhds/acstack-1522526504-osDisk.807d10ba-1b35-4a46-b2cf-64d0f5329489.vhd
 export INTERNAL_TLD         := ${CLUSTER_NAME}.acs
 
 export HYPERKUBE_IMAGE      ?= quay.io/coreos/hyperkube

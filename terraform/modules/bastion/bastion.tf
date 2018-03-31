@@ -40,7 +40,10 @@ resource "azurerm_virtual_machine" "bastion" {
   delete_data_disks_on_termination = true
 
   storage_image_reference {
-    id = "${ var.image_id }"
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "17.10"
+    version   = "latest"
   }
 
   storage_os_disk {
@@ -68,21 +71,6 @@ resource "azurerm_virtual_machine" "bastion" {
   boot_diagnostics {
     enabled     = "true"
     storage_uri = "${ var.storage_endpoint }"
-  }
-
-  connection {
-    host        = "${azurerm_public_ip.bastion.ip_address}"
-    user        = "ubuntu"
-    type        = "ssh"
-    private_key = "${ data.template_file.ssh-private-key.rendered }"
-    timeout     = "2m"
-    agent       = true
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "sudo docker run -d -p 8080:80 nginx",
-    ]
   }
 
   tags {
