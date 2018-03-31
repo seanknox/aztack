@@ -6,6 +6,7 @@ RED   := \033[0;31m
 NC    := \033[0m
 
 export DIR_KEY_PAIR   := .keypair
+export DIR_SECRETS 		:= .secrets
 export DIR_SSL        := .cfssl
 export DIR_KUBECONFIG := .kube
 
@@ -54,7 +55,7 @@ export PKI_IP               ?= 10.0.10.9
 .addons: ; @scripts/do-task "initialize add-ons" ./scripts/init-addons
 
 ## generate key-pair, variables and then `terraform apply`
-all: prereqs create-keypair init apply
+all: prereqs create-keypair create-certs init apply
 	@echo "${GREEN}✓ terraform portion of 'make all' has completed ${NC}\n"
 	@$(MAKE) post-terraform
 

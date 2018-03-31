@@ -1,3 +1,4 @@
+.secrets/
 terraform.*
 .terraform*
 id_rsa*
