@@ -13,21 +13,25 @@ Packer step generates an Azure VHD with:
 |Ubuntu   	|17.10   	|
 |Docker   	|1.13.1   	|
 |etcd   	|3.1.0-1   	|
-|kubectl	| 1.9.3		|
+|kubectl	| 1.10.0		|
+|kube-apiserver	| 1.10.0		|
+|kube-controller-manager	| 1.10.0		|
+|kube-scheduler	| 1.10.0		|
 
 ### Terraform
 - [x] scaffolding of modules implemented:
-	- [x] masters
-	- [ ] etcd
+	- [x] masters/etcd
 	- [ ] security groups
-	- [ ] PKI
-	- [ ] Azure DNS
+	- [x] PKI
+	- [x] Azure DNS
 	- [x] nodes
 	- [x] bastion
 	- [x] vnet
 	- [x] resource group
 - [x] example of provisioning in modules/bastion
 - [x] example of provisioning in modules/nodes via bastion
+
+* Provisions masters/etcds with etcd and kube components running. However, etcd starts on the first master only. See https://github.com/terraform-providers/terraform-provider-azurerm/issues/1054.
 
 ## Prep
 
