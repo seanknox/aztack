@@ -72,9 +72,12 @@ module "master" {
   depends-id = "${ module.bastion.depends-id }"
 
   # variables
-  name     = "${ var.name }"
-  location = "${ var.location }"
-  etcd-ips = "${ var.etcd-ips }"
+  name           = "${ var.name }"
+  location       = "${ var.location }"
+  etcd-ips       = "${ var.etcd-ips }"
+  dns-service-ip = "${ var.dns-service-ip }"
+  pod-cidr       = "${ var.cidr["pods"] }"
+  service-cidr   = "${ var.cidr["service-cluster"] }"
 
   # modules
   private-subnet-id = "${ module.vnet.private-subnet-id }"

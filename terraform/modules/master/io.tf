@@ -3,9 +3,12 @@
 #   default = "10.0.1.10"
 # }
 
-variable "etcd-ips" {}
 variable "name" {}
 variable "location" {}
+variable "etcd-ips" {}
+variable "dns-service-ip" {}
+variable "pod-cidr" {}
+variable "service-cidr" {}
 variable "bastion-ip" {}
 variable "private-subnet-id" {}
 variable "depends-id" {}

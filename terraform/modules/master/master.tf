@@ -57,8 +57,7 @@ resource "azurerm_virtual_machine" "master" {
     admin_username = "ubuntu"
     admin_password = "Kangaroo-jeremiah-thereon1!"
 
-    # user_data = "${ data.template_file.cloud-config.rendered }"
-    # custom_data = "${ data.template_file.cloud-config.rendered }"
+    custom_data = "${ data.template_file.master_yaml.rendered }"
   }
 
   os_profile_linux_config {
@@ -88,6 +87,11 @@ resource "azurerm_virtual_machine" "master" {
 
   provisioner "file" {
     source      = "${ path.module }/../../.secrets/ca.pem"
+    destination = "/home/ubuntu/ca.pem"
+  }
+
+  provisioner "file" {
+    source      = "${ path.module }/../../.secrets/ca-key.pem"
     destination = "/home/ubuntu/ca.pem"
   }
 
@@ -137,6 +141,20 @@ resource "azurerm_virtual_machine" "master" {
 
   tags {
     environment = "staging"
+  }
+}
+
+data "template_file" "master_yaml" {
+  template = "${file("${path.module}/master.yaml")}"
+
+  vars {
+    INTERNAL_IP      = "${ element(split(",", var.etcd-ips), count.index) }"
+    DNS_SERVICE_IP   = "${ var.dns-service-ip }"
+    ETCD_IP1         = "${azurerm_network_interface.master.*.private_ip_address[0]}"
+    ETCD_IP2         = "${azurerm_network_interface.master.*.private_ip_address[1]}"
+    ETCD_IP3         = "${azurerm_network_interface.master.*.private_ip_address[2]}"
+    POD_NETWORK      = "${ var.pod-cidr }"
+    SERVICE_IP_RANGE = "${ var.service-cidr }"
   }
 }
 
