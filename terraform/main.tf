@@ -15,18 +15,9 @@ module "rg" {
   location = "${ var.location }"
 }
 
-module "storage_account" {
-  source     = "./modules/storage_account"
-  depends-id = "${ module.rg.depends-id }"
-
-  # variables
-  name     = "${ var.name }"
-  location = "${ var.location }"
-}
-
 module "vnet" {
   source     = "./modules/vnet"
-  depends-id = "${ module.storage_account.depends-id }"
+  depends-id = "${ module.rg.depends-id }"
 
   # variables
   name     = "${ var.name }"
@@ -44,9 +35,18 @@ module "dns" {
   name         = "${ var.name }"
 }
 
+module "storage_account" {
+  source     = "./modules/storage_account"
+  depends-id = "${ module.rg.depends-id }"
+
+  # variables
+  name     = "${ var.name }"
+  location = "${ var.location }"
+}
+
 module "image" {
   source     = "./modules/image"
-  depends-id = "${ module.rg.depends-id }"
+  depends-id = "${ module.storage_account.depends-id }"
 
   # variables
   name          = "${ var.name }"
@@ -56,7 +56,7 @@ module "image" {
 
 module "bastion" {
   source     = "./modules/bastion"
-  depends-id = "${ module.image.depends-id }"
+  depends-id = "${ module.vnet.depends-id }"
 
   # variables
   name     = "${ var.name }"
@@ -65,7 +65,6 @@ module "bastion" {
   # modules
   private-subnet-id = "${ module.vnet.private-subnet-id }"
   storage_endpoint  = "${ module.storage_account.primary_blob_endpoint }"
-  image_id          = "${ module.image.image_id }"
 }
 
 module "master" {
@@ -81,6 +80,7 @@ module "master" {
   private-subnet-id = "${ module.vnet.private-subnet-id }"
   storage_endpoint  = "${ module.storage_account.primary_blob_endpoint }"
   image_id          = "${ module.image.image_id }"
+  bastion-ip        = "${ module.bastion.public-ip }"
 }
 
 module "node" {

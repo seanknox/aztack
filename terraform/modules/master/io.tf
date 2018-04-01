@@ -6,6 +6,7 @@
 variable "etcd-ips" {}
 variable "name" {}
 variable "location" {}
+variable "bastion-ip" {}
 variable "private-subnet-id" {}
 variable "depends-id" {}
 variable "storage_endpoint" {}

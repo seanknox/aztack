@@ -75,6 +75,66 @@ resource "azurerm_virtual_machine" "master" {
     storage_uri = "${ var.storage_endpoint }"
   }
 
+  connection {
+    host                = "${azurerm_network_interface.master.*.private_ip_address[count.index]}"
+    bastion_host        = "${ var.bastion-ip }"
+    bastion_private_key = "${ data.template_file.ssh-private-key.rendered }"
+    user                = "ubuntu"
+    type                = "ssh"
+    private_key         = "${ data.template_file.ssh-private-key.rendered }"
+    timeout             = "5m"
+    agent               = true
+  }
+
+  provisioner "file" {
+    source      = "${ path.module }/../../.secrets/ca.pem"
+    destination = "/home/ubuntu/ca.pem"
+  }
+
+  provisioner "file" {
+    source      = "${ path.module }/../../.secrets/k8s_etcd.pem"
+    destination = "/home/ubuntu/etcd.pem"
+  }
+
+  provisioner "file" {
+    source      = "${ path.module }/../../.secrets/k8s_etcd-key.pem"
+    destination = "/home/ubuntu/etcd-key.pem"
+  }
+
+  provisioner "file" {
+    source      = "${ path.module }/../../.secrets/k8s_master.pem"
+    destination = "/home/ubuntu/apiserver.pem"
+  }
+
+  provisioner "file" {
+    source      = "${ path.module }/../../.secrets/k8s_master-key.pem"
+    destination = "/home/ubuntu/apiserver-key.pem"
+  }
+
+  provisioner "file" {
+    source      = "${ path.module }/../../.secrets/client-k8s_master.pem"
+    destination = "/home/ubuntu/client.pem"
+  }
+
+  provisioner "file" {
+    source      = "${ path.module }/../../.secrets/client-k8s_master-key.pem"
+    destination = "/home/ubuntu/client-key.pem"
+  }
+
+  provisioner "file" {
+    source      = "${ path.module }/prepare_master.sh"
+    destination = "/home/ubuntu/prepare_master.sh"
+  }
+
+  provisioner "remote-exec" {
+    on_failure = "continue"
+
+    inline = [
+      "sudo /bin/bash -eux /home/ubuntu/prepare_master.sh",
+      "sudo rm /home/ubuntu/prepare_master.sh",
+    ]
+  }
+
   tags {
     environment = "staging"
   }
