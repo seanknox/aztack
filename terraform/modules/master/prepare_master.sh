@@ -5,10 +5,12 @@ mkdir -p /etc/kubernetes/ssl
 mkdir -p /etc/etcd/ssl
 
 # copy TLS certs
-cp /home/ubuntu/{ca,etcd,etcd-key}.pem /etc/etcd/ssl/.
-cp /home/ubuntu/{ca,apiserver,apiserver-key,client,client-key,etcd,etcd-key}.pem /etc/kubernetes/ssl/.
+cp /home/ubuntu/{ca,ca-key,kube-apiserver,kube-apiserver-key}.pem /etc/etcd/ssl/.
+cp /home/ubuntu/{ca,ca-key,kube-apiserver,kube-apiserver-key}.pem /etc/kubernetes/ssl/.
 rm /home/ubuntu/*.pem
 
+# reinitialize daemons and start etcd + kube components
 sudo systemctl daemon-reload
-sudo systemctl stop etcd2
-sudo systemctl start etcd2
+sudo systemctl enable etcd kube-apiserver kube-controller-manager kube-scheduler
+sudo systemctl stop etcd
+sudo systemctl start etcd kube-apiserver kube-controller-manager kube-scheduler

@@ -14,10 +14,10 @@ write_files:
       [Service]
       ExecStart=/usr/bin/etcd \
         --name ${ETCD_NAME} \
-        --cert-file=/etc/etcd/ssl/etcd.pem \
-        --key-file=/etc/etcd/ssl/etcd-key.pem \
-        --peer-cert-file=/etc/etcd/ssl/etcd.pem \
-        --peer-key-file=/etc/etcd/ssl/etcd-key.pem \
+        --cert-file=/etc/etcd/ssl/kube-apiserver.pem \
+        --key-file=/etc/etcd/ssl/kube-apiserver-key.pem \
+        --peer-cert-file=/etc/etcd/ssl/kube-apiserver.pem \
+        --peer-key-file=/etc/etcd/ssl/kube-apiserver-key.pem \
         --trusted-ca-file=/etc/etcd/ssl/ca.pem \
         --peer-trusted-ca-file=/etc/etcd/ssl/ca.pem \
         --peer-client-cert-auth \
@@ -60,25 +60,70 @@ write_files:
         --client-ca-file=/etc/kubernetes/ssl/ca.pem \
         --enable-swagger-ui=true \
         --etcd-cafile=/etc/kubernetes/ssl/ca.pem \
-        --etcd-certfile=/etc/etcd/ssl/etcd.pem \
-        --etcd-keyfile=/etc/etcd/ssl/etcd-key.pem \
+        --etcd-certfile=/etc/etcd/ssl/kube-apiserver.pem \
+        --etcd-keyfile=/etc/etcd/ssl/kube-apiserver-key.pem \
         --etcd-servers=https://${ETCD_IP1}:2379,https://${ETCD_IP2}:2379,https://${ETCD_IP3}:2379 \
         --event-ttl=1h \
         --insecure-bind-address=127.0.0.1 \
         --kubelet-certificate-authority=/etc/kubernetes/ssl/ca.pem \
-        --kubelet-client-certificate=/etc/kubernetes/ssl/client.pem \
-        --kubelet-client-key=/etc/kubernetes/ssl/client-key.pem \
+        --kubelet-client-certificate=/etc/kubernetes/ssl/kube-apiserver.pem \
+        --kubelet-client-key=/etc/kubernetes/ssl/kube-apiserver-key.pem \
         --kubelet-https=true \
         --runtime-config=api/all \
-        --service-account-key-file=/etc/kubernetes/ssl/apiserver-key.pem \
+        --service-account-key-file=/etc/kubernetes/ssl/kube-apiserver-key.pem \
         --service-cluster-ip-range=${SERVICE_IP_RANGE} \
         --service-node-port-range=30000-32767 \
         --tls-ca-file=/etc/kubernetes/ssl/ca.pem \
-        --tls-cert-file=/etc/kubernetes/ssl/apiserver.pem \
-        --tls-private-key-file=/etc/kubernetes/ssl/apiserver-key.pem \
+        --tls-cert-file=/etc/kubernetes/ssl/kube-apiserver.pem \
+        --tls-private-key-file=/etc/kubernetes/ssl/kube-apiserver-key.pem \
         --v=2
       Restart=on-failure
       RestartSec=5
+
+      [Install]
+      WantedBy=multi-user.target
+  - path: "/etc/systemd/system/kube-controller-manager.service"
+    permissions: "0755"
+    content: |
+      [Unit]
+      Description=Kubernetes Controller Manager
+      Documentation=https://github.com/kubernetes/kubernetes
+
+      [Service]
+      ExecStart=/usr/local/bin/kube-controller-manager \
+        --address=0.0.0.0 \
+        --cluster-cidr=${POD_CIDR} \
+        --cluster-name=kubernetes \
+        --cluster-signing-cert-file=/etc/kubernetes/ssl/ca.pem \
+        --cluster-signing-key-file=/etc/kubernetes/ssl/ca-key.pem \
+        --leader-elect=true \
+        --master=http://127.0.0.1:8080 \
+        --root-ca-file=/etc/kubernetes/ssl/ca.pem \
+        --service-account-private-key-file=/etc/kubernetes/ssl/ca-key.pem \
+        --service-cluster-ip-range=${SERVICE_IP_RANGE} \
+        --v=2
+      Restart=on-failure
+      RestartSec=5
+
+      [Install]
+      WantedBy=multi-user.target
+  - path: "/etc/systemd/system/kube-scheduler.service"
+    permissions: "0755"
+    content: |
+      [Unit]
+      Description=Kubernetes Scheduler
+      Documentation=https://github.com/kubernetes/kubernetes
+
+      [Service]
+      ExecStart=/usr/local/bin/kube-scheduler \
+        --leader-elect=true \
+        --master=http://127.0.0.1:8080 \
+        --v=2
+      Restart=on-failure
+      RestartSec=5
+
+      [Install]
+      WantedBy=multi-user.target
   - path: "/etc/kubernetes/kubelet-kubeconfig.yaml"
     permissions: "0755"
     content: |

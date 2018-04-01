@@ -1,5 +1,5 @@
 {
-  "CN": "ACStack",
+  "CN": "admin",
   "key": {
     "algo": "rsa",
     "size": 2048
@@ -8,7 +8,7 @@
     {
       "C": "US",
       "L": "San Francisco",
-      "O": "Microsoft",
+      "O": "system:masters",
       "OU": "ACS",
       "ST": "CA"
     }

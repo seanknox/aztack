@@ -50,7 +50,7 @@ k8s-service-ip = "${K8S_SERVICE_IP}"
 name = "${CLUSTER_NAME}"
 azure_vhd_uri = "${AZURE_VHD_URI}"
 pki-ip = "${PKI_IP}"
-etcd-ips = "$ETCD_IPS"
+etcd-ips = "${ETCD_IPS}"
 EOF
 
 cat terraform.tfvars

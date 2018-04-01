@@ -96,33 +96,13 @@ resource "azurerm_virtual_machine" "master" {
   }
 
   provisioner "file" {
-    source      = "${ path.module }/../../.secrets/k8s_etcd.pem"
-    destination = "/home/ubuntu/etcd.pem"
+    source      = "${ path.module }/../../.secrets/kube-apiserver.pem"
+    destination = "/home/ubuntu/kube-apiserver.pem"
   }
 
   provisioner "file" {
-    source      = "${ path.module }/../../.secrets/k8s_etcd-key.pem"
-    destination = "/home/ubuntu/etcd-key.pem"
-  }
-
-  provisioner "file" {
-    source      = "${ path.module }/../../.secrets/k8s_master.pem"
-    destination = "/home/ubuntu/apiserver.pem"
-  }
-
-  provisioner "file" {
-    source      = "${ path.module }/../../.secrets/k8s_master-key.pem"
-    destination = "/home/ubuntu/apiserver-key.pem"
-  }
-
-  provisioner "file" {
-    source      = "${ path.module }/../../.secrets/client-k8s_master.pem"
-    destination = "/home/ubuntu/client.pem"
-  }
-
-  provisioner "file" {
-    source      = "${ path.module }/../../.secrets/client-k8s_master-key.pem"
-    destination = "/home/ubuntu/client-key.pem"
+    source      = "${ path.module }/../../.secrets/kube-apiserver-key.pem"
+    destination = "/home/ubuntu/kube-apiserver-key.pem"
   }
 
   provisioner "file" {
@@ -154,7 +134,7 @@ data "template_file" "cloud-config" {
     ETCD_IP1         = "${azurerm_network_interface.master.*.private_ip_address[0]}"
     ETCD_IP2         = "${azurerm_network_interface.master.*.private_ip_address[1]}"
     ETCD_IP3         = "${azurerm_network_interface.master.*.private_ip_address[2]}"
-    POD_NETWORK      = "${ var.pod-cidr }"
+    POD_CIDR         = "${ var.pod-cidr }"
     SERVICE_IP_RANGE = "${ var.service-cidr }"
   }
 }

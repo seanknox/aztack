@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -e
+
+set -x
 
 SECRETS_DIR=$PWD/.secrets
 CFSSL_DIR=$(dirname "${BASH_SOURCE[0]}")
