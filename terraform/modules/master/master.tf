@@ -57,7 +57,7 @@ resource "azurerm_virtual_machine" "master" {
     admin_username = "ubuntu"
     admin_password = "Kangaroo-jeremiah-thereon1!"
 
-    custom_data = "${ data.template_file.master_yaml.rendered }"
+    custom_data = "${ data.template_file.cloud-config.rendered }"
   }
 
   os_profile_linux_config {
@@ -92,7 +92,7 @@ resource "azurerm_virtual_machine" "master" {
 
   provisioner "file" {
     source      = "${ path.module }/../../.secrets/ca-key.pem"
-    destination = "/home/ubuntu/ca.pem"
+    destination = "/home/ubuntu/ca-key.pem"
   }
 
   provisioner "file" {
@@ -144,10 +144,11 @@ resource "azurerm_virtual_machine" "master" {
   }
 }
 
-data "template_file" "master_yaml" {
-  template = "${file("${path.module}/master.yaml")}"
+data "template_file" "cloud-config" {
+  template = "${file("${path.module}/cloud-config.yaml")}"
 
   vars {
+    ETCD_NAME        = "k8smaster${ count.index + 1 }"
     INTERNAL_IP      = "${ element(split(",", var.etcd-ips), count.index) }"
     DNS_SERVICE_IP   = "${ var.dns-service-ip }"
     ETCD_IP1         = "${azurerm_network_interface.master.*.private_ip_address[0]}"

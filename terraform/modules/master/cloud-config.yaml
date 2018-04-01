@@ -1,0 +1,98 @@
+#cloud-config
+
+write_files:
+  - path: "/lib/systemd/system/etcd.service"
+    permissions: "0755"
+    content: |
+      [Unit]
+      Description=etcd - highly-available key value store
+      Documentation=https://github.com/coreos/etcd
+      Documentation=man:etcd
+      After=network.target
+      Wants=network-online.target
+
+      [Service]
+      ExecStart=/usr/bin/etcd \
+        --name ${ETCD_NAME} \
+        --cert-file=/etc/etcd/ssl/etcd.pem \
+        --key-file=/etc/etcd/ssl/etcd-key.pem \
+        --peer-cert-file=/etc/etcd/ssl/etcd.pem \
+        --peer-key-file=/etc/etcd/ssl/etcd-key.pem \
+        --trusted-ca-file=/etc/etcd/ssl/ca.pem \
+        --peer-trusted-ca-file=/etc/etcd/ssl/ca.pem \
+        --peer-client-cert-auth \
+        --client-cert-auth \
+        --initial-advertise-peer-urls https://${INTERNAL_IP}:2380 \
+        --listen-peer-urls https://${INTERNAL_IP}:2380 \
+        --listen-client-urls https://${INTERNAL_IP}:2379,http://127.0.0.1:2379 \
+        --advertise-client-urls https://${INTERNAL_IP}:2379 \
+        --initial-cluster-token etcd-cluster-0 \
+        --initial-cluster k8smaster1=https://10.0.10.10:2379,k8smaster2=https://10.0.10.11:2379,k8smaster3=https://10.0.10.12:2379 \
+        --initial-cluster-state new \
+        --data-dir=/var/lib/etcd/default
+      Restart=on-failure
+      RestartSec=5
+      Type=notify
+      User=etcd
+      PermissionsStartOnly=true
+
+      [Install]
+      WantedBy=multi-user.target
+  - path: "/etc/systemd/system/kube-apiserver.service"
+    permissions: "0755"
+    content: |
+      [Unit]
+      Description=Kubernetes API Server
+      Documentation=https://github.com/kubernetes/kubernetes
+
+      [Service]
+      ExecStart=/usr/local/bin/kube-apiserver \
+        --admission-control=Initializers,NamespaceLifecycle,NodeRestriction,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota \
+        --advertise-address=${INTERNAL_IP} \
+        --allow-privileged=true \
+        --apiserver-count=3 \
+        --audit-log-maxage=30 \
+        --audit-log-maxbackup=3 \
+        --audit-log-maxsize=100 \
+        --audit-log-path=/var/log/audit.log \
+        --authorization-mode=Node,RBAC \
+        --bind-address=0.0.0.0 \
+        --client-ca-file=/etc/kubernetes/ssl/ca.pem \
+        --enable-swagger-ui=true \
+        --etcd-cafile=/etc/kubernetes/ssl/ca.pem \
+        --etcd-certfile=/etc/etcd/ssl/etcd.pem \
+        --etcd-keyfile=/etc/etcd/ssl/etcd-key.pem \
+        --etcd-servers=https://${ETCD_IP1}:2379,https://${ETCD_IP2}:2379,https://${ETCD_IP3}:2379 \
+        --event-ttl=1h \
+        --insecure-bind-address=127.0.0.1 \
+        --kubelet-certificate-authority=/etc/kubernetes/ssl/ca.pem \
+        --kubelet-client-certificate=/etc/kubernetes/ssl/client.pem \
+        --kubelet-client-key=/etc/kubernetes/ssl/client-key.pem \
+        --kubelet-https=true \
+        --runtime-config=api/all \
+        --service-account-key-file=/etc/kubernetes/ssl/apiserver-key.pem \
+        --service-cluster-ip-range=${SERVICE_IP_RANGE} \
+        --service-node-port-range=30000-32767 \
+        --tls-ca-file=/etc/kubernetes/ssl/ca.pem \
+        --tls-cert-file=/etc/kubernetes/ssl/apiserver.pem \
+        --tls-private-key-file=/etc/kubernetes/ssl/apiserver-key.pem \
+        --v=2
+      Restart=on-failure
+      RestartSec=5
+  - path: "/etc/kubernetes/kubelet-kubeconfig.yaml"
+    permissions: "0755"
+    content: |
+      apiVersion: v1
+      kind: Config
+      clusters:
+      - name: local
+        cluster:
+          server: http://127.0.0.1:8080
+      users:
+      - name: kubelet
+      contexts:
+      - context:
+          cluster: local
+          user: kubelet
+        name: kubelet-context
+      current-context: kubelet-context
