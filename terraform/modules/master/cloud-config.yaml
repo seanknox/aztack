@@ -5,15 +5,26 @@ write_files:
     permissions: "0755"
     content: |
       {
-        "cloud": "AZUREPUBLICCLOUD",
+        "cloud":"AzurePublicCloud",
         "tenantId": "${TENANT_ID}",
         "subscriptionId": "${SUBSCRIPTION_ID}",
-        "clientId": "${CLIENT_ID}",
-        "clientSecret": "${CLIENT_SECRET}",
+        "aadClientId": "${CLIENT_ID}",
+        "aadClientSecret": "${CLIENT_SECRET}",
         "location": "${LOCATION}",
+        "resourceGroup": "${NAME}",
         "subnetName": "private",
-        "vmType": "standard",
-        "useManagedIdentityExtension": false
+        "vnetName": "${NAME}",
+        "vnetResourceGroup": "",
+        "cloudProviderBackoff": false,
+        "cloudProviderBackoffRetries": 0,
+        "cloudProviderBackoffExponent": 0,
+        "cloudProviderBackoffDuration": 0,
+        "cloudProviderBackoffJitter": 0,
+        "cloudProviderRatelimit": false,
+        "cloudProviderRateLimitQPS": 0,
+        "cloudProviderRateLimitBucket": 0,
+        "useManagedIdentityExtension": false,
+        "useInstanceMetadata": true
       }
   - path: "/lib/systemd/system/etcd.service"
     permissions: "0755"
@@ -110,8 +121,6 @@ write_files:
         --cluster-name=kubernetes \
         --cluster-signing-cert-file=/etc/kubernetes/ssl/ca.pem \
         --cluster-signing-key-file=/etc/kubernetes/ssl/ca-key.pem \
-        --cloud-config=/etc/kubernetes/azure.json \
-        --cloud-provider=azure \
         --leader-elect=true \
         --master=http://127.0.0.1:8080 \
         --root-ca-file=/etc/kubernetes/ssl/ca.pem \

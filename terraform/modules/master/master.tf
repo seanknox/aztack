@@ -137,6 +137,7 @@ data "template_file" "cloud-config" {
     TENANT_ID        = "${ var.azure["tenant_id"]}"
     CLIENT_ID        = "${ var.azure["client_id"]}"
     CLIENT_SECRET    = "${ var.azure["client_secret"]}"
+    NAME             = "${ var.name }"
   }
 }
 
