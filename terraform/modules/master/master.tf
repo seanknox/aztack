@@ -53,7 +53,7 @@ resource "azurerm_virtual_machine" "master" {
     admin_username = "ubuntu"
     admin_password = "Kangaroo-jeremiah-thereon1!"
 
-    custom_data = "${ data.template_file.cloud-config.rendered }"
+    custom_data = "${element(data.template_file.cloud-config.*.rendered, count.index)}"
   }
 
   os_profile_linux_config {
@@ -122,6 +122,7 @@ resource "azurerm_virtual_machine" "master" {
 
 data "template_file" "cloud-config" {
   template = "${file("${path.module}/cloud-config.yaml")}"
+  count    = "${ length( split(",", var.etcd-ips) ) }"
 
   vars {
     ETCD_NAME        = "k8smaster${ count.index + 1 }"

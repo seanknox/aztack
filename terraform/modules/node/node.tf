@@ -63,7 +63,7 @@ resource "azurerm_virtual_machine" "node" {
     admin_username = "ubuntu"
     admin_password = "Kangaroo-jeremiah-thereon1!"
 
-    custom_data = "${ data.template_file.cloud-config.rendered }"
+    custom_data = "${element(data.template_file.cloud-config.*.rendered, count.index)}"
   }
 
   os_profile_linux_config {
@@ -127,6 +127,7 @@ resource "azurerm_virtual_machine" "node" {
 
 data "template_file" "cloud-config" {
   template = "${file("${path.module}/cloud-config.yaml")}"
+  count    = "${ var.node_count }"
 
   vars {
     HOSTNAME       = "k8snode${ count.index + 1 }"
