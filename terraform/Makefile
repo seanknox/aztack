@@ -24,6 +24,7 @@ export DIR_KUBECONFIG := .kube
 
 export AZURE_LOCATION       ?= westus2
 export CLUSTER_NAME         ?= foobarbaz
+export API_PUBLIC_FQDN      := $(CLUSTER_NAME).$(AZURE_LOCATION).cloudapp.azure.com
 
 export AZURE_VM_KEY_NAME    ?= $(CLUSTER_NAME)
 export AZURE_VM_KEY_PATH    := ${DIR_KEY_PAIR}/${AZURE_VM_KEY_NAME}.pem

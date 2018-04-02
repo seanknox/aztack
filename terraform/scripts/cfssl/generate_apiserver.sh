@@ -8,5 +8,5 @@ CFSSL_DIR=$(dirname "${BASH_SOURCE[0]}")
 cfssl gencert -ca=$SECRETS_DIR/ca.pem \
     -ca-key=$SECRETS_DIR/ca-key.pem \
     -config=$CFSSL_DIR/ca-config.json \
-	-hostname=${ETCD_IPS},127.0.0.1,kubernetes.default \
+	-hostname=${ETCD_IPS},${API_PUBLIC_FQDN},127.0.0.1,kubernetes.default \
     -profile=kubernetes $CFSSL_DIR/kube-apiserver-csr.json | cfssljson -bare $SECRETS_DIR/kube-apiserver

@@ -3,6 +3,7 @@ resource "azurerm_public_ip" "lbpip" {
   location                     = "${ var.location }"
   resource_group_name          = "${ var.name }"
   public_ip_address_allocation = "dynamic"
+  domain_name_label            = "${ var.name }"
 
   tags {
     environment = "test"
@@ -53,6 +54,7 @@ resource "azurerm_lb_probe" "lb_probe" {
 
 resource "null_resource" "dummy_dependency" {
   depends_on = [
+    "azurerm_public_ip.lbpip",
     "azurerm_lb_rule.apiserver-public",
   ]
 }
