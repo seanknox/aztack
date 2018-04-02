@@ -14,7 +14,7 @@ apt_flags=(-o "Dpkg::Options::=--force-confnew" -qy)
 apt-get update -q
 apt-get upgrade "${apt_flags[@]}"
 # TODO pin versions here
-apt-get install "${apt_flags[@]}" docker.io kubernetes-cni etcd
+apt-get install "${apt_flags[@]}" docker.io etcd conntrack
 
 ## Also install `jq`, `traceroute`, `ca-certificates`
 
@@ -26,11 +26,12 @@ wget -q --show-progress --https-only --timestamping \
   "https://storage.googleapis.com/kubernetes-release/release/${kubernetes_release_tag}/bin/linux/amd64/kube-controller-manager" \
   "https://storage.googleapis.com/kubernetes-release/release/${kubernetes_release_tag}/bin/linux/amd64/kube-scheduler" \
 	"https://storage.googleapis.com/kubernetes-release/release/${kubernetes_release_tag}/bin/linux/amd64/kube-proxy" \
+	"https://storage.googleapis.com/kubernetes-release/release/${kubernetes_release_tag}/bin/linux/amd64/kubelet" \
   "https://storage.googleapis.com/kubernetes-release/release/${kubernetes_release_tag}/bin/linux/amd64/kubectl"
 
 # Install the Kubernetes binaries
-chmod +x kube-apiserver kube-controller-manager kube-scheduler kubectl
-sudo mv kube-apiserver kube-controller-manager kube-scheduler kubectl /usr/local/bin/
+chmod +x kube-apiserver kube-controller-manager kube-scheduler kubelet kube-proxy kubectl
+sudo mv kube-apiserver kube-controller-manager kube-scheduler kubelet kube-proxy kubectl /usr/local/bin/
 
 # Download CNI networking components
 wget -q --show-progress --https-only --timestamping \
