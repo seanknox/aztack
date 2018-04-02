@@ -1,6 +1,20 @@
 #cloud-config
 
 write_files:
+  - path: "/etc/kubernetes/azure.json"
+    permissions: "0755"
+    content: |
+      {
+        "cloud": "AZUREPUBLICCLOUD",
+        "tenantId": "${TENANT_ID}",
+        "subscriptionId": "${SUBSCRIPTION_ID}",
+        "clientId": "${CLIENT_ID}",
+        "clientSecret": "${CLIENT_SECRET}",
+        "location": "${LOCATION}",
+        "subnetName": "private",
+        "vmType": "standard",
+        "useManagedIdentityExtension": false
+      }
   - path: "/lib/systemd/system/etcd.service"
     permissions: "0755"
     content: |
@@ -96,6 +110,8 @@ write_files:
         --cluster-name=kubernetes \
         --cluster-signing-cert-file=/etc/kubernetes/ssl/ca.pem \
         --cluster-signing-key-file=/etc/kubernetes/ssl/ca-key.pem \
+        --cloud-config=/etc/kubernetes/azure.json \
+        --cloud-provider=azure \
         --leader-elect=true \
         --master=http://127.0.0.1:8080 \
         --root-ca-file=/etc/kubernetes/ssl/ca.pem \

@@ -1,7 +1,3 @@
-data "azurerm_resource_group" "image" {
-  name = "ACStackImages"
-}
-
 resource "azurerm_network_interface" "master" {
   name                = "master${ count.index + 1 }"
   location            = "${ var.location }"
@@ -135,7 +131,12 @@ data "template_file" "cloud-config" {
     ETCD_IP2         = "${azurerm_network_interface.master.*.private_ip_address[1]}"
     ETCD_IP3         = "${azurerm_network_interface.master.*.private_ip_address[2]}"
     POD_CIDR         = "${ var.pod-cidr }"
+    LOCATION         = "${ var.location }"
     SERVICE_IP_RANGE = "${ var.service-cidr }"
+    SUBSCRIPTION_ID  = "${ var.azure["subscription_id"]}"
+    TENANT_ID        = "${ var.azure["tenant_id"]}"
+    CLIENT_ID        = "${ var.azure["client_id"]}"
+    CLIENT_SECRET    = "${ var.azure["client_secret"]}"
   }
 }
 

@@ -78,6 +78,7 @@ module "master" {
   dns-service-ip = "${ var.dns-service-ip }"
   pod-cidr       = "${ var.cidr["pods"] }"
   service-cidr   = "${ var.cidr["service-cluster"] }"
+  azure          = "${ var.azure }"
 
   # modules
   private-subnet-id = "${ module.vnet.private-subnet-id }"
@@ -91,14 +92,16 @@ module "node" {
   depends-id = "${ module.bastion.depends-id }"
 
   # variables
-  name       = "${ var.name }"
-  location   = "${ var.location }"
-  node_count = "${ var.node_count }"
-  etcd-ips   = "${ var.etcd-ips }"
+  name           = "${ var.name }"
+  location       = "${ var.location }"
+  node_count     = "${ var.node_count }"
+  dns-service-ip = "${ var.dns-service-ip }"
+  pod-cidr       = "${ var.cidr["pods"] }"
+  internal-tld   = "${ var.internal-tld }"
 
   # modules
   private-subnet-id = "${ module.vnet.private-subnet-id }"
-  bastion-ip        = "${ module.bastion.public-ip }"
   storage_endpoint  = "${ module.storage_account.primary_blob_endpoint }"
   image_id          = "${ module.image.image_id }"
+  bastion-ip        = "${ module.bastion.public-ip }"
 }

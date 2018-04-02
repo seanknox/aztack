@@ -15,6 +15,10 @@ variable "depends-id" {}
 variable "storage_endpoint" {}
 variable "image_id" {}
 
+variable "azure" {
+  type = "map"
+}
+
 output "depends-id" {
   value = "${null_resource.dummy_dependency.id}"
 }

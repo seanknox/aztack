@@ -1,9 +1,16 @@
-data "azurerm_resource_group" "image" {
-  name = "ACStackImages"
+resource "null_resource" "node_cert" {
+  count = "${ var.node_count }"
+
+  # Generate node client certificate
+  provisioner "local-exec" {
+    command = <<EOF
+        ${path.module}/../../scripts/cfssl/generate_node.sh "k8snode${ count.index + 1 }"
+      EOF
+  }
 }
 
 resource "azurerm_network_interface" "node" {
-  name                = "node${ count.index + 1 }"
+  name                = "k8snode${ count.index + 1 }"
   location            = "${ var.location }"
   resource_group_name = "${ var.name }"
 
@@ -56,7 +63,7 @@ resource "azurerm_virtual_machine" "node" {
     admin_username = "ubuntu"
     admin_password = "Kangaroo-jeremiah-thereon1!"
 
-    # custom_data = "${ data.template_file.cloud-config.rendered }"
+    custom_data = "${ data.template_file.cloud-config.rendered }"
   }
 
   os_profile_linux_config {
@@ -80,18 +87,53 @@ resource "azurerm_virtual_machine" "node" {
     user                = "ubuntu"
     type                = "ssh"
     private_key         = "${ data.template_file.ssh-private-key.rendered }"
-    timeout             = "2m"
+    timeout             = "5m"
     agent               = true
   }
 
+  provisioner "file" {
+    source      = "${ path.module }/../../.secrets/ca.pem"
+    destination = "/home/ubuntu/ca.pem"
+  }
+
+  provisioner "file" {
+    source      = "${ path.module }/../../.secrets/k8snode${ count.index + 1 }.pem"
+    destination = "/home/ubuntu/k8snode${ count.index + 1 }.pem"
+  }
+
+  provisioner "file" {
+    source      = "${ path.module }/../../.secrets/k8snode${ count.index + 1 }-key.pem"
+    destination = "/home/ubuntu/k8snode${ count.index + 1 }-key.pem"
+  }
+
+  provisioner "file" {
+    source      = "${ path.module }/prepare_node.sh"
+    destination = "/home/ubuntu/prepare_node.sh"
+  }
+
   provisioner "remote-exec" {
+    on_failure = "continue"
+
     inline = [
-      "sudo docker run -d -p 8080:80 nginx",
+      "sudo /bin/bash -eux /home/ubuntu/prepare_node.sh",
+      "sudo rm /home/ubuntu/prepare_node.sh",
     ]
   }
 
   tags {
     environment = "staging"
+  }
+}
+
+data "template_file" "cloud-config" {
+  template = "${file("${path.module}/cloud-config.yaml")}"
+
+  vars {
+    HOSTNAME       = "k8snode${ count.index + 1 }"
+    INTERNAL_TLD   = "${ var.internal-tld }"
+    INTERNAL_IP    = "${azurerm_network_interface.node.*.private_ip_address[count.index]}"
+    DNS_SERVICE_IP = "${ var.dns-service-ip }"
+    POD_CIDR       = "${ var.pod-cidr }"
   }
 }
 

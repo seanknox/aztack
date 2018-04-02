@@ -1,0 +1,35 @@
+#cloud-config
+
+write_files:
+  - path: "/etc/systemd/system/kubelet.service"
+    permissions: "0755"
+    content: |
+      [Unit]
+      Description=Kubernetes Kubelet
+      Documentation=https://github.com/kubernetes/kubernetes
+      After=docker.service
+      Requires=docker.service
+
+      [Service]
+      ExecStart=/usr/local/bin/kubelet \
+        --allow-privileged=true \
+        --anonymous-auth=false \
+        --authorization-mode=Webhook \
+        --client-ca-file=/etc/kubernetes/ssl/ca.pem \
+        --cluster-dns=${DNS_SERVICE_IP} \
+        --cluster-domain=cluster.local \
+        --image-pull-progress-deadline=2m \
+        --kubeconfig=/etc/kubernetes/${HOSTNAME}.kubeconfig \
+        --network-plugin=cni \
+        --pod-cidr=${POD_CIDR} \
+        --register-node=true \
+        --runtime-request-timeout=15m \
+        --tls-cert-file=/etc/kubernetes/ssl/${HOSTNAME}.pem \
+        --tls-private-key-file=/etc/kubernetes/ssl/${HOSTNAME}-key.pem \
+        --v=2
+      Restart=on-failure
+      RestartSec=5
+
+      [Install]
+      WantedBy=multi-user.target
+
