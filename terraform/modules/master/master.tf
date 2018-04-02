@@ -6,11 +6,21 @@ resource "azurerm_network_interface" "master" {
   count = "${ length( split(",", var.etcd-ips) ) }"
 
   ip_configuration {
-    name                          = "private"
-    subnet_id                     = "${ var.private-subnet-id }"
-    private_ip_address_allocation = "static"
-    private_ip_address            = "${ element(split(",", var.etcd-ips), count.index) }"
+    name                                    = "private"
+    subnet_id                               = "${ var.private-subnet-id }"
+    private_ip_address_allocation           = "static"
+    private_ip_address                      = "${ element(split(",", var.etcd-ips), count.index) }"
+    load_balancer_backend_address_pools_ids = ["${ var.backend_pool_id }"]
   }
+}
+
+resource "azurerm_availability_set" "masteravset" {
+  name                         = "${var.name}avset"
+  location                     = "${var.location}"
+  resource_group_name          = "${ var.name }"
+  platform_fault_domain_count  = 2
+  platform_update_domain_count = 2
+  managed                      = true
 }
 
 resource "azurerm_virtual_machine" "master" {
@@ -18,6 +28,7 @@ resource "azurerm_virtual_machine" "master" {
   location              = "${ var.location }"
   resource_group_name   = "${ var.name }"
   network_interface_ids = ["${azurerm_network_interface.master.*.id[count.index]}"]
+  availability_set_id   = "${azurerm_availability_set.masteravset.id}"
   vm_size               = "Standard_DS1_v2"
 
   count = "${ length( split(",", var.etcd-ips) ) }"

@@ -14,6 +14,7 @@ variable "private-subnet-id" {}
 variable "depends-id" {}
 variable "storage_endpoint" {}
 variable "image_id" {}
+variable "backend_pool_id" {}
 
 variable "azure" {
   type = "map"

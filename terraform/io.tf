@@ -69,6 +69,10 @@ output "location" {
   value = "${ var.location }"
 }
 
+output "public_load_balancer_ip" {
+  value = "${ module.load_balancer.public_load_balancer_ip }"
+}
+
 output "node_private_ips" {
   value = "${ module.node.node_private_ips }"
 }

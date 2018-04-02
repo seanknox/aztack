@@ -67,6 +67,15 @@ module "bastion" {
   storage_endpoint  = "${ module.storage_account.primary_blob_endpoint }"
 }
 
+module "load_balancer" {
+  source     = "./modules/load_balancer"
+  depends-id = "${ module.vnet.depends-id }"
+
+  # variables
+  name     = "${ var.name }"
+  location = "${ var.location }"
+}
+
 module "master" {
   source     = "./modules/master"
   depends-id = "${ module.bastion.depends-id }"
@@ -85,6 +94,7 @@ module "master" {
   storage_endpoint  = "${ module.storage_account.primary_blob_endpoint }"
   image_id          = "${ module.image.image_id }"
   bastion-ip        = "${ module.bastion.public-ip }"
+  backend_pool_id   = "${ module.load_balancer.backend_pool_id }"
 }
 
 module "node" {

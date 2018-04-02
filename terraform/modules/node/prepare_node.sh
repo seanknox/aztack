@@ -11,21 +11,21 @@ sudo kubectl config set-cluster mycluster \
   --certificate-authority=/etc/kubernetes/ssl/ca.pem \
   --embed-certs=true \
   --server=https://10.0.10.10:6443 \
-  --kubeconfig=/etc/kubernetes/${HOSTNAME}.kubeconfig
+  --kubeconfig=/etc/kubernetes/kubelet.kubeconfig
 
 sudo kubectl config set-credentials system:node:${HOSTNAME} \
   --client-certificate=/etc/kubernetes/ssl/${HOSTNAME}.pem \
   --client-key=/etc/kubernetes/ssl/${HOSTNAME}-key.pem \
   --embed-certs=true \
-  --kubeconfig=/etc/kubernetes/${HOSTNAME}.kubeconfig
+  --kubeconfig=/etc/kubernetes/kubelet.kubeconfig
 
 sudo kubectl config set-context default \
   --cluster=mycluster \
   --user=system:node:${HOSTNAME} \
-  --kubeconfig=/etc/kubernetes/${HOSTNAME}.kubeconfig
+  --kubeconfig=/etc/kubernetes/kubelet.kubeconfig
 
-sudo kubectl config use-context default --kubeconfig=/etc/kubernetes/${HOSTNAME}.kubeconfig
-sudo chmod 644 /etc/kubernetes/${HOSTNAME}.kubeconfig
+sudo kubectl config use-context default --kubeconfig=/etc/kubernetes/kubelet.kubeconfig
+sudo chmod 644 /etc/kubernetes/kubelet.kubeconfig
 
 # reinitialize daemons and start kube components
 sudo systemctl daemon-reload
