@@ -3,3 +3,4 @@ terraform.*
 .terraform*
 id_rsa*
 *.pem*
+packer/settings.json
