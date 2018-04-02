@@ -13,3 +13,7 @@ variable "pod-cidr" {}
 output "depends-id" {
   value = "${null_resource.dummy_dependency.id}"
 }
+
+output "node_private_ips" {
+  value = "${azurerm_network_interface.node.*.private_ip_address}"
+}

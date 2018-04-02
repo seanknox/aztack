@@ -68,3 +68,7 @@ output "name" {
 output "location" {
   value = "${ var.location }"
 }
+
+output "node_private_ips" {
+  value = "${ module.node.node_private_ips }"
+}
