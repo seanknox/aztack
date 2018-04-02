@@ -142,11 +142,11 @@ data "template_file" "cloud-config" {
 }
 
 data "template_file" "ssh-private-key" {
-  template = "${ file( "${ path.module }/../../.keypair/acstack-${ var.name }.pem" )}"
+  template = "${ file( "${ path.module }/../../.keypair/${ var.name }.pem" )}"
 }
 
 data "template_file" "ssh-pub-key" {
-  template = "${ file( "${ path.module }/../../.keypair/acstack-${ var.name }.pem.pub" )}"
+  template = "${ file( "${ path.module }/../../.keypair/${ var.name }.pem.pub" )}"
 }
 
 resource "null_resource" "dummy_dependency" {

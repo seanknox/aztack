@@ -23,9 +23,9 @@ export DIR_KUBECONFIG := .kube
 # ∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨
 
 export AZURE_LOCATION       ?= westus2
-export CLUSTER_NAME         ?= mycluster
+export CLUSTER_NAME         ?= foobarbaz
 
-export AZURE_VM_KEY_NAME    ?= acstack-$(CLUSTER_NAME)
+export AZURE_VM_KEY_NAME    ?= $(CLUSTER_NAME)
 export AZURE_VM_KEY_PATH    := ${DIR_KEY_PAIR}/${AZURE_VM_KEY_NAME}.pem
 export AZURE_VHD_URI 				?= https://acstackimages.blob.core.windows.net/system/Microsoft.Compute/Images/acs-vhds/acstack-1522643166-osDisk.629d7109-82a1-4835-8b08-35e22931e261.vhd
 export INTERNAL_TLD         := ${CLUSTER_NAME}.acs
@@ -57,7 +57,7 @@ export PKI_IP               ?= 10.0.10.9
 ## generate key-pair, variables and then `terraform apply`
 all: prereqs create-keypair create-certs init apply
 	@echo "${GREEN}✓ terraform portion of 'make all' has completed ${NC}\n"
-	@$(MAKE) post-terraform
+	# @$(MAKE) post-terraform
 
 .PHONY: post-terraform
 post-terraform:

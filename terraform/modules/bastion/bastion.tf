@@ -1,7 +1,3 @@
-data "azurerm_resource_group" "image" {
-  name = "ACStackImages"
-}
-
 resource "azurerm_public_ip" "bastion" {
   name                         = "bastion"
   location                     = "${ var.location }"
@@ -79,11 +75,11 @@ resource "azurerm_virtual_machine" "bastion" {
 }
 
 data "template_file" "ssh-private-key" {
-  template = "${ file( "${ path.module }/../../.keypair/acstack-${ var.name }.pem" )}"
+  template = "${ file( "${ path.module }/../../.keypair/${ var.name }.pem" )}"
 }
 
 data "template_file" "ssh-pub-key" {
-  template = "${ file( "${ path.module }/../../.keypair/acstack-${ var.name }.pem.pub" )}"
+  template = "${ file( "${ path.module }/../../.keypair/${ var.name }.pem.pub" )}"
 }
 
 resource "null_resource" "dummy_dependency" {
