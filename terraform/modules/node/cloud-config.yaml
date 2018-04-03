@@ -19,7 +19,7 @@ write_files:
         --cluster-dns=${DNS_SERVICE_IP} \
         --cluster-domain=cluster.local \
         --image-pull-progress-deadline=2m \
-        --kubeconfig=/etc/kubernetes/${HOSTNAME}.kubeconfig \
+        --kubeconfig=/etc/kubernetes/kubelet.kubeconfig \
         --network-plugin=cni \
         --pod-cidr=${POD_CIDR} \
         --register-node=true \
