@@ -1,19 +1,40 @@
-resource "azurerm_dns_zone" "internal" {
-  name                = "${ var.internal-tld }"
-  resource_group_name = "${ var.name }"
+resource "null_resource" "enable_dns_ext" {
+  # Enable private zone extension
+  provisioner "local-exec" {
+    on_failure = "continue"
+
+    command = <<EOF
+        az extension add --name dns
+      EOF
+  }
+}
+
+resource "null_resource" "dns_zone" {
+  depends_on = ["null_resource.enable_dns_ext"]
+
+  # Create private DNS zone that resolves automatically in the vnet
+  provisioner "local-exec" {
+    command = <<EOF
+        az network dns zone create -g ${ var.name } -n ${ var.internal-tld } --zone-type Private --registration-vnets ${ var.name }
+      EOF
+  }
 }
 
 resource "azurerm_dns_a_record" "A-etcd" {
+  depends_on          = ["null_resource.dns_zone"]
   name                = "etcd"
-  zone_name           = "${azurerm_dns_zone.internal.name}"
+  zone_name           = "${ var.internal-tld }"
   resource_group_name = "${ var.name }"
   ttl                 = 300
   records             = ["${ split(",", var.etcd-ips) }"]
 }
 
 resource "azurerm_dns_a_record" "A-etcds" {
+  depends_on = ["null_resource.dns_zone"]
+  count      = "${ length( split(",", var.etcd-ips) ) }"
+
   name                = "etcd${ count.index+1 }"
-  zone_name           = "${azurerm_dns_zone.internal.name}"
+  zone_name           = "${ var.internal-tld }"
   resource_group_name = "${ var.name }"
   ttl                 = 300
 
@@ -23,16 +44,18 @@ resource "azurerm_dns_a_record" "A-etcds" {
 }
 
 resource "azurerm_dns_cname_record" "CNAME-master" {
+  depends_on          = ["null_resource.dns_zone"]
   name                = "master"
-  zone_name           = "${azurerm_dns_zone.internal.name}"
+  zone_name           = "${ var.internal-tld }"
   resource_group_name = "${ var.name }"
   ttl                 = 300
   record              = "etcd.${ var.internal-tld }"
 }
 
 resource "azurerm_dns_srv_record" "etcd-client-tcp" {
-  name                = "_etcd-client._tcp"
-  zone_name           = "${azurerm_dns_zone.internal.name}"
+  depends_on          = ["null_resource.dns_zone"]
+  name                = "_etcd-client-ssl._tcp"
+  zone_name           = "${ var.internal-tld }"
   resource_group_name = "${ var.name }"
   ttl                 = 300
 
@@ -63,8 +86,9 @@ resource "azurerm_dns_srv_record" "etcd-client-tcp" {
 }
 
 resource "azurerm_dns_srv_record" "etcd-server-tcp" {
+  depends_on          = ["null_resource.dns_zone"]
   name                = "_etcd-server-ssl._tcp"
-  zone_name           = "${azurerm_dns_zone.internal.name}"
+  zone_name           = "${ var.internal-tld }"
   resource_group_name = "${ var.name }"
   ttl                 = 300
 
