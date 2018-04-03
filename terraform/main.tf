@@ -78,7 +78,7 @@ module "load_balancer" {
 
 module "master" {
   source     = "./modules/master"
-  depends-id = "${ module.bastion.depends-id }"
+  depends-id = "${ module.load_balancer.depends-id }"
 
   # variables
   name           = "${ var.name }"
