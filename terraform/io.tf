@@ -41,6 +41,9 @@ variable "location" {
   default = "West US 2"
 }
 
+variable "kube-api-public-fqdn" {}
+variable "kube-api-internal-ip" {}
+
 output "bastion-ip" {
   value = "${ module.bastion.public-ip }"
 }
@@ -69,16 +72,18 @@ output "location" {
   value = "${ var.location }"
 }
 
-output "api-fqdn" {
-  value = "${ var.name }.${ var.location }.cloudapp.azure.com"
+output "kube-api-public-fqdn" {
+  value = "${ var.kube-api-public-fqdn }"
+}
+
+output "kube-api-internal-ip" {
+  value = "${ var.kube-api-internal-ip }"
 }
 
 # output "public_load_balancer_ip" {
 #   value = "${ module.load_balancer.public_load_balancer_ip }"
 # }
 
-
 output "node_private_ips" {
   value = "${ module.node.node_private_ips }"
 }
-

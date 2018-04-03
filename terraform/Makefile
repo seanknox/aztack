@@ -22,9 +22,9 @@ export DIR_KUBECONFIG := .kube
 
 # ∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨
 
-export AZURE_LOCATION       ?= westus2
-export CLUSTER_NAME         ?= foobarbaz
-export API_PUBLIC_FQDN      := $(CLUSTER_NAME).$(AZURE_LOCATION).cloudapp.azure.com
+export AZURE_LOCATION       		 ?= westus2
+export CLUSTER_NAME         		 ?= acstack
+export KUBE_API_PUBLIC_FQDN      := $(CLUSTER_NAME).$(AZURE_LOCATION).cloudapp.azure.com
 
 export AZURE_VM_KEY_NAME    ?= $(CLUSTER_NAME)
 export AZURE_VM_KEY_PATH    := ${DIR_KEY_PAIR}/${AZURE_VM_KEY_NAME}.pem
@@ -40,6 +40,7 @@ export CIDR_SERVICE_CLUSTER ?= 10.3.0.0/24
 
 export K8S_SERVICE_IP       ?= 10.3.0.1
 export K8S_DNS_IP           ?= 10.3.0.10
+export KUBE_API_INTERNAL_IP	?= 10.0.10.250
 
 export ETCD_IPS           ?= 10.0.10.10,10.0.10.11,10.0.10.12
 

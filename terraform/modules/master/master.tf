@@ -10,12 +10,12 @@ resource "azurerm_network_interface" "master" {
     subnet_id                               = "${ var.private-subnet-id }"
     private_ip_address_allocation           = "static"
     private_ip_address                      = "${ element(split(",", var.etcd-ips), count.index) }"
-    load_balancer_backend_address_pools_ids = ["${ var.backend_pool_id }"]
+    load_balancer_backend_address_pools_ids = ["${ var.backend_pool_ids }"]
   }
 }
 
 resource "azurerm_availability_set" "masteravset" {
-  name                         = "${var.name}avset"
+  name                         = "masteravset"
   location                     = "${var.location}"
   resource_group_name          = "${ var.name }"
   platform_fault_domain_count  = 2

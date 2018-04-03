@@ -10,7 +10,7 @@ rm /home/ubuntu/*.pem
 sudo kubectl config set-cluster mycluster \
   --certificate-authority=/etc/kubernetes/ssl/ca.pem \
   --embed-certs=true \
-  --server=https://10.0.10.10:6443 \
+  --server=https://10.0.10.250:6443 \
   --kubeconfig=/etc/kubernetes/kubelet.kubeconfig
 
 sudo kubectl config set-credentials system:node:${HOSTNAME} \

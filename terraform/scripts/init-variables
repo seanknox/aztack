@@ -51,6 +51,8 @@ name = "${CLUSTER_NAME}"
 azure_vhd_uri = "${AZURE_VHD_URI}"
 pki-ip = "${PKI_IP}"
 etcd-ips = "${ETCD_IPS}"
+kube-api-internal-ip = "${KUBE_API_INTERNAL_IP}"
+kube-api-public-fqdn = "${KUBE_API_PUBLIC_FQDN}"
 EOF
 
 cat terraform.tfvars

@@ -72,8 +72,12 @@ module "load_balancer" {
   depends-id = "${ module.vnet.depends-id }"
 
   # variables
-  name     = "${ var.name }"
-  location = "${ var.location }"
+  name                 = "${ var.name }"
+  location             = "${ var.location }"
+  kube-api-internal-ip = "${ var.kube-api-internal-ip }"
+
+  # modules
+  private-subnet-id = "${ module.vnet.private-subnet-id }"
 }
 
 module "master" {
@@ -94,7 +98,7 @@ module "master" {
   storage_endpoint  = "${ module.storage_account.primary_blob_endpoint }"
   image_id          = "${ module.image.image_id }"
   bastion-ip        = "${ module.bastion.public-ip }"
-  backend_pool_id   = "${ module.load_balancer.backend_pool_id }"
+  backend_pool_ids  = ["${ module.load_balancer.public_backend_pool_id }", "${ module.load_balancer.private_backend_pool_id }"]
 }
 
 module "node" {

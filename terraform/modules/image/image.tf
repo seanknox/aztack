@@ -1,5 +1,5 @@
 resource "azurerm_image" "acs" {
-  name                = "${ var.name }"
+  name                = "${ var.name }-image"
   location            = "${ var.location }"
   resource_group_name = "${ var.name }"
 

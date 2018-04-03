@@ -23,11 +23,21 @@ resource "azurerm_network_interface" "node" {
   }
 }
 
+resource "azurerm_availability_set" "nodeavset" {
+  name                         = "nodeavset"
+  location                     = "${var.location}"
+  resource_group_name          = "${ var.name }"
+  platform_fault_domain_count  = 2
+  platform_update_domain_count = 2
+  managed                      = true
+}
+
 resource "azurerm_virtual_machine" "node" {
   name                  = "k8snode${ count.index + 1 }"
   location              = "${ var.location }"
   resource_group_name   = "${ var.name }"
   network_interface_ids = ["${azurerm_network_interface.node.*.id[count.index]}"]
+  availability_set_id   = "${azurerm_availability_set.nodeavset.id}"
   vm_size               = "Standard_DS1_v2"
 
   count = "${ var.node_count }"
