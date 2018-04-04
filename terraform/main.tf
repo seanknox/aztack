@@ -80,8 +80,8 @@ module "load_balancer" {
   private-subnet-id = "${ module.vnet.private-subnet-id }"
 }
 
-module "master" {
-  source     = "./modules/master"
+module "controller" {
+  source     = "./modules/controller"
   depends-id = "${ module.load_balancer.depends-id }"
 
   # variables

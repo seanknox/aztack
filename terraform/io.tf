@@ -56,8 +56,8 @@ output "dns-service-ip" {
   value = "${ var.dns-service-ip }"
 }
 
-output "master1-ip" {
-  value = "${ element( split(",", var.etcd-ips), 0 ) }"
+output "controller-ips" {
+  value = "${split(",", var.etcd-ips))}"
 }
 
 output "internal-tld" {

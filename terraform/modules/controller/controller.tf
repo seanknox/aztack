@@ -1,5 +1,5 @@
-resource "azurerm_network_interface" "master" {
-  name                = "master${ count.index + 1 }"
+resource "azurerm_network_interface" "controller" {
+  name                = "controller${ count.index + 1 }"
   location            = "${ var.location }"
   resource_group_name = "${ var.name }"
 
@@ -14,8 +14,8 @@ resource "azurerm_network_interface" "master" {
   }
 }
 
-resource "azurerm_availability_set" "masteravset" {
-  name                         = "masteravset"
+resource "azurerm_availability_set" "controlleravset" {
+  name                         = "controlleravset"
   location                     = "${var.location}"
   resource_group_name          = "${ var.name }"
   platform_fault_domain_count  = 2
@@ -23,12 +23,12 @@ resource "azurerm_availability_set" "masteravset" {
   managed                      = true
 }
 
-resource "azurerm_virtual_machine" "master" {
-  name                  = "k8smaster${ count.index + 1 }"
+resource "azurerm_virtual_machine" "controller" {
+  name                  = "k8scontroller${ count.index + 1 }"
   location              = "${ var.location }"
   resource_group_name   = "${ var.name }"
-  network_interface_ids = ["${azurerm_network_interface.master.*.id[count.index]}"]
-  availability_set_id   = "${azurerm_availability_set.masteravset.id}"
+  network_interface_ids = ["${azurerm_network_interface.controller.*.id[count.index]}"]
+  availability_set_id   = "${azurerm_availability_set.controlleravset.id}"
   vm_size               = "Standard_DS1_v2"
 
   count = "${ length( split(",", var.etcd-ips) ) }"
@@ -44,7 +44,7 @@ resource "azurerm_virtual_machine" "master" {
   }
 
   storage_os_disk {
-    name              = "masterosdisk${ count.index + 1 }"
+    name              = "controllerosdisk${ count.index + 1 }"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
@@ -52,7 +52,7 @@ resource "azurerm_virtual_machine" "master" {
 
   # Optional data disks
   storage_data_disk {
-    name              = "masterdatadisk${ count.index + 1 }"
+    name              = "controllerdatadisk${ count.index + 1 }"
     managed_disk_type = "Standard_LRS"
     create_option     = "Empty"
     lun               = 0
@@ -60,7 +60,7 @@ resource "azurerm_virtual_machine" "master" {
   }
 
   os_profile {
-    computer_name  = "k8smaster${ count.index + 1 }"
+    computer_name  = "k8scontroller${ count.index + 1 }"
     admin_username = "ubuntu"
     admin_password = "Kangaroo-jeremiah-thereon1!"
 
@@ -82,7 +82,7 @@ resource "azurerm_virtual_machine" "master" {
   }
 
   connection {
-    host                = "${azurerm_network_interface.master.*.private_ip_address[count.index]}"
+    host                = "${azurerm_network_interface.controller.*.private_ip_address[count.index]}"
     bastion_host        = "${ var.bastion-ip }"
     bastion_private_key = "${ data.template_file.ssh-private-key.rendered }"
     user                = "ubuntu"
@@ -113,16 +113,16 @@ resource "azurerm_virtual_machine" "master" {
   }
 
   provisioner "file" {
-    source      = "${ path.module }/prepare_master.sh"
-    destination = "/home/ubuntu/prepare_master.sh"
+    source      = "${ path.module }/prepare_controller.sh"
+    destination = "/home/ubuntu/prepare_controller.sh"
   }
 
   provisioner "remote-exec" {
     on_failure = "continue"
 
     inline = [
-      "sudo /bin/bash -eux /home/ubuntu/prepare_master.sh",
-      "sudo rm /home/ubuntu/prepare_master.sh",
+      "sudo /bin/bash -eux /home/ubuntu/prepare_controller.sh",
+      "sudo rm /home/ubuntu/prepare_controller.sh",
     ]
   }
 
@@ -139,11 +139,11 @@ data "template_file" "cloud-config" {
     ETCD_NAME        = "etcd${ count.index + 1 }"
     INTERNAL_TLD     = "${ var.internal-tld }"
     FQDN             = "etcd${ count.index + 1 }.${ var.internal-tld }"
-    INTERNAL_IP      = "${azurerm_network_interface.master.*.private_ip_address[count.index]}"
+    INTERNAL_IP      = "${azurerm_network_interface.controller.*.private_ip_address[count.index]}"
     DNS_SERVICE_IP   = "${ var.dns-service-ip }"
-    ETCD_IP1         = "${azurerm_network_interface.master.*.private_ip_address[0]}"
-    ETCD_IP2         = "${azurerm_network_interface.master.*.private_ip_address[1]}"
-    ETCD_IP3         = "${azurerm_network_interface.master.*.private_ip_address[2]}"
+    ETCD_IP1         = "${azurerm_network_interface.controller.*.private_ip_address[0]}"
+    ETCD_IP2         = "${azurerm_network_interface.controller.*.private_ip_address[1]}"
+    ETCD_IP3         = "${azurerm_network_interface.controller.*.private_ip_address[2]}"
     POD_CIDR         = "${ var.pod-cidr }"
     LOCATION         = "${ var.location }"
     SERVICE_IP_RANGE = "${ var.service-cidr }"
@@ -165,6 +165,6 @@ data "template_file" "ssh-pub-key" {
 
 resource "null_resource" "dummy_dependency" {
   depends_on = [
-    "azurerm_virtual_machine.master",
+    "azurerm_virtual_machine.controller",
   ]
 }

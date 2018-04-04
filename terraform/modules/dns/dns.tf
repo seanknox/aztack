@@ -43,9 +43,9 @@ resource "azurerm_dns_a_record" "A-etcds" {
   ]
 }
 
-resource "azurerm_dns_cname_record" "CNAME-master" {
+resource "azurerm_dns_cname_record" "CNAME-controller" {
   depends_on          = ["null_resource.dns_zone"]
-  name                = "master"
+  name                = "controller"
   zone_name           = "${ var.internal-tld }"
   resource_group_name = "${ var.name }"
   ttl                 = 300
