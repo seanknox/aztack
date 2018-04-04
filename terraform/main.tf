@@ -92,6 +92,7 @@ module "master" {
   pod-cidr       = "${ var.cidr["pods"] }"
   service-cidr   = "${ var.cidr["service-cluster"] }"
   azure          = "${ var.azure }"
+  internal-tld   = "${ var.internal-tld }"
 
   # modules
   private-subnet-id = "${ module.vnet.private-subnet-id }"

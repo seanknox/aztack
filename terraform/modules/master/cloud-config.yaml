@@ -38,7 +38,7 @@ write_files:
 
       [Service]
       ExecStart=/usr/bin/etcd \
-        --name ${ETCD_NAME} \
+        --name ${ETCD_NAME}.${INTERNAL_TLD} \
         --cert-file=/etc/etcd/ssl/kube-apiserver.pem \
         --key-file=/etc/etcd/ssl/kube-apiserver-key.pem \
         --peer-cert-file=/etc/etcd/ssl/kube-apiserver.pem \
@@ -46,15 +46,15 @@ write_files:
         --trusted-ca-file=/etc/etcd/ssl/ca.pem \
         --peer-trusted-ca-file=/etc/etcd/ssl/ca.pem \
         --peer-client-cert-auth \
-        --client-cert-auth \
-        --initial-advertise-peer-urls https://${INTERNAL_IP}:2380 \
-        --listen-peer-urls https://${INTERNAL_IP}:2380 \
-        --listen-client-urls https://${INTERNAL_IP}:2379,http://127.0.0.1:2379 \
-        --advertise-client-urls https://${INTERNAL_IP}:2379 \
+        --client-cert-auth=true \
+        --discovery-srv ${INTERNAL_TLD} \
+        --initial-advertise-peer-urls https://${FQDN}:2380 \
+        --listen-peer-urls https://${ETCD_NAME}.${INTERNAL_TLD}:2380 \
+        --listen-client-urls https://${ETCD_NAME}.${INTERNAL_TLD}:2379,http://127.0.0.1:2379 \
+        --advertise-client-urls https://${FQDN}:2379 \
         --initial-cluster-token etcd-cluster-0 \
-        --initial-cluster k8smaster1=https://10.0.10.10:2379,k8smaster2=https://10.0.10.11:2379,k8smaster3=https://10.0.10.12:2379 \
         --initial-cluster-state new \
-        --data-dir=/var/lib/etcd/default
+        --data-dir /var/lib/etcd/default
       Restart=on-failure
       RestartSec=5
       Type=notify

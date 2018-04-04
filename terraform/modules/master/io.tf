@@ -11,9 +11,10 @@ variable "pod-cidr" {}
 variable "service-cidr" {}
 variable "bastion-ip" {}
 variable "private-subnet-id" {}
-variable "depends-id" {}
 variable "storage_endpoint" {}
 variable "image_id" {}
+variable "internal-tld" {}
+variable "depends-id" {}
 
 variable "backend_pool_ids" {
   type = "list"

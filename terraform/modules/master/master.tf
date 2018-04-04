@@ -136,7 +136,9 @@ data "template_file" "cloud-config" {
   count    = "${ length( split(",", var.etcd-ips) ) }"
 
   vars {
-    ETCD_NAME        = "k8smaster${ count.index + 1 }"
+    ETCD_NAME        = "etcd${ count.index + 1 }"
+    INTERNAL_TLD     = "${ var.internal-tld }"
+    FQDN             = "etcd${ count.index + 1 }.${ var.internal-tld }"
     INTERNAL_IP      = "${azurerm_network_interface.master.*.private_ip_address[count.index]}"
     DNS_SERVICE_IP   = "${ var.dns-service-ip }"
     ETCD_IP1         = "${azurerm_network_interface.master.*.private_ip_address[0]}"
