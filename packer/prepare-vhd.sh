@@ -14,7 +14,7 @@ apt_flags=(-o "Dpkg::Options::=--force-confnew" -qy)
 apt-get update -q
 apt-get upgrade "${apt_flags[@]}"
 # TODO pin versions here
-apt-get install "${apt_flags[@]}" docker.io etcd conntrack
+apt-get install "${apt_flags[@]}" docker.io conntrack
 
 ## Also install `jq`, `traceroute`, `ca-certificates`
 
