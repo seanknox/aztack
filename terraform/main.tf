@@ -56,7 +56,7 @@ module "image" {
 
 module "bastion" {
   source     = "./modules/bastion"
-  depends-id = "${ module.vnet.depends-id }"
+  depends-id = "${ module.dns.depends-id }"
 
   # variables
   name     = "${ var.name }"
@@ -69,7 +69,7 @@ module "bastion" {
 
 module "load_balancer" {
   source     = "./modules/load_balancer"
-  depends-id = "${ module.vnet.depends-id }"
+  depends-id = "${ module.bastion.depends-id }"
 
   # variables
   name                 = "${ var.name }"

@@ -120,6 +120,7 @@ resource "azurerm_dns_srv_record" "etcd-server-tcp" {
 
 resource "null_resource" "dummy_dependency" {
   depends_on = [
+    "null_resource.dns_zone",
     "azurerm_dns_srv_record.etcd-server-tcp",
     "azurerm_dns_a_record.A-etcd",
   ]
