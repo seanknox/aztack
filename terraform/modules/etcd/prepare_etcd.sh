@@ -9,7 +9,14 @@ cp /home/ubuntu/{ca,ca-key,kube-apiserver,kube-apiserver-key}.pem /etc/etcd/ssl/
 cp /home/ubuntu/{ca,ca-key,kube-apiserver,kube-apiserver-key}.pem /etc/kubernetes/ssl/.
 rm /home/ubuntu/*.pem
 
-# reinitialize daemons and start etcd + kube components
-sudo systemctl daemon-reload
-sudo systemctl enable kube-apiserver kube-controller-manager kube-scheduler
-sudo systemctl start kube-apiserver kube-controller-manager kube-scheduler
+systemctl enable etcd.service
+systemctl start etcd.service
+
+mkdir -p /etc/systemd/system/etcd.service.d
+
+cat <<EOF > /etc/systemd/system/etcd.service.d/local.conf
+[Service]
+Environment="ETCD_INITIAL_CLUSTER_STATE=existing"
+EOF
+
+systemctl daemon-reload

@@ -21,6 +21,10 @@ variable "etcd-ips" {
 
 variable "internal-tld" {}
 
+variable "master_count" {
+  default = 3
+}
+
 variable "node_count" {
   default = 3
 }
@@ -43,10 +47,6 @@ variable "location" {
 
 variable "kube-api-public-fqdn" {}
 variable "kube-api-internal-ip" {}
-
-output "bastion-ip" {
-  value = "${ module.bastion.public-ip }"
-}
 
 output "cluster-domain" {
   value = "${ var.cluster-domain }"
@@ -78,6 +78,10 @@ output "kube-api-public-fqdn" {
 
 output "kube-api-internal-ip" {
   value = "${ var.kube-api-internal-ip }"
+}
+
+output "bastion-ip" {
+  value = "${ module.bastion.public-ip }"
 }
 
 # output "public_load_balancer_ip" {

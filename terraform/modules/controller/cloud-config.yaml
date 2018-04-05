@@ -26,43 +26,6 @@ write_files:
         "useManagedIdentityExtension": false,
         "useInstanceMetadata": true
       }
-  - path: "/lib/systemd/system/etcd.service"
-    permissions: "0755"
-    content: |
-      [Unit]
-      Description=etcd - highly-available key value store
-      Documentation=https://github.com/coreos/etcd
-      Documentation=man:etcd
-      After=network.target
-      Wants=network-online.target
-
-      [Service]
-      Environment="ETCD_ADVERTISE_CLIENT_URLS=https://${ FQDN }:2379"
-      Environment="ETCD_CERT_FILE=/etc/etcd/ssl/kube-apiserver.pem"
-      Environment="ETCD_CLIENT_CERT_AUTH=true"
-      Environment="ETCD_DISCOVERY_SRV=${ INTERNAL_TLD }"
-      Environment="ETCD_INITIAL_ADVERTISE_PEER_URLS=https://${ FQDN }:2380"
-      Environment="ETCD_INITIAL_CLUSTER_STATE=new"
-      Environment="ETCD_INITIAL_CLUSTER_TOKEN=${ CLUSTER_TOKEN }"
-      Environment="ETCD_KEY_FILE=/etc/etcd/ssl/kube-apiserver-key.pem"
-      Environment="ETCD_LISTEN_CLIENT_URLS=https://0.0.0.0:2379"
-      Environment="ETCD_LISTEN_PEER_URLS=https://0.0.0.0:2380"
-      Environment="ETCD_NAME=${ ETCD_NAME }"
-      Environment="ETCD_PEER_CERT_FILE=/etc/etcd/ssl/kube-apiserver.pem"
-      Environment="ETCD_PEER_KEY_FILE=/etc/etcd/ssl/kube-apiserver-key.pem"
-      Environment="ETCD_PEER_TRUSTED_CA_FILE=/etc/etcd/ssl/ca.pem"
-      Environment="ETCD_SSL_DIR=/etc/kubernetes/ssl"
-      Environment="ETCD_TRUSTED_CA_FILE=/etc/etcd/ssl/ca.pem"
-      ExecStart=/usr/bin/etcd \
-        --data-dir /var/lib/etcd/default
-      Restart=on-failure
-      RestartSec=5
-      Type=notify
-      User=etcd
-      PermissionsStartOnly=true
-
-      [Install]
-      WantedBy=multi-user.target
   - path: "/etc/systemd/system/kube-apiserver.service"
     permissions: "0755"
     content: |
@@ -169,4 +132,4 @@ write_files:
 
 runcmd:
   - [ systemctl, enable, etcd.service ]
-  - [ systemctl, start, etcd.service ]
+  - [ /usr/bin/etcd, --initial-cluster-state, new  ]

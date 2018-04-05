@@ -1,20 +1,20 @@
-resource "azurerm_network_interface" "controller" {
-  name                = "controller${ count.index + 1 }"
+resource "azurerm_network_interface" "etcd" {
+  name                = "etcd${ count.index + 1 }"
   location            = "${ var.location }"
   resource_group_name = "${ var.resource_group_name }"
 
-  count = "${ var.master_count }"
+  count = "${ length( split(",", var.etcd-ips) ) }"
 
   ip_configuration {
-    name                                    = "private"
-    subnet_id                               = "${ var.private-subnet-id }"
-    private_ip_address_allocation           = "dynamic"
-    load_balancer_backend_address_pools_ids = ["${ var.backend_pool_ids }"]
+    name                          = "private"
+    subnet_id                     = "${ var.private-subnet-id }"
+    private_ip_address_allocation = "static"
+    private_ip_address            = "${ element(split(",", var.etcd-ips), count.index) }"
   }
 }
 
-resource "azurerm_availability_set" "controlleravset" {
-  name                         = "controlleravset"
+resource "azurerm_availability_set" "etcdavset" {
+  name                         = "etcdavset"
   location                     = "${var.location}"
   resource_group_name          = "${ var.resource_group_name }"
   platform_fault_domain_count  = 2
@@ -22,15 +22,15 @@ resource "azurerm_availability_set" "controlleravset" {
   managed                      = true
 }
 
-resource "azurerm_virtual_machine" "controller" {
-  name                  = "k8scontroller${ count.index + 1 }"
+resource "azurerm_virtual_machine" "etcd" {
+  name                  = "k8setcd${ count.index + 1 }"
   location              = "${ var.location }"
   resource_group_name   = "${ var.resource_group_name }"
-  network_interface_ids = ["${azurerm_network_interface.controller.*.id[count.index]}"]
-  availability_set_id   = "${azurerm_availability_set.controlleravset.id}"
+  network_interface_ids = ["${azurerm_network_interface.etcd.*.id[count.index]}"]
+  availability_set_id   = "${azurerm_availability_set.etcdavset.id}"
   vm_size               = "Standard_DS1_v2"
 
-  count = "${ var.master_count }"
+  count = "${ length( split(",", var.etcd-ips) ) }"
 
   # Uncomment this line to delete the OS disk automatically when deleting the VM
   delete_os_disk_on_termination = true
@@ -43,7 +43,7 @@ resource "azurerm_virtual_machine" "controller" {
   }
 
   storage_os_disk {
-    name              = "controllerosdisk${ count.index + 1 }"
+    name              = "etcdosdisk${ count.index + 1 }"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
@@ -51,7 +51,7 @@ resource "azurerm_virtual_machine" "controller" {
 
   # Optional data disks
   storage_data_disk {
-    name              = "controllerdatadisk${ count.index + 1 }"
+    name              = "etcddatadisk${ count.index + 1 }"
     managed_disk_type = "Standard_LRS"
     create_option     = "Empty"
     lun               = 0
@@ -59,7 +59,7 @@ resource "azurerm_virtual_machine" "controller" {
   }
 
   os_profile {
-    computer_name  = "k8scontroller${ count.index + 1 }"
+    computer_name  = "k8setcd${ count.index + 1 }"
     admin_username = "ubuntu"
     admin_password = "Kangaroo-jeremiah-thereon1!"
 
@@ -81,7 +81,7 @@ resource "azurerm_virtual_machine" "controller" {
   }
 
   connection {
-    host                = "${azurerm_network_interface.controller.*.private_ip_address[count.index]}"
+    host                = "${azurerm_network_interface.etcd.*.private_ip_address[count.index]}"
     bastion_host        = "${ var.bastion-ip }"
     bastion_private_key = "${ data.template_file.ssh-private-key.rendered }"
     user                = "ubuntu"
@@ -112,22 +112,31 @@ resource "azurerm_virtual_machine" "controller" {
   }
 
   provisioner "file" {
-    source      = "${ path.module }/prepare_controller.sh"
-    destination = "/home/ubuntu/prepare_controller.sh"
+    source      = "${ path.module }/prepare_etcd.sh"
+    destination = "/home/ubuntu/prepare_etcd.sh"
   }
 
   provisioner "remote-exec" {
     on_failure = "continue"
 
     inline = [
-      "sudo /bin/bash -eux /home/ubuntu/prepare_controller.sh",
-      "sudo rm /home/ubuntu/prepare_controller.sh",
+      "sudo /bin/bash -eux /home/ubuntu/prepare_etcd.sh",
+      "sudo rm /home/ubuntu/prepare_etcd.sh",
     ]
   }
 
   tags {
     environment = "staging"
   }
+}
+
+resource "random_id" "cluster_token" {
+  keepers = {
+    # Generate a new ID only when a new resource group is defined
+    resource_group = "${ var.resource_group_name }"
+  }
+
+  byte_length = 8
 }
 
 data "template_file" "ssh-private-key" {
@@ -140,6 +149,6 @@ data "template_file" "ssh-pub-key" {
 
 resource "null_resource" "dummy_dependency" {
   depends_on = [
-    "azurerm_virtual_machine.controller",
+    "azurerm_virtual_machine.etcd",
   ]
 }

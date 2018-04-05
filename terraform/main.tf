@@ -6,26 +6,22 @@ provider "azurerm" {
   tenant_id       = "${var.azure["tenant_id"]}"
 }
 
-module "rg" {
-  source     = "./modules/rg"
-  depends-id = ""
-
-  # variables
+resource "azurerm_resource_group" "main" {
   name     = "${ var.name }"
   location = "${ var.location }"
 }
 
 module "vnet" {
   source     = "./modules/vnet"
-  depends-id = "${ module.rg.depends-id }"
+  depends-id = ""
 
   # variables
   name     = "${ var.name }"
   location = "${ var.location }"
   cidr     = "${ var.cidr["vnet"] }"
 
-	# modules
-	resource_group_name = "${ module.rg.name }"
+  # modules
+  resource_group_name = "${ azurerm_resource_group.main.name }"
 }
 
 module "dns" {
@@ -37,33 +33,47 @@ module "dns" {
   internal-tld = "${ var.internal-tld }"
   name         = "${ var.name }"
 
-	# modules
-	resource_group_name = "${ module.rg.name }"
+  # modules
+  resource_group_name = "${ azurerm_resource_group.main.name }"
 }
 
 module "storage_account" {
   source     = "./modules/storage_account"
-  depends-id = "${ module.rg.depends-id }"
+  depends-id = "${ module.vnet.depends-id }"
 
   # variables
   name     = "${ var.name }"
   location = "${ var.location }"
 
-	# modules
-	resource_group_name = "${ module.rg.name }"
+  # modules
+  resource_group_name = "${ azurerm_resource_group.main.name }"
 }
 
 module "image" {
   source     = "./modules/image"
-  depends-id = "${ module.storage_account.depends-id }"
+  depends-id = "${ module.vnet.depends-id }"
 
   # variables
   name          = "${ var.name }"
   location      = "${ var.location }"
   azure_vhd_uri = "${ var.azure_vhd_uri }"
 
-	# modules
-	resource_group_name = "${ module.rg.name }"
+  # modules
+  resource_group_name = "${ azurerm_resource_group.main.name }"
+}
+
+module "load_balancer" {
+  source     = "./modules/load_balancer"
+  depends-id = "${ module.vnet.depends-id }"
+
+  # variables
+  name                 = "${ var.name }"
+  location             = "${ var.location }"
+  kube-api-internal-ip = "${ var.kube-api-internal-ip }"
+
+  # modules
+  private-subnet-id   = "${ module.vnet.private-subnet-id }"
+  resource_group_name = "${ azurerm_resource_group.main.name }"
 }
 
 module "bastion" {
@@ -75,32 +85,37 @@ module "bastion" {
   location = "${ var.location }"
 
   # modules
-  private-subnet-id = "${ module.vnet.private-subnet-id }"
-  storage_endpoint  = "${ module.storage_account.primary_blob_endpoint }"
-	resource_group_name = "${ module.rg.name }"
+  private-subnet-id   = "${ module.vnet.private-subnet-id }"
+  storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
+  resource_group_name = "${ azurerm_resource_group.main.name }"
 }
 
-module "load_balancer" {
-  source     = "./modules/load_balancer"
+module "etcd" {
+  source     = "./modules/etcd"
   depends-id = "${ module.bastion.depends-id }"
 
   # variables
-  name                 = "${ var.name }"
-  location             = "${ var.location }"
-  kube-api-internal-ip = "${ var.kube-api-internal-ip }"
+  name         = "${ var.name }"
+  location     = "${ var.location }"
+  etcd-ips     = "${ var.etcd-ips }"
+  internal-tld = "${ var.internal-tld }"
 
   # modules
-  private-subnet-id = "${ module.vnet.private-subnet-id }"
-	resource_group_name = "${ module.rg.name }"
+  private-subnet-id   = "${ module.vnet.private-subnet-id }"
+  storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
+  image_id            = "${ module.image.image_id }"
+  bastion-ip          = "${ module.bastion.public-ip }"
+  resource_group_name = "${ azurerm_resource_group.main.name }"
 }
 
 module "controller" {
   source     = "./modules/controller"
-  depends-id = "${ module.load_balancer.depends-id }"
+  depends-id = "${ module.bastion.depends-id }"
 
   # variables
   name           = "${ var.name }"
   location       = "${ var.location }"
+  master_count   = "${ var.master_count }"
   etcd-ips       = "${ var.etcd-ips }"
   dns-service-ip = "${ var.dns-service-ip }"
   pod-cidr       = "${ var.cidr["pods"] }"
@@ -109,12 +124,12 @@ module "controller" {
   internal-tld   = "${ var.internal-tld }"
 
   # modules
-  private-subnet-id = "${ module.vnet.private-subnet-id }"
-  storage_endpoint  = "${ module.storage_account.primary_blob_endpoint }"
-  image_id          = "${ module.image.image_id }"
-  bastion-ip        = "${ module.bastion.public-ip }"
-  backend_pool_ids  = ["${ module.load_balancer.public_backend_pool_id }", "${ module.load_balancer.private_backend_pool_id }"]
-	resource_group_name = "${ module.rg.name }"
+  private-subnet-id   = "${ module.vnet.private-subnet-id }"
+  storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
+  image_id            = "${ module.image.image_id }"
+  bastion-ip          = "${ module.bastion.public-ip }"
+  backend_pool_ids    = ["${ module.load_balancer.public_backend_pool_id }", "${ module.load_balancer.private_backend_pool_id }"]
+  resource_group_name = "${ azurerm_resource_group.main.name }"
 }
 
 module "node" {
@@ -130,9 +145,9 @@ module "node" {
   internal-tld   = "${ var.internal-tld }"
 
   # modules
-  private-subnet-id = "${ module.vnet.private-subnet-id }"
-  storage_endpoint  = "${ module.storage_account.primary_blob_endpoint }"
-  image_id          = "${ module.image.image_id }"
-  bastion-ip        = "${ module.bastion.public-ip }"
-	resource_group_name = "${ module.rg.name }"
+  private-subnet-id   = "${ module.vnet.private-subnet-id }"
+  storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
+  image_id            = "${ module.image.image_id }"
+  bastion-ip          = "${ module.bastion.public-ip }"
+  resource_group_name = "${ azurerm_resource_group.main.name }"
 }
