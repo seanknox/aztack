@@ -13,6 +13,19 @@ resource "azurerm_network_interface" "controller" {
   }
 }
 
+resource "azurerm_dns_a_record" "A-controllers" {
+  count = "${ var.master_count }"
+
+  name                = "controller${ count.index+1 }"
+  zone_name           = "${ var.internal-tld }"
+  resource_group_name = "${ var.resource_group_name }"
+  ttl                 = 300
+
+  records = [
+    "${ azurerm_network_interface.controller.*.private_ip_address[count.index] }",
+  ]
+}
+
 resource "azurerm_availability_set" "controlleravset" {
   name                         = "controlleravset"
   location                     = "${var.location}"

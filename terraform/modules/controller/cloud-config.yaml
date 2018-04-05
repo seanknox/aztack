@@ -50,7 +50,7 @@ write_files:
         --etcd-cafile=/etc/kubernetes/ssl/ca.pem \
         --etcd-certfile=/etc/etcd/ssl/kube-apiserver.pem \
         --etcd-keyfile=/etc/etcd/ssl/kube-apiserver-key.pem \
-        --etcd-servers=https://${ETCD_IP1}:2379,https://${ETCD_IP2}:2379,https://${ETCD_IP3}:2379 \
+        --etcd-servers=https://etcd1.${INTERNAL_TLD}:2379,https://etcd2.${INTERNAL_TLD}:2379,https://etcd3.${INTERNAL_TLD}:2379 \
         --event-ttl=1h \
         --insecure-bind-address=127.0.0.1 \
         --kubelet-certificate-authority=/etc/kubernetes/ssl/ca.pem \
