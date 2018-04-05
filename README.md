@@ -31,6 +31,9 @@ Packer step generates an Azure VHD with:
   - [ ] separate controllers and nodes into different subnets (with NSGs)
 	- [ ] Explicit MSI definition
 	- [ ] token/TLS bootstrap of kubelet https://kubernetes.io/docs/admin/kubelet-tls-bootstrapping/
+	- [x] separate etcd from controllers
+	- [ ] certs for etcd, api, and clients
+	- [ ] kube-proxy on nodes
 - [x] example of provisioning in modules/bastion
 - [x] example of provisioning in modules/nodes via bastion
 
