@@ -166,3 +166,7 @@ write_files:
           user: kubelet
         name: kubelet-context
       current-context: kubelet-context
+
+runcmd:
+  - [ systemctl, enable, etcd.service ]
+  - [ systemctl, start, etcd.service ]
