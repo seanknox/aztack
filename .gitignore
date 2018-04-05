@@ -1,4 +1,5 @@
 .secrets/
+.cfssl/
 terraform.*
 .terraform*
 id_rsa*
