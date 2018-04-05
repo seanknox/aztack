@@ -1,7 +1,7 @@
 resource "random_id" "randomId" {
   keepers = {
     # Generate a new ID only when a new resource group is defined
-    resource_group = "${ var.name }"
+    resource_group = "${ var.resource_group_name }"
   }
 
   byte_length = 8
@@ -9,7 +9,7 @@ resource "random_id" "randomId" {
 
 resource "azurerm_storage_account" "diag" {
   name                     = "diag${random_id.randomId.hex}"
-  resource_group_name      = "${ var.name }"
+  resource_group_name      = "${ var.resource_group_name }"
   location                 = "${ var.location }"
   account_replication_type = "LRS"
   account_tier             = "Standard"

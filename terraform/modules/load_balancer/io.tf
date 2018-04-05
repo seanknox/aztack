@@ -7,6 +7,7 @@ variable "name" {}
 variable "location" {}
 variable "kube-api-internal-ip" {}
 variable "private-subnet-id" {}
+variable "resource_group_name" {}
 variable "depends-id" {}
 
 output "depends-id" {

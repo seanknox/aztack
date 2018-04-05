@@ -14,6 +14,7 @@ variable "private-subnet-id" {}
 variable "storage_endpoint" {}
 variable "image_id" {}
 variable "internal-tld" {}
+variable "resource_group_name" {}
 variable "depends-id" {}
 
 variable "backend_pool_ids" {

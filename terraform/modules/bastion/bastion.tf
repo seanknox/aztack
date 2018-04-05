@@ -1,7 +1,7 @@
 resource "azurerm_public_ip" "bastion" {
   name                         = "bastion"
   location                     = "${ var.location }"
-  resource_group_name          = "${ var.name }"
+  resource_group_name          = "${ var.resource_group_name }"
   public_ip_address_allocation = "static"
 
   tags {
@@ -12,7 +12,7 @@ resource "azurerm_public_ip" "bastion" {
 resource "azurerm_network_interface" "bastion" {
   name                = "bastion"
   location            = "${ var.location }"
-  resource_group_name = "${ var.name }"
+  resource_group_name = "${ var.resource_group_name }"
 
   ip_configuration {
     name                          = "private"
@@ -25,7 +25,7 @@ resource "azurerm_network_interface" "bastion" {
 resource "azurerm_virtual_machine" "bastion" {
   name                  = "bastion"
   location              = "${ var.location }"
-  resource_group_name   = "${ var.name }"
+  resource_group_name   = "${ var.resource_group_name }"
   network_interface_ids = ["${azurerm_network_interface.bastion.id}"]
   vm_size               = "Standard_DS1_v2"
 

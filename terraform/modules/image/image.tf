@@ -1,7 +1,7 @@
 resource "azurerm_image" "acs" {
   name                = "${ var.name }-image"
   location            = "${ var.location }"
-  resource_group_name = "${ var.name }"
+  resource_group_name = "${ var.resource_group_name }"
 
   os_disk {
     os_type  = "Linux"

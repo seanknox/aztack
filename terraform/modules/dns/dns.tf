@@ -15,7 +15,7 @@ resource "null_resource" "dns_zone" {
   # Create private DNS zone that resolves automatically in the vnet
   provisioner "local-exec" {
     command = <<EOF
-        az network dns zone create -g ${ var.name } -n ${ var.internal-tld } --zone-type Private --registration-vnets ${ var.name }
+        az network dns zone create -g ${ var.resource_group_name } -n ${ var.internal-tld } --zone-type Private --registration-vnets ${ var.name }
       EOF
   }
 }
@@ -24,7 +24,7 @@ resource "azurerm_dns_a_record" "A-etcd" {
   depends_on          = ["null_resource.dns_zone"]
   name                = "etcd"
   zone_name           = "${ var.internal-tld }"
-  resource_group_name = "${ var.name }"
+  resource_group_name = "${ var.resource_group_name }"
   ttl                 = 300
   records             = ["${ split(",", var.etcd-ips) }"]
 }
@@ -35,7 +35,7 @@ resource "azurerm_dns_a_record" "A-etcds" {
 
   name                = "etcd${ count.index+1 }"
   zone_name           = "${ var.internal-tld }"
-  resource_group_name = "${ var.name }"
+  resource_group_name = "${ var.resource_group_name }"
   ttl                 = 300
 
   records = [
@@ -47,7 +47,7 @@ resource "azurerm_dns_cname_record" "CNAME-controller" {
   depends_on          = ["null_resource.dns_zone"]
   name                = "controller"
   zone_name           = "${ var.internal-tld }"
-  resource_group_name = "${ var.name }"
+  resource_group_name = "${ var.resource_group_name }"
   ttl                 = 300
   record              = "etcd.${ var.internal-tld }"
 }
@@ -56,7 +56,7 @@ resource "azurerm_dns_srv_record" "etcd-client-tcp" {
   depends_on          = ["null_resource.dns_zone"]
   name                = "_etcd-client-ssl._tcp"
   zone_name           = "${ var.internal-tld }"
-  resource_group_name = "${ var.name }"
+  resource_group_name = "${ var.resource_group_name }"
   ttl                 = 300
 
   record {
@@ -89,7 +89,7 @@ resource "azurerm_dns_srv_record" "etcd-server-tcp" {
   depends_on          = ["null_resource.dns_zone"]
   name                = "_etcd-server-ssl._tcp"
   zone_name           = "${ var.internal-tld }"
-  resource_group_name = "${ var.name }"
+  resource_group_name = "${ var.resource_group_name }"
   ttl                 = 300
 
   record {

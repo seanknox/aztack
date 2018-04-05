@@ -23,6 +23,9 @@ module "vnet" {
   name     = "${ var.name }"
   location = "${ var.location }"
   cidr     = "${ var.cidr["vnet"] }"
+
+	# modules
+	resource_group_name = "${ module.rg.name }"
 }
 
 module "dns" {
@@ -33,6 +36,9 @@ module "dns" {
   etcd-ips     = "${ var.etcd-ips }"
   internal-tld = "${ var.internal-tld }"
   name         = "${ var.name }"
+
+	# modules
+	resource_group_name = "${ module.rg.name }"
 }
 
 module "storage_account" {
@@ -42,6 +48,9 @@ module "storage_account" {
   # variables
   name     = "${ var.name }"
   location = "${ var.location }"
+
+	# modules
+	resource_group_name = "${ module.rg.name }"
 }
 
 module "image" {
@@ -52,6 +61,9 @@ module "image" {
   name          = "${ var.name }"
   location      = "${ var.location }"
   azure_vhd_uri = "${ var.azure_vhd_uri }"
+
+	# modules
+	resource_group_name = "${ module.rg.name }"
 }
 
 module "bastion" {
@@ -65,6 +77,7 @@ module "bastion" {
   # modules
   private-subnet-id = "${ module.vnet.private-subnet-id }"
   storage_endpoint  = "${ module.storage_account.primary_blob_endpoint }"
+	resource_group_name = "${ module.rg.name }"
 }
 
 module "load_balancer" {
@@ -78,6 +91,7 @@ module "load_balancer" {
 
   # modules
   private-subnet-id = "${ module.vnet.private-subnet-id }"
+	resource_group_name = "${ module.rg.name }"
 }
 
 module "controller" {
@@ -100,6 +114,7 @@ module "controller" {
   image_id          = "${ module.image.image_id }"
   bastion-ip        = "${ module.bastion.public-ip }"
   backend_pool_ids  = ["${ module.load_balancer.public_backend_pool_id }", "${ module.load_balancer.private_backend_pool_id }"]
+	resource_group_name = "${ module.rg.name }"
 }
 
 module "node" {
@@ -119,4 +134,5 @@ module "node" {
   storage_endpoint  = "${ module.storage_account.primary_blob_endpoint }"
   image_id          = "${ module.image.image_id }"
   bastion-ip        = "${ module.bastion.public-ip }"
+	resource_group_name = "${ module.rg.name }"
 }

@@ -1,5 +1,6 @@
 variable "name" {}
 variable "location" {}
+variable "resource_group_name" {}
 variable "depends-id" {}
 
 output "depends-id" {

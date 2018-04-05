@@ -1,7 +1,8 @@
 variable "name" {}
 variable "location" {}
-variable "depends-id" {}
 variable "azure_vhd_uri" {}
+variable "resource_group_name" { }
+variable "depends-id" {}
 
 output "depends-id" {
   value = "${null_resource.dummy_dependency.id}"

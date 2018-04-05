@@ -1,7 +1,7 @@
 resource "azurerm_network_interface" "controller" {
   name                = "controller${ count.index + 1 }"
   location            = "${ var.location }"
-  resource_group_name = "${ var.name }"
+  resource_group_name = "${ var.resource_group_name }"
 
   count = "${ length( split(",", var.etcd-ips) ) }"
 
@@ -17,7 +17,7 @@ resource "azurerm_network_interface" "controller" {
 resource "azurerm_availability_set" "controlleravset" {
   name                         = "controlleravset"
   location                     = "${var.location}"
-  resource_group_name          = "${ var.name }"
+  resource_group_name          = "${ var.resource_group_name }"
   platform_fault_domain_count  = 2
   platform_update_domain_count = 2
   managed                      = true
@@ -26,7 +26,7 @@ resource "azurerm_availability_set" "controlleravset" {
 resource "azurerm_virtual_machine" "controller" {
   name                  = "k8scontroller${ count.index + 1 }"
   location              = "${ var.location }"
-  resource_group_name   = "${ var.name }"
+  resource_group_name   = "${ var.resource_group_name }"
   network_interface_ids = ["${azurerm_network_interface.controller.*.id[count.index]}"]
   availability_set_id   = "${azurerm_availability_set.controlleravset.id}"
   vm_size               = "Standard_DS1_v2"

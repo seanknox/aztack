@@ -2,7 +2,7 @@ resource "azurerm_virtual_network" "main" {
   name                = "${ var.name }"
   address_space       = ["${ var.cidr }"]
   location            = "${ var.location }"
-  resource_group_name = "${ var.name }"
+  resource_group_name = "${ var.resource_group_name }"
 }
 
 resource "null_resource" "dummy_dependency" {

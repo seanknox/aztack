@@ -1,7 +1,7 @@
 resource "azurerm_public_ip" "lbpip" {
   name                         = "lbpip"
   location                     = "${ var.location }"
-  resource_group_name          = "${ var.name }"
+  resource_group_name          = "${ var.resource_group_name }"
   public_ip_address_allocation = "dynamic"
   domain_name_label            = "${ var.name }"
 
@@ -13,7 +13,7 @@ resource "azurerm_public_ip" "lbpip" {
 resource "azurerm_lb" "extlb" {
   name                = "${ var.name }-public"
   location            = "${ var.location }"
-  resource_group_name = "${ var.name }"
+  resource_group_name = "${ var.resource_group_name }"
 
   frontend_ip_configuration {
     name                 = "LoadBalancerFrontEndPublic"
@@ -22,13 +22,13 @@ resource "azurerm_lb" "extlb" {
 }
 
 resource "azurerm_lb_backend_address_pool" "public_backend_pool" {
-  resource_group_name = "${ var.name }"
+  resource_group_name = "${ var.resource_group_name }"
   loadbalancer_id     = "${azurerm_lb.extlb.id}"
   name                = "BackendPoolPublic"
 }
 
 resource "azurerm_lb_rule" "apiserver_public" {
-  resource_group_name            = "${ var.name }"
+  resource_group_name            = "${ var.resource_group_name }"
   loadbalancer_id                = "${azurerm_lb.extlb.id}"
   name                           = "kube-api-public"
   protocol                       = "tcp"
@@ -43,7 +43,7 @@ resource "azurerm_lb_rule" "apiserver_public" {
 }
 
 resource "azurerm_lb_probe" "lb_probe_public" {
-  resource_group_name = "${ var.name }"
+  resource_group_name = "${ var.resource_group_name }"
   loadbalancer_id     = "${azurerm_lb.extlb.id}"
   name                = "kube-api-publicProbe"
   protocol            = "tcp"

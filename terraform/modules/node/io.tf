@@ -2,13 +2,14 @@ variable "name" {}
 variable "location" {}
 variable "private-subnet-id" {}
 variable "node_count" {}
-variable "depends-id" {}
 variable "bastion-ip" {}
 variable "storage_endpoint" {}
 variable "image_id" {}
 variable "internal-tld" {}
 variable "dns-service-ip" {}
 variable "pod-cidr" {}
+variable "resource_group_name" {}
+variable "depends-id" {}
 
 output "depends-id" {
   value = "${null_resource.dummy_dependency.id}"
