@@ -20,20 +20,20 @@ Packer step generates an Azure VHD with:
 
 ### Terraform
 - [x] scaffolding of modules implemented:
-	- [x] controllers/etcd
-	- [x] PKI
-	- [x] Azure DNS
-	- [x] nodes
-	- [x] bastion
-	- [x] vnet
-	- [x] resource group
-	- [ ] NSGs for controller and nodes
+  - [x] controllers/etcd
+  - [x] PKI
+  - [x] Azure DNS
+  - [x] nodes
+  - [x] bastion
+  - [x] vnet
+  - [x] resource group
+  - [ ] NSGs for controller and nodes
   - [ ] separate controllers and nodes into different subnets (with NSGs)
-	- [ ] Explicit MSI definition
-	- [ ] token/TLS bootstrap of kubelet https://kubernetes.io/docs/admin/kubelet-tls-bootstrapping/
-	- [x] separate etcd from controllers
-	- [ ] certs for etcd, api, and clients
-	- [ ] kube-proxy on nodes
+  - [ ] Explicit MSI definition
+  - [ ] token/TLS bootstrap of kubelet https://kubernetes.io/docs/admin/kubelet-tls-bootstrapping/
+  - [x] separate etcd from controllers
+  - [ ] certs for etcd, api, and clients
+  - [ ] kube-proxy on nodes
 - [x] example of provisioning in modules/bastion
 - [x] example of provisioning in modules/nodes via bastion
 
