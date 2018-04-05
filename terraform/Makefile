@@ -28,7 +28,7 @@ export KUBE_API_PUBLIC_FQDN      := $(CLUSTER_NAME).$(AZURE_LOCATION).cloudapp.a
 
 export AZURE_VM_KEY_NAME    ?= $(CLUSTER_NAME)
 export AZURE_VM_KEY_PATH    := ${DIR_KEY_PAIR}/${AZURE_VM_KEY_NAME}.pem
-export AZURE_VHD_URI 				?= https://acstackimages.blob.core.windows.net/system/Microsoft.Compute/Images/acs-vhds/acstack-1522887162-osDisk.57fec4d8-e2c5-4408-a8e6-c8825e1f883a.vhd
+export AZURE_VHD_URI 				?= https://acstackimages.blob.core.windows.net/system/Microsoft.Compute/Images/acs-vhds/acstack-1522951385-osDisk.51fb3665-a63a-4f19-917a-ad7fa3796004.vhd
 export INTERNAL_TLD         := ${CLUSTER_NAME}.acs
 
 export HYPERKUBE_IMAGE      ?= quay.io/coreos/hyperkube

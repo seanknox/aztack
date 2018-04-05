@@ -24,3 +24,7 @@ variable "azure" {
 output "depends-id" {
   value = "${null_resource.dummy_dependency.id}"
 }
+
+output "controller_private_ips" {
+  value = "${azurerm_network_interface.controller.*.private_ip_address}"
+}

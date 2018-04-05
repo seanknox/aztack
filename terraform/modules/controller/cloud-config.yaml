@@ -43,7 +43,7 @@ write_files:
         --audit-log-maxbackup=3 \
         --audit-log-maxsize=100 \
         --audit-log-path=/var/log/audit.log \
-        --authorization-mode=Node,RBAC \
+        --authorization-mode=Node \
         --bind-address=0.0.0.0 \
         --client-ca-file=/etc/kubernetes/ssl/ca.pem \
         --enable-swagger-ui=true \

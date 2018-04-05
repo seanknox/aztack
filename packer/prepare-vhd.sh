@@ -48,7 +48,7 @@ sudo mkdir -p \
 sudo tar -xvf cni-plugins-amd64-v0.6.0.tgz -C /opt/cni/bin/
 sudo tar -xvf cri-containerd-1.0.0-beta.1.linux-amd64.tar.gz -C /
 sudo tar -xvf azure-vnet-cni-linux-amd64-v1.0.3.tgz
-sudo mv azure-vnet /opt/cni/bin
+sudo mv azure-vnet azure-vnet-ipam /opt/cni/bin
 sudo mv 10-azure.conflist /etc/cni/net.d
 
 ## Pre-fetch Kubernetes release images for Hyperkube

@@ -56,10 +56,6 @@ output "dns-service-ip" {
   value = "${ var.dns-service-ip }"
 }
 
-output "controller-ips" {
-  value = "${split(",", var.etcd-ips)}"
-}
-
 output "internal-tld" {
   value = "${ var.internal-tld }"
 }
@@ -90,4 +86,8 @@ output "bastion-ip" {
 
 output "node_private_ips" {
   value = "${ module.node.node_private_ips }"
+}
+
+output "controller_private_ips" {
+  value = "${ module.controller.controller_private_ips }"
 }
