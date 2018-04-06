@@ -83,9 +83,7 @@ TBD
 
 ```
 cd terraform
-make init # generates Azure credentials and other required configuration
-make plan # validates configuration and generates Terraform plan
-make apply # executes Terraform plan
+CLUSTER_NAME=mycluster make all # generates Azure credentials and other required configuration and builds infra on Terraform
 ```
 
 
