@@ -133,7 +133,7 @@ journal: ; @scripts/ssh "ssh `terraform output etcd1-ip` journalctl -fl"
 prereqs: ; @scripts/do-task "checking prerequisities" scripts/prereqs
 
 ## ssh into etcd1
-ssh: ; @scripts/ssh "ssh `terraform output etcd1-ip`"
+ssh: ; @scripts/ssh "ssh $(hostname)"
 
 ## ssh into bastion host
 ssh-bastion: ; @scripts/ssh
