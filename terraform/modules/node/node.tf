@@ -1,3 +1,16 @@
+resource "azurerm_dns_a_record" "A-node" {
+  count = "${ var.node_count }"
+
+  name                = "node${ count.index+1 }"
+  zone_name           = "${ var.internal-tld }"
+  resource_group_name = "${ var.resource_group_name }"
+  ttl                 = 300
+
+  records = [
+    "${ azurerm_network_interface.node.*.private_ip_address[count.index] }",
+  ]
+}
+
 resource "null_resource" "node_cert" {
   count = "${ var.node_count }"
 
