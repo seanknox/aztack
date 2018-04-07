@@ -22,20 +22,6 @@ resource "null_resource" "node_cert" {
   }
 }
 
-resource "azurerm_network_interface" "node" {
-  name                = "k8snode${ count.index + 1 }"
-  location            = "${ var.location }"
-  resource_group_name = "${ var.resource_group_name }"
-
-  count = "${ var.node_count }"
-
-  ip_configuration {
-    name                          = "private"
-    subnet_id                     = "${ var.private-subnet-id }"
-    private_ip_address_allocation = "dynamic"
-  }
-}
-
 resource "azurerm_availability_set" "nodeavset" {
   name                         = "nodeavset"
   location                     = "${var.location}"
@@ -46,7 +32,7 @@ resource "azurerm_availability_set" "nodeavset" {
 }
 
 resource "azurerm_virtual_machine" "node" {
-  name                  = "k8snode${ count.index + 1 }"
+  name                  = "node${ count.index + 1 }"
   location              = "${ var.location }"
   resource_group_name   = "${ var.resource_group_name }"
   network_interface_ids = ["${azurerm_network_interface.node.*.id[count.index]}"]
@@ -138,7 +124,7 @@ resource "azurerm_virtual_machine" "node" {
     on_failure = "continue"
 
     inline = [
-      "sudo /bin/bash -eux /home/ubuntu/prepare_node.sh",
+      "sudo /bin/bash -eux /home/ubuntu/prepare_node.sh ${ var.kube-api-internal-ip }",
       "sudo rm /home/ubuntu/prepare_node.sh",
     ]
   }

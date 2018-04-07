@@ -137,12 +137,13 @@ module "node" {
   depends-id = "${ module.bastion.depends-id }"
 
   # variables
-  name           = "${ var.name }"
-  location       = "${ var.location }"
-  node_count     = "${ var.node_count }"
-  dns-service-ip = "${ var.dns-service-ip }"
-  pod-cidr       = "${ var.cidr["pods"] }"
-  internal-tld   = "${ var.internal-tld }"
+  name                 = "${ var.name }"
+  location             = "${ var.location }"
+  node_count           = "${ var.node_count }"
+  dns-service-ip       = "${ var.dns-service-ip }"
+  pod-cidr             = "${ var.cidr["pods"] }"
+  internal-tld         = "${ var.internal-tld }"
+  kube-api-internal-ip = "${ var.kube-api-internal-ip }"
 
   # modules
   private-subnet-id   = "${ module.vnet.private-subnet-id }"

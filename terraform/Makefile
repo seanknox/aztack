@@ -35,14 +35,14 @@ export HYPERKUBE_IMAGE      ?= quay.io/coreos/hyperkube
 export HYPERKUBE_TAG        ?= v1.9.6_coreos.0
 
 export CIDR_VNET            ?= 10.0.0.0/16
-export CIDR_PODS            ?= 10.2.0.0/16
+export CIDR_PODS            ?= 10.0.128.0/17
 export CIDR_SERVICE_CLUSTER ?= 10.3.0.0/24
 
 export K8S_SERVICE_IP       ?= 10.3.0.1
 export K8S_DNS_IP           ?= 10.3.0.10
-export KUBE_API_INTERNAL_IP	?= 10.0.10.250
+export KUBE_API_INTERNAL_IP	?= 10.0.128.250
 
-export ETCD_IPS           ?= 10.0.10.10,10.0.10.11,10.0.10.12
+export ETCD_IPS           ?= 10.0.128.10,10.0.128.11,10.0.128.12
 
 export PKI_IP               ?= 10.0.10.9
 

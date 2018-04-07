@@ -9,6 +9,7 @@ variable "internal-tld" {}
 variable "dns-service-ip" {}
 variable "pod-cidr" {}
 variable "resource_group_name" {}
+variable "kube-api-internal-ip" {}
 variable "depends-id" {}
 
 output "depends-id" {
