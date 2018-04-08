@@ -6,14 +6,18 @@ provider "azurerm" {
   tenant_id       = "${var.azure["tenant_id"]}"
 }
 
-resource "azurerm_resource_group" "main" {
-  name     = "${ var.name }"
-  location = "${ var.location }"
+module "rg" {
+  source     = "./modules/rg"
+  depends-id = ""
+
+  # variables
+  resource_group_name = "${ var.name }"
+  location            = "${ var.location }"
 }
 
 module "vnet" {
   source     = "./modules/vnet"
-  depends-id = ""
+  depends-id = "${ module.rg.depends-id }"
 
   # variables
   name     = "${ var.name }"
@@ -21,12 +25,12 @@ module "vnet" {
   cidr     = "${ var.cidr["vnet"] }"
 
   # modules
-  resource_group_name = "${ azurerm_resource_group.main.name }"
+  resource_group_name = "${ module.rg.name }"
 }
 
 module "dns" {
   source     = "./modules/dns"
-  depends-id = "${ module.vnet.depends-id }"
+  depends-id = "${ module.rg.depends-id }"
 
   # variables
   etcd-ips     = "${ var.etcd-ips }"
@@ -34,7 +38,7 @@ module "dns" {
   name         = "${ var.name }"
 
   # modules
-  resource_group_name = "${ azurerm_resource_group.main.name }"
+  resource_group_name = "${ module.rg.name }"
 }
 
 module "storage_account" {
@@ -46,7 +50,7 @@ module "storage_account" {
   location = "${ var.location }"
 
   # modules
-  resource_group_name = "${ azurerm_resource_group.main.name }"
+  resource_group_name = "${ module.rg.name }"
 }
 
 module "image" {
@@ -59,7 +63,7 @@ module "image" {
   azure_vhd_uri = "${ var.azure_vhd_uri }"
 
   # modules
-  resource_group_name = "${ azurerm_resource_group.main.name }"
+  resource_group_name = "${ module.rg.name }"
 }
 
 module "load_balancer" {
@@ -73,7 +77,7 @@ module "load_balancer" {
 
   # modules
   private-subnet-id   = "${ module.vnet.private-subnet-id }"
-  resource_group_name = "${ azurerm_resource_group.main.name }"
+  resource_group_name = "${ module.rg.name }"
 }
 
 module "bastion" {
@@ -87,7 +91,7 @@ module "bastion" {
   # modules
   private-subnet-id   = "${ module.vnet.private-subnet-id }"
   storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
-  resource_group_name = "${ azurerm_resource_group.main.name }"
+  resource_group_name = "${ module.rg.name }"
 }
 
 module "etcd" {
@@ -105,7 +109,7 @@ module "etcd" {
   storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
   image_id            = "${ module.image.image_id }"
   bastion-ip          = "${ module.bastion.public-ip }"
-  resource_group_name = "${ azurerm_resource_group.main.name }"
+  resource_group_name = "${ module.rg.name }"
 }
 
 module "controller" {
@@ -129,7 +133,7 @@ module "controller" {
   image_id            = "${ module.image.image_id }"
   bastion-ip          = "${ module.bastion.public-ip }"
   backend_pool_ids    = ["${ module.load_balancer.public_backend_pool_id }", "${ module.load_balancer.private_backend_pool_id }"]
-  resource_group_name = "${ azurerm_resource_group.main.name }"
+  resource_group_name = "${ module.rg.name }"
 }
 
 module "node" {
@@ -150,5 +154,5 @@ module "node" {
   storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
   image_id            = "${ module.image.image_id }"
   bastion-ip          = "${ module.bastion.public-ip }"
-  resource_group_name = "${ azurerm_resource_group.main.name }"
+  resource_group_name = "${ module.rg.name }"
 }
