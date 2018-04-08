@@ -1,5 +1,5 @@
 resource "azurerm_network_interface" "node" {
-  name                = "k8snode${ count.index + 1 }"
+  name                = "node${ count.index + 1 }"
   location            = "${ var.location }"
   resource_group_name = "${ var.resource_group_name }"
 

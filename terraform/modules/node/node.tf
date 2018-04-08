@@ -17,7 +17,7 @@ resource "null_resource" "node_cert" {
   # Generate node client certificate
   provisioner "local-exec" {
     command = <<EOF
-        ${path.module}/../../scripts/cfssl/generate_node.sh "k8snode${ count.index + 1 }"
+        ${path.module}/../../scripts/cfssl/generate_node.sh "node${ count.index + 1 }"
       EOF
   }
 }
@@ -68,7 +68,7 @@ resource "azurerm_virtual_machine" "node" {
   }
 
   os_profile {
-    computer_name  = "k8snode${ count.index + 1 }"
+    computer_name  = "node${ count.index + 1 }"
     admin_username = "ubuntu"
     admin_password = "Kangaroo-jeremiah-thereon1!"
 
@@ -106,13 +106,13 @@ resource "azurerm_virtual_machine" "node" {
   }
 
   provisioner "file" {
-    source      = "${ path.module }/../../.secrets/k8snode${ count.index + 1 }.pem"
-    destination = "/home/ubuntu/k8snode${ count.index + 1 }.pem"
+    source      = "${ path.module }/../../.secrets/node${ count.index + 1 }.pem"
+    destination = "/home/ubuntu/node${ count.index + 1 }.pem"
   }
 
   provisioner "file" {
-    source      = "${ path.module }/../../.secrets/k8snode${ count.index + 1 }-key.pem"
-    destination = "/home/ubuntu/k8snode${ count.index + 1 }-key.pem"
+    source      = "${ path.module }/../../.secrets/node${ count.index + 1 }-key.pem"
+    destination = "/home/ubuntu/node${ count.index + 1 }-key.pem"
   }
 
   provisioner "file" {
@@ -139,7 +139,7 @@ data "template_file" "cloud-config" {
   count    = "${ var.node_count }"
 
   vars {
-    HOSTNAME       = "k8snode${ count.index + 1 }"
+    HOSTNAME       = "node${ count.index + 1 }"
     INTERNAL_TLD   = "${ var.internal-tld }"
     INTERNAL_IP    = "${azurerm_network_interface.node.*.private_ip_address[count.index]}"
     DNS_SERVICE_IP = "${ var.dns-service-ip }"
