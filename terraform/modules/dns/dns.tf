@@ -1,4 +1,16 @@
+resource "null_resource" "pause" {
+  provisioner "local-exec" {
+    command = <<EOF
+        sleep 5
+      EOF
+  }
+}
+
 resource "null_resource" "enable_dns_ext" {
+  depends_on = [
+    "null_resource.pause",
+  ]
+
   # Enable private zone extension
   provisioner "local-exec" {
     on_failure = "continue"
