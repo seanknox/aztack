@@ -1,0 +1,6 @@
+#!/bin/bash -eux
+
+ADMIN_TOKEN=$(head -c 16 /dev/urandom | od -An -t x | tr -d ' ')
+NODE_TOKEN=$(head -c 16 /dev/urandom | od -An -t x | tr -d ' ')
+
+jq -n --arg admin_token "$ADMIN_TOKEN" --arg node_token "$NODE_TOKEN" '{"admin_token":$admin_token,"node_token":$node_token}'

@@ -11,17 +11,6 @@ resource "azurerm_dns_a_record" "A-node" {
   ]
 }
 
-resource "null_resource" "node_cert" {
-  count = "${ var.node_count }"
-
-  # Generate node client certificate
-  provisioner "local-exec" {
-    command = <<EOF
-        ${path.module}/../../scripts/cfssl/generate_node.sh "node${ count.index + 1 }"
-      EOF
-  }
-}
-
 resource "azurerm_availability_set" "nodeavset" {
   name                         = "nodeavset"
   location                     = "${var.location}"
@@ -144,6 +133,7 @@ data "template_file" "cloud-config" {
     INTERNAL_IP    = "${azurerm_network_interface.node.*.private_ip_address[count.index]}"
     DNS_SERVICE_IP = "${ var.dns-service-ip }"
     POD_CIDR       = "${ var.pod-cidr }"
+    NODE_TOKEN     = "${ var.node_token }"
   }
 }
 

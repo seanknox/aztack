@@ -26,6 +26,11 @@ write_files:
         "useManagedIdentityExtension": false,
         "useInstanceMetadata": true
       }
+  - path: "/var/lib/kubernetes/token.csv"
+    permissions: "0755"
+    content: |
+      ${ADMIN_TOKEN},admin,10000,admin
+      ${NODE_TOKEN},kubelet-bootstrap,10001,"system:kubelet-bootstrap"
   - path: "/etc/systemd/system/kube-apiserver.service"
     permissions: "0755"
     content: |
@@ -43,10 +48,13 @@ write_files:
         --audit-log-maxbackup=3 \
         --audit-log-maxsize=100 \
         --audit-log-path=/var/log/audit.log \
-        --authorization-mode=Node \
+        --authorization-mode=Node,RBAC \
         --bind-address=0.0.0.0 \
         --client-ca-file=/etc/kubernetes/ssl/ca.pem \
+        --cloud-config=/etc/kubernetes/azure.json \
+        --cloud-provider=azure \
         --enable-swagger-ui=true \
+        --enable-bootstrap-token-auth \
         --etcd-cafile=/etc/kubernetes/ssl/ca.pem \
         --etcd-certfile=/etc/etcd/ssl/kube-apiserver.pem \
         --etcd-keyfile=/etc/etcd/ssl/kube-apiserver-key.pem \
@@ -57,14 +65,18 @@ write_files:
         --kubelet-client-certificate=/etc/kubernetes/ssl/kube-apiserver.pem \
         --kubelet-client-key=/etc/kubernetes/ssl/kube-apiserver-key.pem \
         --kubelet-https=true \
+        --profiling=false \
+        --repair-malformed-updates=false \
         --runtime-config=api/all \
         --service-account-key-file=/etc/kubernetes/ssl/kube-apiserver-key.pem \
         --service-cluster-ip-range=${SERVICE_IP_RANGE} \
         --service-node-port-range=30000-32767 \
+        --storage-backend=etcd3 \
         --tls-ca-file=/etc/kubernetes/ssl/ca.pem \
         --tls-cert-file=/etc/kubernetes/ssl/kube-apiserver.pem \
         --tls-private-key-file=/etc/kubernetes/ssl/kube-apiserver-key.pem \
-        --v=2
+        --token-auth-file=/var/lib/kubernetes/token.csv \
+        --v=4
       Restart=on-failure
       RestartSec=5
 
@@ -86,12 +98,13 @@ write_files:
         --cluster-name=kubernetes \
         --cluster-signing-cert-file=/etc/kubernetes/ssl/ca.pem \
         --cluster-signing-key-file=/etc/kubernetes/ssl/ca-key.pem \
+        --controllers=*,bootstrapsigner,tokencleaner \
         --kubeconfig=/var/lib/kubelet/kubeconfig \
         --leader-elect=true \
         --master=http://127.0.0.1:8080 \
         --profiling=false \
         --root-ca-file=/etc/kubernetes/ssl/ca.pem \
-        --service-account-private-key-file=/etc/kubernetes/ssl/ca-key.pem \
+        --service-account-private-key-file=/etc/kubernetes/ssl/kube-apiserver-key.pem \
         --service-cluster-ip-range=${SERVICE_IP_RANGE} \
         --terminated-pod-gc-threshold=5000 \
         --use-service-account-credentials=true \

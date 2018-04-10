@@ -112,6 +112,11 @@ module "etcd" {
   resource_group_name = "${ module.rg.name }"
 }
 
+module "bootstrap_token" {
+  source     = "./modules/bootstrap_token"
+  depends-id = ""
+}
+
 module "controller" {
   source     = "./modules/controller"
   depends-id = "${ module.bastion.depends-id }"
@@ -134,6 +139,8 @@ module "controller" {
   bastion-ip          = "${ module.bastion.public-ip }"
   backend_pool_ids    = ["${ module.load_balancer.public_backend_pool_id }", "${ module.load_balancer.private_backend_pool_id }"]
   resource_group_name = "${ module.rg.name }"
+  admin_token         = "${ module.bootstrap_token.admin_token }"
+  node_token          = "${ module.bootstrap_token.node_token }"
 }
 
 module "node" {
@@ -155,4 +162,5 @@ module "node" {
   image_id            = "${ module.image.image_id }"
   bastion-ip          = "${ module.bastion.public-ip }"
   resource_group_name = "${ module.rg.name }"
+  node_token          = "${ module.bootstrap_token.node_token }"
 }

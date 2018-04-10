@@ -11,6 +11,8 @@ variable "storage_endpoint" {}
 variable "image_id" {}
 variable "internal-tld" {}
 variable "resource_group_name" {}
+variable "admin_token" {}
+variable "node_token" {}
 variable "depends-id" {}
 
 variable "backend_pool_ids" {
