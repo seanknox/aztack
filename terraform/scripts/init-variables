@@ -22,7 +22,7 @@ echo $PKI_IP
 
 set +x
 
-CRED_ARRAY=($(az ad sp create-for-rbac -o tsv | cut -f1,4,5 -d'	'))
+CRED_ARRAY=($(az ad sp create-for-rbac -n cluster-${CLUSTER_NAME} -o tsv | cut -f1,4,5 -d'	'))
 SUBSCRIPTION_ID=`az account show  -o tsv| cut -f2 -d'	'`
 
 cat <<EOF > terraform.tfvars

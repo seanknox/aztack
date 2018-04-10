@@ -1,6 +1,7 @@
 #!/bin/bash -eux
 
 KUBE_API_INTERNAL_IP=$1
+NODE_TOKEN=$2
 
 # create SSL dirs
 mkdir -p /etc/kubernetes/ssl
@@ -16,7 +17,7 @@ sudo kubectl config set-cluster mycluster \
 	--kubeconfig=/var/lib/kubelet/bootstrap.kubeconfig
 
 sudo kubectl config set-credentials \
-	kubelet-bootstrap --token=${NODE_TOKEN}
+	kubelet-bootstrap --token=${NODE_TOKEN} \
 	--kubeconfig=/var/lib/kubelet/bootstrap.kubeconfig
 
 sudo kubectl config set-context default \
@@ -24,7 +25,6 @@ sudo kubectl config set-context default \
   --kubeconfig=/var/lib/kubelet/bootstrap.kubeconfig
 
 sudo kubectl config use-context default --kubeconfig=/var/lib/kubelet/bootstrap.kubeconfig
-sudo chmod 644 /var/lib/kubelet/kubeconfig
 
 sudo sed -i -- 's/#DNS=/DNS=168.63.129.16/g' /etc/systemd/resolved.conf
 
