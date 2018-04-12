@@ -1,0 +1,43 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+
+metadata:
+  name: kube-dns-autoscaler
+  namespace: kube-system
+  labels:
+    k8s-app: kube-dns-autoscaler
+    kubernetes.io/cluster-service: "true"
+
+spec:
+  template:
+    metadata:
+      labels:
+        k8s-app: kube-dns-autoscaler
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      - key: "CriticalAddonsOnly"
+        operator: "Exists"
+      containers:
+      - name: autoscaler
+        image: gcr.io/google_containers/cluster-proportional-autoscaler-amd64:1.1.1-r2
+        resources:
+            requests:
+                cpu: "20m"
+                memory: "10Mi"
+        command:
+          - /cluster-proportional-autoscaler
+          - --namespace=kube-system
+          - --configmap=kube-dns-autoscaler
+          # Should keep target in sync with cluster/addons/dns/kubedns-controller.yaml.base
+          - --target=Deployment/kube-dns
+          # When cluster is using large nodes(with more cores), "coresPerReplica" should dominate.
+          # If using small nodes, "nodesPerReplica" should dominate.
+          - --default-params={"linear":{"coresPerReplica":256,"nodesPerReplica":16,"preventSinglePointFailure":true}}
+          - --logtostderr=true
+          - --v=2
+      serviceAccountName: kube-dns
