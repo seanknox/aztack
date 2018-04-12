@@ -23,7 +23,6 @@ export DIR_KUBECONFIG := .kube
 # ∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨
 
 export AZURE_LOCATION       		 ?= westus2
-export CLUSTER_NAME         		 ?= acstack
 export KUBE_API_PUBLIC_FQDN      := $(CLUSTER_NAME).$(AZURE_LOCATION).cloudapp.azure.com
 
 export AZURE_VM_KEY_NAME    ?= $(CLUSTER_NAME)
