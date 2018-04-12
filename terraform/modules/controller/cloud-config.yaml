@@ -26,11 +26,6 @@ write_files:
         "useManagedIdentityExtension": false,
         "useInstanceMetadata": true
       }
-  - path: "/var/lib/kubernetes/token.csv"
-    permissions: "0755"
-    content: |
-      ${ADMIN_TOKEN},admin,10000,admin
-      ${NODE_TOKEN},kubelet-bootstrap,10001,"system:kubelet-bootstrap"
   - path: "/etc/systemd/system/kube-apiserver.service"
     permissions: "0755"
     content: |
@@ -54,10 +49,10 @@ write_files:
         --cloud-config=/etc/kubernetes/azure.json \
         --cloud-provider=azure \
         --enable-swagger-ui=true \
-        --enable-bootstrap-token-auth \
+        --enable-bootstrap-token-auth=true \
         --etcd-cafile=/etc/kubernetes/ssl/ca.pem \
-        --etcd-certfile=/etc/etcd/ssl/kube-apiserver.pem \
-        --etcd-keyfile=/etc/etcd/ssl/kube-apiserver-key.pem \
+        --etcd-certfile=/etc/kubernetes/ssl/kube-apiserver.pem \
+        --etcd-keyfile=/etc/kubernetes/ssl/kube-apiserver-key.pem \
         --etcd-servers=https://etcd1.${INTERNAL_TLD}:2379,https://etcd2.${INTERNAL_TLD}:2379,https://etcd3.${INTERNAL_TLD}:2379 \
         --event-ttl=1h \
         --insecure-bind-address=127.0.0.1 \
@@ -75,7 +70,6 @@ write_files:
         --tls-ca-file=/etc/kubernetes/ssl/ca.pem \
         --tls-cert-file=/etc/kubernetes/ssl/kube-apiserver.pem \
         --tls-private-key-file=/etc/kubernetes/ssl/kube-apiserver-key.pem \
-        --token-auth-file=/var/lib/kubernetes/token.csv \
         --v=4
       Restart=on-failure
       RestartSec=5

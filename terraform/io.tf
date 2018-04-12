@@ -48,6 +48,8 @@ variable "location" {
 variable "kube-api-public-fqdn" {}
 variable "kube-api-internal-ip" {}
 
+variable "bootstrap_token" {}
+
 output "cluster-domain" {
   value = "${ var.cluster-domain }"
 }
@@ -90,4 +92,8 @@ output "node_private_ips" {
 
 output "controller_private_ips" {
   value = "${ module.controller.controller_private_ips }"
+}
+
+output "bootstrap_token" {
+  value = "${ var.bootstrap_token }"
 }

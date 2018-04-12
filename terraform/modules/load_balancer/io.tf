@@ -1,8 +1,3 @@
-# variable "etcd-ips" { default = "10.0.1.10,10.0.1.11,10.0.1.12" }
-# variable "etcd-ips" {
-#   default = "10.0.1.10"
-# }
-
 variable "name" {}
 variable "location" {}
 variable "kube-api-internal-ip" {}

@@ -10,7 +10,7 @@ variable "dns-service-ip" {}
 variable "pod-cidr" {}
 variable "resource_group_name" {}
 variable "kube-api-internal-ip" {}
-variable "node_token" {}
+variable "bootstrap_token" {}
 variable "depends-id" {}
 
 output "depends-id" {

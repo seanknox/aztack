@@ -129,11 +129,16 @@ resource "azurerm_virtual_machine" "controller" {
     destination = "/home/ubuntu/prepare_controller.sh"
   }
 
+  provisioner "file" {
+    source      = "${ path.module }/rbac.yml"
+    destination = "/home/ubuntu/rbac.yml"
+  }
+
   provisioner "remote-exec" {
     on_failure = "continue"
 
     inline = [
-      "sudo /bin/bash -eux /home/ubuntu/prepare_controller.sh",
+      "sudo /bin/bash -eux /home/ubuntu/prepare_controller.sh ${ var.kube-api-internal-ip } ${ var.bootstrap_token }",
       "sudo rm /home/ubuntu/prepare_controller.sh",
     ]
   }

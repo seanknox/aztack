@@ -112,25 +112,22 @@ module "etcd" {
   resource_group_name = "${ module.rg.name }"
 }
 
-module "bootstrap_token" {
-  source     = "./modules/bootstrap_token"
-  depends-id = ""
-}
-
 module "controller" {
   source     = "./modules/controller"
   depends-id = "${ module.bastion.depends-id }"
 
   # variables
-  name           = "${ var.name }"
-  location       = "${ var.location }"
-  master_count   = "${ var.master_count }"
-  etcd-ips       = "${ var.etcd-ips }"
-  dns-service-ip = "${ var.dns-service-ip }"
-  pod-cidr       = "${ var.cidr["pods"] }"
-  service-cidr   = "${ var.cidr["service-cluster"] }"
-  azure          = "${ var.azure }"
-  internal-tld   = "${ var.internal-tld }"
+  name                 = "${ var.name }"
+  location             = "${ var.location }"
+  master_count         = "${ var.master_count }"
+  etcd-ips             = "${ var.etcd-ips }"
+  dns-service-ip       = "${ var.dns-service-ip }"
+  pod-cidr             = "${ var.cidr["pods"] }"
+  service-cidr         = "${ var.cidr["service-cluster"] }"
+  azure                = "${ var.azure }"
+  internal-tld         = "${ var.internal-tld }"
+  kube-api-internal-ip = "${ var.kube-api-internal-ip }"
+  bootstrap_token      = "${ var.bootstrap_token}"
 
   # modules
   private-subnet-id   = "${ module.vnet.private-subnet-id }"
@@ -139,8 +136,6 @@ module "controller" {
   bastion-ip          = "${ module.bastion.public-ip }"
   backend_pool_ids    = ["${ module.load_balancer.public_backend_pool_id }", "${ module.load_balancer.private_backend_pool_id }"]
   resource_group_name = "${ module.rg.name }"
-  admin_token         = "${ module.bootstrap_token.admin_token }"
-  node_token          = "${ module.bootstrap_token.node_token }"
 }
 
 module "node" {
@@ -155,6 +150,7 @@ module "node" {
   pod-cidr             = "${ var.cidr["pods"] }"
   internal-tld         = "${ var.internal-tld }"
   kube-api-internal-ip = "${ var.kube-api-internal-ip }"
+  bootstrap_token      = "${ var.bootstrap_token }"
 
   # modules
   private-subnet-id   = "${ module.vnet.private-subnet-id }"
@@ -162,5 +158,4 @@ module "node" {
   image_id            = "${ module.image.image_id }"
   bastion-ip          = "${ module.bastion.public-ip }"
   resource_group_name = "${ module.rg.name }"
-  node_token          = "${ module.bootstrap_token.node_token }"
 }

@@ -95,16 +95,6 @@ resource "azurerm_virtual_machine" "node" {
   }
 
   provisioner "file" {
-    source      = "${ path.module }/../../.secrets/node${ count.index + 1 }.pem"
-    destination = "/home/ubuntu/node${ count.index + 1 }.pem"
-  }
-
-  provisioner "file" {
-    source      = "${ path.module }/../../.secrets/node${ count.index + 1 }-key.pem"
-    destination = "/home/ubuntu/node${ count.index + 1 }-key.pem"
-  }
-
-  provisioner "file" {
     source      = "${ path.module }/prepare_node.sh"
     destination = "/home/ubuntu/prepare_node.sh"
   }
@@ -113,7 +103,7 @@ resource "azurerm_virtual_machine" "node" {
     on_failure = "continue"
 
     inline = [
-      "sudo /bin/bash -eux /home/ubuntu/prepare_node.sh ${ var.kube-api-internal-ip }",
+      "sudo /bin/bash -eux /home/ubuntu/prepare_node.sh ${ var.kube-api-internal-ip } ${ var.bootstrap_token }",
       "sudo rm /home/ubuntu/prepare_node.sh",
     ]
   }
@@ -129,11 +119,8 @@ data "template_file" "cloud-config" {
 
   vars {
     HOSTNAME       = "node${ count.index + 1 }"
-    INTERNAL_TLD   = "${ var.internal-tld }"
-    INTERNAL_IP    = "${azurerm_network_interface.node.*.private_ip_address[count.index]}"
     DNS_SERVICE_IP = "${ var.dns-service-ip }"
     POD_CIDR       = "${ var.pod-cidr }"
-    NODE_TOKEN     = "${ var.node_token }"
   }
 }
 
