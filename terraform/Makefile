@@ -91,10 +91,9 @@ post-terraform:
 
 
 ## destroy and remove everything
-clean: delete-addons destroy delete-keypair
+clean: destroy delete-keypair
 	@-pkill -f "kubectl proxy" ||:
-	@-rm terraform.tfvars ||:
-	@-rm terraform.tfplan ||:
+	@-rm -rf terraform.* ||:
 	@-rm -rf .terraform ||:
 	@-rm -rf tmp ||:
 	@-rm -rf ${DIR_SSL} ||:

@@ -1,0 +1,23 @@
+#!/bin/bash -eu
+
+LIGHT_RED='\033[1;31m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+# trap 'echo -e "\n# $BASH_COMMAND"' DEBUG
+
+CDIR=$(dirname "${BASH_SOURCE}")
+
+echo -e "${LIGHT_RED}CLUSTER: ${CLUSTER_NAME}\n${NC}"
+
+echo -e "${RED}This will destroy your clusters. There is no going back. Are you sure?"
+echo -e "Type YES in caps to continue.${NC}"
+
+read answer
+
+if [[ $answer != "YES" ]]; then
+	echo "You did not type YES in all caps, bailing out!"
+	exit 1
+fi
+
+az group delete -g ${CLUSTER_NAME} --no-wait -y || true

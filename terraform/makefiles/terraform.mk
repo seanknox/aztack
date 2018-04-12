@@ -16,7 +16,9 @@ apply: plan
 	@echo "${GREEN}✓ make $@ - success${NC}"
 
 ## terraform destroy
-destroy: ; terraform destroy
+destroy:
+	@echo "${RED}****** DESTRUCTIVE ACTION AHEAD! ******${NC}"
+	@./scripts/delete_cluster_resource_groups
 
 ## terraform get
 get: ; terraform get
