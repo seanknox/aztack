@@ -1,0 +1,28 @@
+#!/bin/bash
+echo $DIR_SSL
+echo $KUBE_API_PUBLIC_FQDN
+
+
+CA_PATH=$DIR_SSL/ca.pem
+CA_CRT_BASE64=$(cat ${CA_PATH} | base64 -w0)
+
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-info
+  namespace: kube-public
+data:
+  kubeconfig: |
+    apiVersion: v1
+    clusters:
+    - cluster:
+        certificate-authority-data: ${CA_CRT_BASE64}
+        server: https://${KUBE_API_PUBLIC_FQDN}:6443
+      name: ""
+    contexts: []
+    current-context: ""
+    kind: Config
+    preferences: {}
+    users: []
+EOF

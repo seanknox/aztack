@@ -129,11 +129,6 @@ resource "azurerm_virtual_machine" "controller" {
     destination = "/home/ubuntu/prepare_controller.sh"
   }
 
-  provisioner "file" {
-    source      = "${ path.module }/rbac.yml"
-    destination = "/home/ubuntu/rbac.yml"
-  }
-
   provisioner "remote-exec" {
     on_failure = "continue"
 
