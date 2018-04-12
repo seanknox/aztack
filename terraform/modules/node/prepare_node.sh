@@ -1,4 +1,4 @@
-#!/bin/bash -eux
+#!/bin/bash -ux
 
 KUBE_API_INTERNAL_IP=$1
 BOOTSTRAP_TOKEN=$2
