@@ -112,25 +112,13 @@ create-kubeconfig: ; @scripts/do-task "create kubeconfig" \
 ## start proxy and open kubernetes dashboard
 dashboard: ; @./scripts/dashboard
 
-## delete addons
-delete-addons: ; @-scripts/delete-addons
-
-## get ca certificate
-get-ca: ; scripts/do-task "get root ca certificate" scripts/get-ca
-
-## journalctl on etcd1
-journal: ; @scripts/ssh "ssh `terraform output etcd1-ip` journalctl -fl"
-
 prereqs: ; @scripts/do-task "checking prerequisities" scripts/prereqs
 
-## ssh into etcd1
+## ssh into hostname=host
 ssh: ; @scripts/ssh "ssh $(hostname)"
 
 ## ssh into bastion host
 ssh-bastion: ; @scripts/ssh
-
-## smoke it
-test: test-ssl test-route53 test-etcd pods dns
 
 wait-for-cluster: ; @scripts/do-task "wait-for-cluster" scripts/wait-for-cluster
 
