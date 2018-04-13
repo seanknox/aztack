@@ -20,4 +20,3 @@ output "private_backend_pool_id" {
 # output "public_load_balancer_ip" {
 #   value = "${azurerm_public_ip.lbpip.ip_address}"
 # }
-

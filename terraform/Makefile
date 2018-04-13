@@ -64,6 +64,7 @@ all: prereqs create-keypair create-certs init apply
 post-terraform:
 	@$(MAKE) create-kubeconfig
 	@$(MAKE) wait-for-cluster
+	@$(MAKE) create-tls-bootstrap-config
 	@$(MAKE) create-addons
 	kubectl get nodes -o wide
 	kubectl --namespace=kube-system get cs
@@ -87,13 +88,16 @@ clean: destroy delete-keypair
 	@-rm -rf tmp ||:
 	@-rm -rf ${DIR_SSL} ||:
 
-## create kube-system addons
-create-addons:
+## create tls bootstrap config
+create-tls-bootstrap-config:
 	scripts/create-bootstrap-rbac
 	scripts/create-bootstrap-configmap
 	scripts/create-bootstrap-secret
+
+## create kube-system addons
+create-addons:
 	scripts/create-default-storage-class
-	scripts/creat	e-kube-dns-service
+	scripts/create-kube-dns-service
 	kubectl apply --recursive -f addons
 
 create-admin-certificate: ; @scripts/do-task "create admin certificate" \
