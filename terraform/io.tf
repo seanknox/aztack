@@ -58,6 +58,10 @@ output "dns-service-ip" {
   value = "${ var.dns-service-ip }"
 }
 
+output "etcd1-ip" {
+  value = "${ element( split(",", var.etcd-ips), 0 ) }"
+}
+
 output "internal-tld" {
   value = "${ var.internal-tld }"
 }
@@ -82,16 +86,23 @@ output "bastion-ip" {
   value = "${ module.bastion.public-ip }"
 }
 
-# output "public_load_balancer_ip" {
-#   value = "${ module.load_balancer.public_load_balancer_ip }"
-# }
-
-output "node_private_ips" {
-  value = "${ module.node.node_private_ips }"
+output "ips" {
+  value = "${
+    map(
+      "bastion", "${ module.bastion.public-ip }",
+      "dns-service", "${ var.dns-service-ip }",
+      "etcd", "${ var.etcd-ips }",
+    )
+  }"
 }
 
-output "controller_private_ips" {
-  value = "${ module.controller.controller_private_ips }"
+output "vm_ips" {
+  value = "${
+    map(
+			"node_private_ips", "${ module.node.node_private_ips }",
+  		"controller_private_ips", "${ module.controller.controller_private_ips }"
+    )
+  }"
 }
 
 output "bootstrap_token" {
