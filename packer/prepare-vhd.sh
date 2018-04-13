@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-kubernetes_release_tag="v1.10.0"
+kubernetes_release_tag="v1.10.1"
 
 ## Install official Kubernetes package
 
@@ -19,6 +19,9 @@ apt-get install "${apt_flags[@]}" docker.io conntrack
 ## Also install `jq`, `traceroute`, `ca-certificates`
 
 apt-get install "${apt_flags[@]}" jq traceroute ca-certificates
+
+## Install kubeadm
+apt-get install "${apt_flags[@]}" kubeadm
 
 # Download the official Kubernetes release binaries
 wget -q --show-progress --https-only --timestamping \
