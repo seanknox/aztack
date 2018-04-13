@@ -7,7 +7,7 @@ NC    := \033[0m
 
 export DIR_KEY_PAIR   := .keypair
 export DIR_SECRETS 		:= .secrets
-export DIR_SSL        := .cfssl
+export DIR_SSL        := .secrets
 export DIR_KUBECONFIG := .kube
 
 # CIDR_PODS: flannel overlay range
@@ -58,30 +58,20 @@ export PKI_IP               ?= 10.0.10.9
 ## generate key-pair, variables and then `terraform apply`
 all: prereqs create-keypair create-certs init apply
 	@echo "${GREEN}✓ terraform portion of 'make all' has completed ${NC}\n"
-	# @$(MAKE) post-terraform
+	@$(MAKE) post-terraform
 
 .PHONY: post-terraform
 post-terraform:
-	@$(MAKE) instances
-	@$(MAKE) get-ca
-	@$(MAKE) create-admin-certificate
 	@$(MAKE) create-kubeconfig
 	@$(MAKE) wait-for-cluster
 	@$(MAKE) create-addons
-	@$(MAKE) create-busybox
 	kubectl get nodes -o wide
 	kubectl --namespace=kube-system get cs
-	@echo "etcd-0 incorrectly reporting as unhelathy"
-	@echo "https://github.com/kubernetes/kubernetes/issues/27343"
-	@echo "https://github.com/kubernetes/kubernetes/pull/39716"
 	@echo "View nodes:"
 	@echo "% make nodes"
 	@echo "---"
 	@echo "View uninitialized kube-system pods:"
 	@echo "% make pods"
-	@echo "---"
-	@echo "View VM instance info:"
-	@echo "% make instances"
 	@echo "---"
 	@echo "Status summaries:"
 	@echo "% make status"
@@ -99,9 +89,11 @@ clean: destroy delete-keypair
 
 ## create kube-system addons
 create-addons:
+	scripts/create-bootstrap-rbac
+	scripts/create-bootstrap-configmap
+	scripts/create-bootstrap-secret
 	scripts/create-default-storage-class
-	scripts/create-kube-dns-service
-	scripts/create-kube-system-configmap
+	scripts/creat	e-kube-dns-service
 	kubectl apply --recursive -f addons
 
 create-admin-certificate: ; @scripts/do-task "create admin certificate" \
@@ -122,9 +114,6 @@ delete-addons: ; @-scripts/delete-addons
 ## get ca certificate
 get-ca: ; scripts/do-task "get root ca certificate" scripts/get-ca
 
-## show instance information
-instances: ; @scripts/instances
-
 ## journalctl on etcd1
 journal: ; @scripts/ssh "ssh `terraform output etcd1-ip` journalctl -fl"
 
@@ -135,9 +124,6 @@ ssh: ; @scripts/ssh "ssh $(hostname)"
 
 ## ssh into bastion host
 ssh-bastion: ; @scripts/ssh
-
-## status
-status: instances ; scripts/status
 
 ## smoke it
 test: test-ssl test-route53 test-etcd pods dns
