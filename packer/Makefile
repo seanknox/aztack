@@ -1,0 +1,18 @@
+SHELL += -eu
+
+BLUE	:= \033[0;34m
+GREEN	:= \033[0;32m
+RED   := \033[0;31m
+NC    := \033[0m
+
+# ∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨
+
+export AZURE_LOCATION       		 			?= West US 2
+export AZURE_RESOURCE_GROUP_NAME	    ?= ACStackImages
+export AZURE_VM_SIZE 									?= Standard_D2_v2
+
+build: init
+	@packer build -var-file=settings.json acstack.json
+
+init:
+	@./scripts/init-variables
