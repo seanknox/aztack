@@ -1,6 +1,9 @@
 addons:
 	kubectl get pods --namespace=kube-system
 
+csr:
+	kubectl get csr
+
 dns:
 	kubectl exec busybox -- nslookup kubernetes
 
