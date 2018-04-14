@@ -20,9 +20,6 @@ apt-get install "${apt_flags[@]}" docker.io conntrack
 
 apt-get install "${apt_flags[@]}" jq traceroute ca-certificates
 
-## Install kubeadm
-apt-get install "${apt_flags[@]}" kubeadm
-
 # Download the official Kubernetes release binaries
 wget -q --show-progress --https-only --timestamping \
   "https://storage.googleapis.com/kubernetes-release/release/${kubernetes_release_tag}/bin/linux/amd64/kube-apiserver" \
