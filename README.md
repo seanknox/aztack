@@ -13,31 +13,29 @@ Packer step generates an Azure VHD with:
 |Ubuntu   	|17.10   	|
 |Docker   	|1.13.1   	|
 |etcd   	|3.1.0-1   	|
-|kubectl	| 1.10.0		|
-|kube-apiserver	| 1.10.0		|
-|kube-controller-manager	| 1.10.0		|
-|kube-scheduler	| 1.10.0		|
+|kubectl	| 1.10.1		|
+|kube-apiserver	| 1.10.1		|
+|kube-controller-manager	| 1.10.1		|
+|kube-scheduler	| 1.10.1		|
 
-### Terraform
-- [x] scaffolding of modules implemented:
+### Kubernetes build out status
+- control plane
   - [x] controllers/etcd
-  - [x] PKI
-  - [x] Azure DNS
-  - [x] nodes
-  - [x] bastion
-  - [x] vnet
-  - [x] resource group
-  - [ ] NSGs for controller and nodes
-  - [ ] separate controllers and nodes into different subnets (with NSGs)
-  - [ ] Explicit MSI definition
-  - [ ] token/TLS bootstrap of kubelet https://kubernetes.io/docs/admin/kubelet-tls-bootstrapping/
   - [x] separate etcd from controllers
   - [ ] certs for etcd, api, and clients
+  - [ ] separate controllers and nodes into different subnets (with NSGs)
+- nodes
+  - [x] token/TLS bootstrap of kubelet https://kubernetes.io/docs/admin/kubelet-tls-bootstrapping/
+  - [x] CNI working
   - [ ] kube-proxy on nodes
-- [x] example of provisioning in modules/bastion
-- [x] example of provisioning in modules/nodes via bastion
-
-* Provisions masters/etcds with etcd and kube components running. However, etcd starts on the first master only. See https://github.com/terraform-providers/terraform-provider-azurerm/issues/1054.
+- [x] bastion host
+- Azure/Cloud Provider
+  - [ ] Service w/Load Balancer working
+  - [ ] PVCs working
+  - [x] Azure DNS
+  - [x] vnet
+  - [ ] NSGs for controller and nodes
+  - [ ] Explicit MSI definition
 
 ## Prep
 
