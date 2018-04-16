@@ -21,6 +21,7 @@ write_files:
         --cluster-domain=cluster.local \
         --image-pull-progress-deadline=2m \
         --kubeconfig=/var/lib/kubelet/kubeconfig \
+        --hostname-override=${HOSTNAME}  \
         --network-plugin=cni \
         --pod-cidr=${POD_CIDR} \
         --register-node=true \

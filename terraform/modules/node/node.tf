@@ -21,7 +21,7 @@ resource "azurerm_availability_set" "nodeavset" {
 }
 
 resource "azurerm_virtual_machine" "node" {
-  name                  = "node${ count.index + 1 }"
+  name                  = "node${ count.index + 1 }.${ var.internal-tld }"
   location              = "${ var.location }"
   resource_group_name   = "${ var.resource_group_name }"
   network_interface_ids = ["${azurerm_network_interface.node.*.id[count.index]}"]
@@ -128,7 +128,7 @@ data "template_file" "cloud-config" {
   count    = "${ var.node_count }"
 
   vars {
-    HOSTNAME       = "node${ count.index + 1 }"
+    HOSTNAME       = "node${ count.index + 1 }.${ var.internal-tld}"
     DNS_SERVICE_IP = "${ var.dns-service-ip }"
     POD_CIDR       = "${ var.pod-cidr }"
   }
