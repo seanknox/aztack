@@ -14,6 +14,7 @@ echo "❤ Polling for cluster life - this could take a minute or more"
 _retry "❤ Curling apiserver external elb" curl --insecure --silent "https://${ELB}:8443"
 _retry "❤ Trying to connect to cluster with kubectl" kubectl cluster-info
 _retry "❤ Waiting for kube-system namespace" kubectl get namespace kube-system
+_retry "❤ Waiting for rbac.authorization.k8s.io/v1 API to become available" kubectl get clusterrolebinding
 
 
 set -x
