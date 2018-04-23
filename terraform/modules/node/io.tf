@@ -1,6 +1,7 @@
 variable "name" {}
 variable "location" {}
 variable "private-subnet-id" {}
+variable "pod-subnet-id" {}
 variable "node_count" {}
 variable "bastion-ip" {}
 variable "storage_endpoint" {}

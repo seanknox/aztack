@@ -8,6 +8,10 @@ resource "azurerm_virtual_network" "main" {
 resource "null_resource" "dummy_dependency" {
   depends_on = [
     "azurerm_virtual_network.main",
-    "azurerm_subnet.private",
+    "azurerm_subnet.controller",
+    "azurerm_subnet.node",
+    "azurerm_subnet.etcd",
+    "azurerm_subnet.dmz",
+    "azurerm_subnet.pod",
   ]
 }

@@ -16,6 +16,22 @@ output "vnet-name" {
   value = "${ azurerm_virtual_network.main.name }"
 }
 
-output "private-subnet-id" {
-  value = "${ azurerm_subnet.private.id }"
+output "controller-subnet-id" {
+  value = "${ azurerm_subnet.controller.id }"
+}
+
+output "node-subnet-id" {
+  value = "${ azurerm_subnet.node.id }"
+}
+
+output "etcd-subnet-id" {
+  value = "${ azurerm_subnet.etcd.id }"
+}
+
+output "dmz-subnet-id" {
+  value = "${ azurerm_subnet.dmz.id }"
+}
+
+output "pod-subnet-id" {
+  value = "${ azurerm_subnet.pod.id }"
 }

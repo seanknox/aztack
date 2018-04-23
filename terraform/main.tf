@@ -76,7 +76,7 @@ module "load_balancer" {
   kube-api-internal-ip = "${ var.kube-api-internal-ip }"
 
   # modules
-  private-subnet-id   = "${ module.vnet.private-subnet-id }"
+  private-subnet-id   = "${ module.vnet.controller-subnet-id }"
   resource_group_name = "${ module.rg.name }"
 }
 
@@ -89,7 +89,7 @@ module "bastion" {
   location = "${ var.location }"
 
   # modules
-  private-subnet-id   = "${ module.vnet.private-subnet-id }"
+  private-subnet-id   = "${ module.vnet.dmz-subnet-id }"
   storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
   resource_group_name = "${ module.rg.name }"
 }
@@ -105,7 +105,7 @@ module "etcd" {
   internal-tld = "${ var.internal-tld }"
 
   # modules
-  private-subnet-id   = "${ module.vnet.private-subnet-id }"
+  private-subnet-id   = "${ module.vnet.etcd-subnet-id }"
   storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
   image_id            = "${ module.image.image_id }"
   bastion-ip          = "${ module.bastion.public-ip }"
@@ -130,7 +130,7 @@ module "controller" {
   bootstrap_token      = "${ var.bootstrap_token}"
 
   # modules
-  private-subnet-id   = "${ module.vnet.private-subnet-id }"
+  private-subnet-id   = "${ module.vnet.controller-subnet-id }"
   storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
   image_id            = "${ module.image.image_id }"
   bastion-ip          = "${ module.bastion.public-ip }"
@@ -153,7 +153,8 @@ module "node" {
   bootstrap_token      = "${ var.bootstrap_token }"
 
   # modules
-  private-subnet-id   = "${ module.vnet.private-subnet-id }"
+  private-subnet-id   = "${ module.vnet.node-subnet-id }"
+  pod-subnet-id       = "${ module.vnet.pod-subnet-id }"
   storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
   image_id            = "${ module.image.image_id }"
   bastion-ip          = "${ module.bastion.public-ip }"
