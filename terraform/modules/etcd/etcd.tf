@@ -23,7 +23,7 @@ resource "azurerm_availability_set" "etcdavset" {
 }
 
 resource "azurerm_virtual_machine" "etcd" {
-  name                  = "k8setcd${ count.index + 1 }"
+  name                  = "etcd${ count.index + 1 }"
   location              = "${ var.location }"
   resource_group_name   = "${ var.resource_group_name }"
   network_interface_ids = ["${azurerm_network_interface.etcd.*.id[count.index]}"]
