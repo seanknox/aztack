@@ -101,6 +101,7 @@ create-tls-bootstrap-config:
 create-addons:
 	scripts/create-default-storage-class
 	scripts/create-kube-dns-service
+	scripts/create-kube-system-configmap
 	kubectl apply --recursive -f addons
 
 create-admin-certificate: ; @scripts/do-task "create admin certificate" \

@@ -1,0 +1,11 @@
+
+#!/bin/bash -eux
+
+CLUSTER_DOMAIN=$(terraform output -state=build/${CLUSTER_NAME}/terraform.tfstate cluster-domain)
+DNS_SERVICE_IP=$(terraform output -state=build/${CLUSTER_NAME}/terraform.tfstate dns-service-ip)
+INTERNAL_TLD=$(terraform output -state=build/${CLUSTER_NAME}/terraform.tfstate internal-tld)
+
+kubectl create --namespace=kube-system configmap kube-system-config \
+  --from-literal=CLUSTER_DOMAIN=${CLUSTER_DOMAIN} \
+  --from-literal=DNS_SERVICE_IP=${DNS_SERVICE_IP} \
+  --from-literal=INTERNAL_TLD=${INTERNAL_TLD}
