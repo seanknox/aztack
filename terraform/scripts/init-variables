@@ -19,7 +19,7 @@ echo $HYPERKUBE_TAG
 echo $PKI_IP
 
 SP_PATH=${SP_PATH:-~/.azure/acstack-sp.json}
-SUBSCRIPTION_ID=${SUBSCRIPTION_ID:-`az account show --query="id" | tr -d '"'`}
+SUBSCRIPTION_ID=${SUBSCRIPTION_ID:-`az account show -o json --query="id" | tr -d '"'`}
 TOKEN_ID=$(cat /dev/urandom | tr -dc 'a-f0-9' | fold -w 6 | head -n 1)
 TOKEN_CONTENT=$(cat /dev/urandom | tr -dc 'a-f0-9' | fold -w 16 | head -n 1)
 BOOTSTRAP_TOKEN="${TOKEN_ID}.${TOKEN_CONTENT}"
