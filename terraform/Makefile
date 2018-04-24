@@ -81,7 +81,6 @@ post-terraform:
 	@echo "Status summaries:"
 	@echo "% make status"
 	@echo "---"
-	@scripts/watch-pods-until
 
 
 ## destroy and remove everything
