@@ -25,7 +25,7 @@
       "os_type": "Linux",
       "image_publisher": "Canonical",
       "image_offer": "UbuntuServer",
-      "image_sku": "16.04-LTS",
+      "image_sku": "17.10",
 
       "azure_tags": {
         "dept": "Azure Container Service"
