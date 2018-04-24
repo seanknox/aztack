@@ -41,7 +41,8 @@ export K8S_SERVICE_IP       ?= 10.3.0.1
 export K8S_DNS_IP           ?= 10.3.0.10
 export KUBE_API_INTERNAL_IP	?= 10.0.10.250
 
-export ETCD_IPS           ?= 10.0.30.10,10.0.30.11,10.0.30.12
+export ETCD_IPS           	?= 10.0.30.10,10.0.30.11,10.0.30.12
+export MASTER_IPS           ?= 10.0.10.247,10.0.10.248,10.0.10.249
 
 export PKI_IP               ?= 10.0.10.9
 

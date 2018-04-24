@@ -16,6 +16,10 @@ variable "dns-service-ip" {
 }
 
 variable "etcd-ips" {
+  default = "10.0.30.10,10.0.30.11,10.0.30.12"
+}
+
+variable "master-ips" {
   default = "10.0.10.10,10.0.10.11,10.0.10.12"
 }
 
@@ -92,6 +96,7 @@ output "ips" {
       "bastion", "${ module.bastion.public-ip }",
       "dns-service", "${ var.dns-service-ip }",
       "etcd", "${ var.etcd-ips }",
+      "master", "${ var.master-ips }",
     )
   }"
 }

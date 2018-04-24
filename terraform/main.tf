@@ -121,6 +121,7 @@ module "controller" {
   location             = "${ var.location }"
   master_count         = "${ var.master_count }"
   etcd-ips             = "${ var.etcd-ips }"
+  master-ips           = "${ var.master-ips }"
   dns-service-ip       = "${ var.dns-service-ip }"
   pod-cidr             = "${ var.cidr["pods"] }"
   service-cidr         = "${ var.cidr["service-cluster"] }"

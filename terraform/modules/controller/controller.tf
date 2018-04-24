@@ -8,7 +8,8 @@ resource "azurerm_network_interface" "controller" {
   ip_configuration {
     name                                    = "private"
     subnet_id                               = "${ var.private-subnet-id }"
-    private_ip_address_allocation           = "dynamic"
+    private_ip_address_allocation           = "static"
+    private_ip_address                      = "${ element(split(",", var.master-ips), count.index) }"
     load_balancer_backend_address_pools_ids = ["${ var.backend_pool_ids }"]
   }
 }

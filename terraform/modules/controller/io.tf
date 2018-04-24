@@ -2,6 +2,7 @@ variable "name" {}
 variable "location" {}
 variable "master_count" {}
 variable "etcd-ips" {}
+variable "master-ips" {}
 variable "dns-service-ip" {}
 variable "pod-cidr" {}
 variable "service-cidr" {}
