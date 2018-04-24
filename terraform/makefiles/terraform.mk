@@ -11,6 +11,7 @@ module.%:
 
 ## terraform apply
 apply: plan
+	cd build/$(CLUSTER_NAME)
 	@echo "${BLUE}❤ terraform apply - commencing${NC}"
 	terraform apply terraform.tfplan
 	@echo "${GREEN}✓ make $@ - success${NC}"
@@ -28,10 +29,11 @@ init: terraform.tfvars
 
 ## terraform plan
 plan: get init
+	cd build/$(CLUSTER_NAME)
 	terraform init
-	terraform validate -var-file=terraform.tfvars
+	terraform validate -var-file=build/$(CLUSTER_NAME)/terraform.tfvars
 	@echo "${GREEN}✓ terraform validate - success${NC}"
-	terraform plan -out terraform.tfplan
+	terraform plan -var-file=build/$(CLUSTER_NAME)/terraform.tfvars -out terraform.tfplan
 
 ## terraform show
 show: ; terraform show

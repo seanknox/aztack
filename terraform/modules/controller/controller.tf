@@ -105,22 +105,22 @@ resource "azurerm_virtual_machine" "controller" {
   }
 
   provisioner "file" {
-    source      = "${ path.module }/../../.secrets/ca.pem"
+    source      = "${ path.module }/../../.secrets/${ var.name }/ca.pem"
     destination = "/home/ubuntu/ca.pem"
   }
 
   provisioner "file" {
-    source      = "${ path.module }/../../.secrets/ca-key.pem"
+    source      = "${ path.module }/../../.secrets/${ var.name }/ca-key.pem"
     destination = "/home/ubuntu/ca-key.pem"
   }
 
   provisioner "file" {
-    source      = "${ path.module }/../../.secrets/kube-apiserver.pem"
+    source      = "${ path.module }/../../.secrets/${ var.name }/kube-apiserver.pem"
     destination = "/home/ubuntu/kube-apiserver.pem"
   }
 
   provisioner "file" {
-    source      = "${ path.module }/../../.secrets/kube-apiserver-key.pem"
+    source      = "${ path.module }/../../.secrets/${ var.name }/kube-apiserver-key.pem"
     destination = "/home/ubuntu/kube-apiserver-key.pem"
   }
 

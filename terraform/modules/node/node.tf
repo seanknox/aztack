@@ -90,17 +90,17 @@ resource "azurerm_virtual_machine" "node" {
   }
 
   provisioner "file" {
-    source      = "${ path.module }/../../.secrets/ca.pem"
+    source      = "${ path.module }/../../.secrets/${ var.name }/ca.pem"
     destination = "/home/ubuntu/ca.pem"
   }
 
   provisioner "file" {
-    source      = "${ path.module }/../../.secrets/kube-proxy.pem"
+    source      = "${ path.module }/../../.secrets/${ var.name }/kube-proxy.pem"
     destination = "/home/ubuntu/kube-proxy.crt"
   }
 
   provisioner "file" {
-    source      = "${ path.module }/../../.secrets/kube-proxy-key.pem"
+    source      = "${ path.module }/../../.secrets/${ var.name }/kube-proxy-key.pem"
     destination = "/home/ubuntu/kube-proxy.key"
   }
 

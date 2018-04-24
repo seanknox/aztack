@@ -53,6 +53,10 @@ export PKI_IP               ?= 10.0.10.9
 
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+ifndef CLUSTER_NAME
+$(error CLUSTER_NAME is not set)
+endif
+
 .addons: ; @scripts/do-task "initialize add-ons" ./scripts/init-addons
 
 ## generate key-pair, variables and then `terraform apply`
@@ -83,10 +87,9 @@ post-terraform:
 ## destroy and remove everything
 clean: destroy delete-keypair
 	@-pkill -f "kubectl proxy" ||:
-	@-rm -rf terraform.* ||:
-	@-rm -rf .terraform ||:
+	@-rm -rf build/${CLUSTER_NAME}
 	@-rm -rf tmp ||:
-	@-rm -rf ${DIR_SSL} ||:
+	@-rm -rf ${DIR_SSL}/${CLUSTER_NAME} ||:
 
 ## create tls bootstrap config
 create-tls-bootstrap-config:

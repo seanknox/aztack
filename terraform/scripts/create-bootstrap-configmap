@@ -3,7 +3,7 @@ echo $DIR_SSL
 echo $KUBE_API_PUBLIC_FQDN
 
 
-CA_PATH=$DIR_SSL/ca.pem
+CA_PATH=$DIR_SSL/${CLUSTER_NAME}/ca.pem
 CA_CRT_BASE64=$(cat ${CA_PATH} | base64 -w0)
 
 cat <<EOF | kubectl apply -f -
