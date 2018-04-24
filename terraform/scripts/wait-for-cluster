@@ -1,6 +1,6 @@
 #!/bin/bash -eu
 
-ELB=$(terraform output kube-api-public-fqdn)
+ELB=$(terraform output -state=build/${CLUSTER_NAME}/terraform.tfstate kube-api-public-fqdn)
 
 _retry() {
   [ -z "${2}" ] && return 1

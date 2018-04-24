@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-BASTION_IP=`terraform output bastion-ip`
+BASTION_IP=`terraform output -state=build/${CLUSTER_NAME}/terraform.tfstate bastion-ip`
 
 COMMAND=$1
 

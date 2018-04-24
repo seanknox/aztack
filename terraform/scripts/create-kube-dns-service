@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DNS_SERVICE_IP=$(terraform output dns-service-ip)
+DNS_SERVICE_IP=$(terraform output -state=build/${CLUSTER_NAME}/terraform.tfstate dns-service-ip)
 
 cat <<EOF | kubectl create -f -
 apiVersion: v1
