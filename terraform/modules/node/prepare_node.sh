@@ -55,5 +55,5 @@ sudo sed -i -- 's/#DNS=/DNS=168.63.129.16/g' /etc/systemd/resolved.conf
 # reinitialize daemons and start kube components
 sudo systemctl daemon-reload
 sudo systemctl restart systemd-resolved
-sudo systemctl enable docker kubelet kube-proxy
-sudo systemctl start docker kubelet kube-proxy
+sudo systemctl enable containerd kubelet kube-proxy
+sudo systemctl start containerd kubelet kube-proxy

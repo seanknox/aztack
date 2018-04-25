@@ -5,20 +5,25 @@ Provision a Kubernetes cluster with [Packer](https://packer.io) and [Terraform](
 ## Status
 
 Still WIP
+
 ### Packer
+
 Packer step generates an Azure VHD with:
 
-|Software   	|Version   	|
-|---	|---	|
-|Ubuntu   	|17.10   	|
-|Docker   	|1.13.1   	|
-|etcd   	|3.1.0-1   	|
-|kubectl	| 1.10.1		|
-|kube-apiserver	| 1.10.1		|
-|kube-controller-manager	| 1.10.1		|
-|kube-scheduler	| 1.10.1		|
+|Software     |Version    |
+|---  |---  |
+|Ubuntu     |17.10    |
+|cri-containerd     |1.0.0-rc.2    |
+|containerd     |v1.0.0-6    |
+|runc     |1.0.0-rc4+dev    |
+|etcd     |3.1.0-1    |
+|kubectl  | 1.10.1    |
+|kube-apiserver | 1.10.1    |
+|kube-controller-manager  | 1.10.1    |
+|kube-scheduler | 1.10.1    |
 
 ### Kubernetes build out status
+
 - control plane
   - [x] controllers/etcd
   - [x] separate etcd from controllers
@@ -48,22 +53,26 @@ Instead of provisioning a VM at boot time, we use Packer to create an immutable 
 
 Running the packer commands below will create the following image:
 
-```
+```sh
 acstack-ubuntu-17.10-{{timestamp}}
 ```
 
 ### Create the ACStack Base Image
+
 #### Create resource group
+
 During the build process, Packer creates temporary Azure resources as it builds the source VM. To capture that source VM for use as an image, you must define a resource group. The output from the Packer build process is stored in this resource group.
 
 - `az group create -n myResourceGroup -l westus2`
 
 #### Edit Packer settings
+
 Edit `packer/settings.json` with required settings such as your subscription id.
+
 - To generate credentials: `az ad sp create-for-rbac --query "{ client_id: appId, client_secret: password, tenant_id: tenant }" -o json`
 - To get your subscription id: `az account show --query "{ subscription_id: id }" -o json`
 
-```
+```sh
 cd packer
 packer build -var-file=settings.json acstack.json
 ```
