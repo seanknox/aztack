@@ -12,7 +12,7 @@ module.%:
 ## terraform apply
 apply: plan
 	@echo "${BLUE}❤ terraform apply - commencing${NC}"
-	terraform apply -state-out build/$(CLUSTER_NAME)/terraform.tfstate build/$(CLUSTER_NAME)/terraform.tfplan
+	terraform apply -state-out=build/$(CLUSTER_NAME)/terraform.tfstate build/$(CLUSTER_NAME)/terraform.tfplan
 	@echo "${GREEN}✓ make $@ - success${NC}"
 
 ## terraform destroy
