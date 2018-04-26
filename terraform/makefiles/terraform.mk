@@ -32,7 +32,7 @@ plan: get init
 	terraform init
 	terraform validate -var-file=build/$(CLUSTER_NAME)/terraform.tfvars
 	@echo "${GREEN}✓ terraform validate - success${NC}"
-	terraform plan -var-file=build/$(CLUSTER_NAME)/terraform.tfvars -out build/$(CLUSTER_NAME)/terraform.tfplan
+	terraform plan -state=build/$(CLUSTER_NAME)/terraform.tfstate -var-file=build/$(CLUSTER_NAME)/terraform.tfvars -out build/$(CLUSTER_NAME)/terraform.tfplan
 
 ## terraform show
 show: ; terraform show
