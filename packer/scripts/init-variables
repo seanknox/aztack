@@ -2,22 +2,22 @@
 
 CDIR=$(dirname "${BASH_SOURCE}")
 
-SP_PATH=${SP_PATH:-~/packer-sp.json}
-SUBSCRIPTION_ID=${SUBSCRIPTION_ID:-`az account show --query="id" | tr -d '"'`}
+SETTINGS_JSON=${SETTINGS_JSON:-./settings.json}
+SUBSCRIPTION_ID=${SUBSCRIPTION_ID:-`az account show -o json --query="id" | tr -d '"'`}
 
 echo "Subscription ID: ${SUBSCRIPTION_ID}"
-echo "Service Principal Path: ${SP_PATH}"
+echo "Service Principal Path: ${SETTINGS_JSON}"
 
-if [ -a "${SP_PATH}" ]; then
-	client_id=`cat ${SP_PATH} | jq -r .appId`
-	client_secret=`cat ${SP_PATH} | jq -r .password`
-	tenant_id=`cat ${SP_PATH} | jq -r .tenant`
+if [ -a "${SETTINGS_JSON}" ]; then
+	client_id=`cat ${SETTINGS_JSON} | jq -r .appId`
+	client_secret=`cat ${SETTINGS_JSON} | jq -r .password`
+	tenant_id=`cat ${SETTINGS_JSON} | jq -r .tenant`
 else
-	echo "Service principal file not found! Generating one @ ${SP_PATH}"
-	az ad sp create-for-rbac -n acstack-packer -o json > ${SP_PATH}
-	client_id=`cat ${SP_PATH} | jq -r .appId`
-	client_secret=`cat ${SP_PATH} | jq -r .password`
-	tenant_id=`cat ${SP_PATH} | jq -r .tenant`
+	echo "Service principal file not found! Generating one @ ${SETTINGS_JSON}"
+	az ad sp create-for-rbac -n acstack-packer$(date +%s) -o json > ${SETTINGS_JSON}
+	client_id=`cat ${SETTINGS_JSON} | jq -r .appId`
+	client_secret=`cat ${SETTINGS_JSON} | jq -r .password`
+	tenant_id=`cat ${SETTINGS_JSON} | jq -r .tenant`
 fi
 
 if [ -z "${client_id}" ]; then
