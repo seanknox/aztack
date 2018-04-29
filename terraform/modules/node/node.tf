@@ -11,6 +11,17 @@ resource "azurerm_dns_a_record" "A-node" {
   ]
 }
 
+resource "null_resource" "node_cert" {
+  count = "${ var.node_count }"
+
+  # Generate node client certificate
+  provisioner "local-exec" {
+    command = <<EOF
+        ${path.module}/../../scripts/cfssl/generate_node.sh "node${ count.index + 1 }.${ var.internal-tld }"
+      EOF
+  }
+}
+
 resource "azurerm_availability_set" "nodeavset" {
   name                         = "nodeavset"
   location                     = "${var.location}"
@@ -100,6 +111,16 @@ resource "azurerm_virtual_machine" "node" {
   }
 
   provisioner "file" {
+    source      = "${ path.module }/../../.secrets/${ var.name }/node${ count.index + 1 }.${ var.internal-tld }.pem"
+    destination = "/home/ubuntu/kubelet.crt"
+  }
+
+  provisioner "file" {
+    source      = "${ path.module }/../../.secrets/${ var.name }/node${ count.index + 1 }.${ var.internal-tld }-key.pem"
+    destination = "/home/ubuntu/kubelet.key"
+  }
+
+  provisioner "file" {
     source      = "${ path.module }/../../.secrets/${ var.name }/kube-proxy-key.pem"
     destination = "/home/ubuntu/kube-proxy.key"
   }
@@ -113,7 +134,7 @@ resource "azurerm_virtual_machine" "node" {
     on_failure = "continue"
 
     inline = [
-      "sudo /bin/bash -eux /home/ubuntu/prepare_node.sh ${ var.kube-api-internal-ip } ${ var.bootstrap_token }",
+      "sudo /bin/bash -eux /home/ubuntu/prepare_node.sh ${ var.kube-api-internal-ip } ${ var.bootstrap_token } node${ count.index + 1 }.${ var.internal-tld }",
       "sudo rm /home/ubuntu/prepare_node.sh",
     ]
   }

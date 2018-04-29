@@ -2,7 +2,7 @@
 
 set -x
 
-SECRETS_DIR=$PWD/.secrets
+SECRETS_DIR=$PWD/.secrets/${CLUSTER_NAME}
 CFSSL_DIR=$(dirname "${BASH_SOURCE[0]}")
 
 instance=$1
