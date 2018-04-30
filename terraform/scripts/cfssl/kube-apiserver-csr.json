@@ -1,5 +1,5 @@
 {
-  "CN": "kubernetes",
+  "CN": "system:apiserver",
   "key": {
     "algo": "rsa",
     "size": 2048
