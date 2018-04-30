@@ -305,4 +305,364 @@ resource "azurerm_network_interface" "node" {
     subnet_id                     = "${ var.pod-subnet-id }"
     private_ip_address_allocation = "dynamic"
   }
+
+  ip_configuration {
+    name                          = "private51"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private52"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private53"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private54"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private55"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private56"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private57"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private58"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private59"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private60"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private61"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private62"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private63"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private64"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private65"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private66"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private67"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private68"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private69"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private70"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private71"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private72"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private73"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private74"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private75"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private76"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private77"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private78"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private79"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private80"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private81"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private82"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private83"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private84"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private85"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private86"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private87"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private88"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private89"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private90"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private91"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private92"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private93"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private94"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private95"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private96"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private97"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private98"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private99"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private100"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private101"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private102"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private103"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private104"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private105"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private106"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private107"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private108"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private109"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
+
+  ip_configuration {
+    name                          = "private110"
+    subnet_id                     = "${ var.pod-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+  }
 }
