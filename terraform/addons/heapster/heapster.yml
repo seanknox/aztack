@@ -95,7 +95,7 @@ spec:
         operator: Exists
       serviceAccountName: heapster
       containers:
-      - image: gcr.io/google_containers/heapster:v1.3.0
+      - image: gcr.io/google_containers/heapster:v1.5.2
         command:
         - "/heapster"
         - "--source=kubernetes.summary_api:\"\""
