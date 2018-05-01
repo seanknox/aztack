@@ -119,7 +119,7 @@ dashboard: ; @./scripts/dashboard
 prereqs: ; @scripts/do-task "checking prerequisities" scripts/prereqs
 
 ## ssh into hostname=host
-ssh: ; @scripts/ssh "ssh $(hostname)"
+ssh: ; @scripts/ssh "ssh $(hostname).$(INTERNAL_TLD)"
 
 ## ssh into bastion host
 ssh-bastion: ; @scripts/ssh
