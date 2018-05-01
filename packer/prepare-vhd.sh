@@ -15,7 +15,7 @@ apt_flags=(-o "Dpkg::Options::=--force-confnew" -qy)
 apt-get update -q
 apt-get upgrade "${apt_flags[@]}"
 
-apt-get install "${apt_flags[@]}" conntrack jq traceroute ca-certificates
+apt-get install "${apt_flags[@]}" conntrack ipset jq traceroute ca-certificates
 
 # Download the official Kubernetes release binaries
 wget -q --show-progress --https-only --timestamping \
