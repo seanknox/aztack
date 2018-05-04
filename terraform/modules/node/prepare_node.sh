@@ -61,6 +61,7 @@ sudo sed -i -- 's/#DNS=/DNS=168.63.129.16/g' /etc/systemd/resolved.conf
 sudo iptables -t nat -A POSTROUTING -m iprange ! --dst-range 168.63.129.16 -m addrtype ! --dst-type local ! -d 10.0.0.0/15 -j MASQUERADE
 
 # reinitialize daemons and start kube components
+sudo netplan apply
 sudo systemctl daemon-reload
 sudo systemctl restart systemd-resolved
 sudo systemctl enable containerd kubelet kube-proxy

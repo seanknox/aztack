@@ -1,6 +1,14 @@
 #cloud-config
 
 write_files:
+  - path: "/etc/netplan/eth1.yaml"
+    permissions: "0755"
+    content: |
+      network:
+        version: 2
+        ethernets:
+          eth1:
+            dhcp4: true
   - path: "/etc/systemd/system/kubelet.service.d/0-containerd.conf"
     permissions: "0755"
     content: |
