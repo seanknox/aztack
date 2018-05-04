@@ -72,6 +72,9 @@ cidr = {
   pods = "${CIDR_PODS}"
   service-cluster = "${CIDR_SERVICE_CLUSTER}"
   vnet = "${CIDR_VNET}"
+  master = "${CIDR_MASTER}"
+  node = "${CIDR_NODE}"
+  etcd = "${CIDR_ETCD}"
 }
 k8s = {
   hyperkube-image = "${HYPERKUBE_IMAGE}"

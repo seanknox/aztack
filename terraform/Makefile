@@ -34,6 +34,10 @@ export HYPERKUBE_IMAGE      ?= quay.io/coreos/hyperkube
 export HYPERKUBE_TAG        ?= v1.9.6_coreos.0
 
 export CIDR_VNET            ?= 10.0.0.0/15
+export CIDR_MASTER          ?= 10.0.10.0/24
+export CIDR_NODE        	  ?= 10.0.20.0/24
+export CIDR_ETCD        	  ?= 10.0.30.0/24
+export CIDR_VNET            ?= 10.0.0.0/15
 export CIDR_PODS            ?= 10.1.0.0/16
 export CIDR_SERVICE_CLUSTER ?= 10.3.0.0/24
 

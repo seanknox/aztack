@@ -32,12 +32,19 @@ resource "azurerm_availability_set" "nodeavset" {
 }
 
 resource "azurerm_virtual_machine" "node" {
-  name                  = "node${ count.index + 1 }.${ var.internal-tld }"
-  location              = "${ var.location }"
-  resource_group_name   = "${ var.resource_group_name }"
-  network_interface_ids = ["${azurerm_network_interface.node.*.id[count.index]}"]
-  availability_set_id   = "${azurerm_availability_set.nodeavset.id}"
-  vm_size               = "Standard_DS1_v2"
+  name                = "node${ count.index + 1 }.${ var.internal-tld }"
+  location            = "${ var.location }"
+  resource_group_name = "${ var.resource_group_name }"
+
+  network_interface_ids = [
+    "${azurerm_network_interface.node.*.id[count.index]}",
+    "${azurerm_network_interface.pod.*.id[count.index]}",
+  ]
+
+  primary_network_interface_id = "${azurerm_network_interface.node.*.id[count.index]}"
+
+  availability_set_id = "${azurerm_availability_set.nodeavset.id}"
+  vm_size             = "Standard_DS1_v2"
 
   count = "${ var.node_count }"
 

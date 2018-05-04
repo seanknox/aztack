@@ -1,7 +1,24 @@
 resource "azurerm_network_interface" "node" {
-  name                = "node${ count.index + 1 }"
-  location            = "${ var.location }"
-  resource_group_name = "${ var.resource_group_name }"
+  name                 = "node${ count.index + 1 }"
+  location             = "${ var.location }"
+  resource_group_name  = "${ var.resource_group_name }"
+  enable_ip_forwarding = true
+
+  count = "${ var.node_count }"
+
+  ip_configuration {
+    name                          = "private1"
+    subnet_id                     = "${ var.node-subnet-id }"
+    private_ip_address_allocation = "dynamic"
+    primary                       = true
+  }
+}
+
+resource "azurerm_network_interface" "pod" {
+  name                 = "node${ count.index + 1 }pod"
+  location             = "${ var.location }"
+  resource_group_name  = "${ var.resource_group_name }"
+  enable_ip_forwarding = true
 
   count = "${ var.node_count }"
 

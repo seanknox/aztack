@@ -156,6 +156,7 @@ module "node" {
   # modules
   private-subnet-id   = "${ module.vnet.node-subnet-id }"
   pod-subnet-id       = "${ module.vnet.pod-subnet-id }"
+  node-subnet-id       = "${ module.vnet.node-subnet-id }"
   storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
   image_id            = "${ module.image.image_id }"
   bastion-ip          = "${ module.bastion.public-ip }"
