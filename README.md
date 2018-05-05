@@ -17,10 +17,11 @@ Packer step generates an Azure VHD with:
 |containerd     |v1.0.0-6    |
 |runc     |1.0.0-rc4+dev    |
 |etcd     |3.1.0-1    |
-|kubectl  | 1.10.1    |
-|kube-apiserver | 1.10.1    |
-|kube-controller-manager  | 1.10.1    |
-|kube-scheduler | 1.10.1    |
+|kubectl  | 1.10.2    |
+|kube-apiserver | 1.10.2    |
+|kube-controller-manager  | 1.10.2    |
+|kube-scheduler | 1.10.2   |
+|azure CNI | v1.0.4   |
 
 ### Kubernetes build out status
 
@@ -28,18 +29,19 @@ Packer step generates an Azure VHD with:
   - [x] controllers/etcd
   - [x] separate etcd from controllers
   - [ ] certs for etcd, api, and clients
-  - [ ] separate controllers and nodes into different subnets (with NSGs)
+  - [x] separate controllers and nodes into different subnets
+	- [ ] add NSGs
 - nodes
   - [x] token/TLS bootstrap of kubelet https://kubernetes.io/docs/admin/kubelet-tls-bootstrapping/
-  - [x] CNI working
-  - [ ] kube-proxy on nodes
+  - [x] CNI can run pods
+  - [] Outbound internet working with CNI
+  - [x] kube-proxy on nodes
 - [x] bastion host
 - Azure/Cloud Provider
   - [ ] Service w/Load Balancer working
   - [ ] PVCs working
   - [x] Azure DNS
   - [x] vnet
-  - [ ] NSGs for controller and nodes
   - [ ] Explicit MSI definition
 
 ## Prep
