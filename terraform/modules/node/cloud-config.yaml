@@ -28,14 +28,15 @@ write_files:
         --allow-privileged=true \
         --anonymous-auth=false \
         --authorization-mode=Webhook \
+        --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf \
         --client-ca-file=/etc/kubernetes/ssl/ca.pem \
         --cluster-dns=${DNS_SERVICE_IP} \
         --cluster-domain=cluster.local \
         --container-runtime=remote \
         --container-runtime-endpoint=unix:///run/containerd/containerd.sock \
         --image-pull-progress-deadline=2m \
-        --kubeconfig=/etc/kubernetes/kubelet.kubeconfig \
         --hostname-override=${HOSTNAME}  \
+        --kubeconfig=/var/lib/kubelet/kubeconfig \
         --network-plugin=cni \
         --pod-cidr=${POD_CIDR} \
         --register-node=true \
