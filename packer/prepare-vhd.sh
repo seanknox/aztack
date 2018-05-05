@@ -1,7 +1,7 @@
 #!/bin/bash -eux
 
-kubernetes_release_tag="v1.10.1"
-cni_release_tag="v1.0.3"
+kubernetes_release_tag="v1.10.2"
+cni_release_tag="v1.0.4"
 
 ## Install official Kubernetes package
 
