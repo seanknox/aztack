@@ -4,15 +4,43 @@ variable "private-subnet-id" {}
 variable "pod-subnet-id" {}
 variable "node-subnet-id" {}
 variable "node_count" {}
-variable "bastion-ip" {}
-variable "storage_endpoint" {}
-variable "image_id" {}
-variable "internal-tld" {}
-variable "dns-service-ip" {}
-variable "pod-cidr" {}
-variable "resource_group_name" {}
-variable "kube-api-internal-ip" {}
-variable "bootstrap_token" {}
+
+variable "bastion-ip" {
+  type = "string"
+}
+
+variable "storage_endpoint" {
+  type = "string"
+}
+
+variable "image_id" {
+  type = "string"
+}
+
+variable "internal-tld" {
+  type = "string"
+}
+
+variable "dns-service-ip" {
+  type = "string"
+}
+
+variable "pod-cidr" {
+  type = "string"
+}
+
+variable "resource_group_name" {
+  type = "string"
+}
+
+variable "kube-api-internal-ip" {
+  type = "string"
+}
+
+variable "bootstrap_token" {
+  type = "string"
+}
+
 variable "depends-id" {}
 
 output "depends-id" {

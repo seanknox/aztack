@@ -38,6 +38,7 @@ write_files:
         --hostname-override=${HOSTNAME}  \
         --kubeconfig=/var/lib/kubelet/kubeconfig \
         --network-plugin=cni \
+        --node-labels node-role.kubernetes.io/node \
         --pod-cidr=${POD_CIDR} \
         --register-node=true \
         --rotate-certificates=true \
