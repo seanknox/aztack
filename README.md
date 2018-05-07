@@ -28,20 +28,26 @@ Packer step generates an Azure VHD with:
 - control plane
   - [x] controllers/etcd
   - [x] separate etcd from controllers
-  - [ ] certs for etcd, api, and clients
+  - [ ] certs for etcd
+	- [x] certs for api and clients
   - [x] separate controllers and nodes into different subnets
 	- [ ] add NSGs
+		- [ ] apiserver
+		- [ ] etcd
+		- [ ] nodes
 - nodes
   - [x] token/TLS bootstrap of kubelet https://kubernetes.io/docs/admin/kubelet-tls-bootstrapping/
   - [x] CNI can run pods
-  - [] Outbound internet working with CNI
   - [x] kube-proxy on nodes
 - [x] bastion host
+- Cluster networking
+	- [x] Pod-to-pod communication
+  - [ ] Outbound internet
+	- [ ] Pod to cluster service
 - Azure/Cloud Provider
   - [ ] Service w/Load Balancer working
   - [ ] PVCs working
   - [x] Azure DNS
-  - [x] vnet
   - [ ] Explicit MSI definition
 
 ## Prep
