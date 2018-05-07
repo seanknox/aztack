@@ -17,7 +17,8 @@ resource "null_resource" "node_cert" {
   # Generate node client certificate
   provisioner "local-exec" {
     command = <<EOF
-        ${path.module}/../../scripts/cfssl/generate_node.sh "node${ count.index + 1 }.${ var.internal-tld }"
+        ${path.module}/../../scripts/cfssl/generate_kubelet.sh "node${ count.index + 1 }.${ var.internal-tld }"
+
       EOF
   }
 }
@@ -148,17 +149,6 @@ resource "azurerm_virtual_machine" "node" {
 
   tags {
     environment = "staging"
-  }
-}
-
-data "template_file" "cloud-config" {
-  template = "${file("${path.module}/cloud-config.yaml")}"
-  count    = "${ var.node_count }"
-
-  vars {
-    HOSTNAME       = "node${ count.index + 1 }.${ var.internal-tld}"
-    DNS_SERVICE_IP = "${ var.dns-service-ip }"
-    POD_CIDR       = "${ var.pod-cidr }"
   }
 }
 

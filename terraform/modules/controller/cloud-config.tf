@@ -6,6 +6,7 @@ data "template_file" "cloud-config" {
   vars {
     ETCD_NAME        = "etcd${ count.index + 1 }"
     CLUSTER_TOKEN    = "etcd-cluster-${ var.name }"
+    HOSTNAME         = "controller${ count.index + 1 }.${ var.internal-tld}"
     INTERNAL_TLD     = "${ var.internal-tld }"
     FQDN             = "etcd${ count.index + 1 }.${ var.internal-tld }"
     INTERNAL_IP      = "${azurerm_network_interface.controller.*.private_ip_address[count.index]}"

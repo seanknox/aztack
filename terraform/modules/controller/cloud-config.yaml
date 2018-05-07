@@ -127,6 +127,43 @@ write_files:
 
       [Install]
       WantedBy=multi-user.target
+  - path: "/etc/systemd/system/kubelet.service"
+    permissions: "0755"
+    content: |
+      [Unit]
+      Description=Kubernetes Kubelet
+      Documentation=https://github.com/kubernetes/kubernetes
+      After=containerd.service
+      Requires=containerd.service
+
+      [Service]
+      ExecStart=/usr/local/bin/kubelet \
+        --allow-privileged=true \
+        --anonymous-auth=false \
+        --authorization-mode=Webhook \
+        --client-ca-file=/etc/kubernetes/ssl/ca.pem \
+        --cluster-dns=${DNS_SERVICE_IP} \
+        --cluster-domain=cluster.local \
+        --container-runtime=remote \
+        --container-runtime-endpoint=unix:///run/containerd/containerd.sock \
+        --image-pull-progress-deadline=2m \
+        --hostname-override=${HOSTNAME}  \
+        --kubeconfig=/var/lib/kubelet/kubeconfig \
+        --network-plugin=cni \
+        --node-labels node-role.kubernetes.io/controller \
+        --pod-cidr=${POD_CIDR} \
+        --register-node=true \
+        --register-with-taints node-role.kubernetes.io/controller='':NoSchedule \
+        --rotate-certificates=true \
+        --runtime-request-timeout=15m \
+        --tls-cert-file=/var/lib/kubelet/pki/kubelet.crt \
+        --tls-private-key-file=/var/lib/kubelet/pki/kubelet.key \
+        --v=2
+      Restart=on-failure
+      RestartSec=5
+
+      [Install]
+      WantedBy=multi-user.target
   - path: "/var/lib/kubelet/kubeconfig"
     permissions: "0755"
     content: |

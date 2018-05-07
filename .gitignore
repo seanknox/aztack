@@ -8,3 +8,4 @@ id_rsa*
 *.pem*
 packer/settings.json
 node*csr.json
+controller*csr.json

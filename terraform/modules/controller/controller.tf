@@ -27,6 +27,17 @@ resource "azurerm_dns_a_record" "A-controllers" {
   ]
 }
 
+resource "null_resource" "node_cert" {
+  count = "${ var.master_count }"
+
+  # Generate node client certificate
+  provisioner "local-exec" {
+    command = <<EOF
+        ${path.module}/../../scripts/cfssl/generate_kubelet.sh "controller${ count.index + 1 }.${ var.internal-tld }"
+      EOF
+  }
+}
+
 resource "azurerm_availability_set" "controlleravset" {
   name                         = "controlleravset"
   location                     = "${var.location}"
@@ -37,7 +48,7 @@ resource "azurerm_availability_set" "controlleravset" {
 }
 
 resource "azurerm_virtual_machine" "controller" {
-  name                  = "k8scontroller${ count.index + 1 }"
+  name                  = "controller${ count.index + 1 }.${ var.internal-tld }"
   location              = "${ var.location }"
   resource_group_name   = "${ var.resource_group_name }"
   network_interface_ids = ["${azurerm_network_interface.controller.*.id[count.index]}"]
@@ -73,7 +84,7 @@ resource "azurerm_virtual_machine" "controller" {
   }
 
   os_profile {
-    computer_name  = "k8scontroller${ count.index + 1 }"
+    computer_name  = "controller${ count.index + 1 }.${ var.internal-tld }"
     admin_username = "ubuntu"
     admin_password = "Kangaroo-jeremiah-thereon1!"
 
@@ -123,6 +134,16 @@ resource "azurerm_virtual_machine" "controller" {
   provisioner "file" {
     source      = "${ path.module }/../../.secrets/${ var.name }/kube-apiserver-key.pem"
     destination = "/home/ubuntu/kube-apiserver-key.pem"
+  }
+
+  provisioner "file" {
+    source      = "${ path.module }/../../.secrets/${ var.name }/node${ count.index + 1 }.${ var.internal-tld }.pem"
+    destination = "/home/ubuntu/kubelet.crt"
+  }
+
+  provisioner "file" {
+    source      = "${ path.module }/../../.secrets/${ var.name }/node${ count.index + 1 }.${ var.internal-tld }-key.pem"
+    destination = "/home/ubuntu/kubelet.key"
   }
 
   provisioner "file" {
