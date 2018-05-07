@@ -181,7 +181,22 @@ write_files:
           user: kubelet
         name: kubelet-context
       current-context: kubelet-context
+  - path: "/etc/systemd/system/kube-proxy.service"
+    permissions: "0755"
+    content: |
+      [Unit]
+      Description=Kubernetes Kube Proxy
+      Documentation=https://github.com/kubernetes/kubernetes
 
-runcmd:
-  - [ systemctl, enable, etcd.service ]
-  - [ /usr/bin/etcd, --initial-cluster-state, new  ]
+      [Service]
+      ExecStart=/usr/local/bin/kube-proxy \
+        --cluster-cidr=${POD_CIDR} \
+        --hostname-override=${HOSTNAME} \
+        --kubeconfig=/var/lib/kube-proxy/kube-proxy.kubeconfig \
+        --proxy-mode=iptables \
+        --v=2
+      Restart=on-failure
+      RestartSec=5
+
+      [Install]
+      WantedBy=multi-user.target
