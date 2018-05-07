@@ -48,8 +48,6 @@ export KUBE_API_INTERNAL_IP	?= 10.0.10.250
 export ETCD_IPS           	?= 10.0.30.10,10.0.30.11,10.0.30.12
 export MASTER_IPS           ?= 10.0.10.247,10.0.10.248,10.0.10.249
 
-export PKI_IP               ?= 10.0.10.9
-
 # Alternative:
 # CIDR_PODS ?= "172.15.0.0/16"
 # CIDR_SERVICE_CLUSTER ?= "172.16.0.0/24"

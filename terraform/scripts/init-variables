@@ -18,7 +18,6 @@ echo $K8S_DNS_IP
 echo $ETCD_IPS
 echo $HYPERKUBE_IMAGE
 echo $HYPERKUBE_TAG
-echo $PKI_IP
 
 SP_PATH=${SP_PATH:-~/.azure/acstack-sp.json}
 SUBSCRIPTION_ID=${SUBSCRIPTION_ID:-`az account show -o json --query="id" | tr -d '"'`}
@@ -85,7 +84,6 @@ internal-tld = "${INTERNAL_TLD}"
 k8s-service-ip = "${K8S_SERVICE_IP}"
 name = "${CLUSTER_NAME}"
 azure_vhd_uri = "${AZURE_VHD_URI}"
-pki-ip = "${PKI_IP}"
 etcd-ips = "${ETCD_IPS}"
 master-ips = "${MASTER_IPS}"
 kube-api-internal-ip = "${KUBE_API_INTERNAL_IP}"
