@@ -4,7 +4,7 @@ cat <<EOF | kubectl create -f -
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: slow
+  name: default
 provisioner: kubernetes.io/azure-disk
 parameters:
   storageaccounttype: Standard_LRS
