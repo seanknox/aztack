@@ -94,15 +94,17 @@ write_files:
         --cloud-config=/etc/kubernetes/azure.json \
         --cloud-provider=azure \
         --cluster-cidr=${POD_CIDR} \
-        --cluster-name=kubernetes \
+        --cluster-name=${NAME} \
         --cluster-signing-cert-file=/etc/kubernetes/ssl/ca.pem \
         --cluster-signing-key-file=/etc/kubernetes/ssl/ca-key.pem \
         --controllers=*,bootstrapsigner,tokencleaner \
         --kubeconfig=/var/lib/kubelet/kubeconfig \
         --leader-elect=true \
-        --master=http://127.0.0.1:8080 \
+        --node-monitor-grace-period=40s \
+        --pod-eviction-timeout=5m0s \
         --profiling=false \
         --root-ca-file=/etc/kubernetes/ssl/ca.pem \
+        --route-reconciliation-period=10s \
         --service-account-private-key-file=/etc/kubernetes/ssl/kube-apiserver-key.pem \
         --service-cluster-ip-range=${SERVICE_IP_RANGE} \
         --terminated-pod-gc-threshold=5000 \
@@ -124,7 +126,6 @@ write_files:
       ExecStart=/usr/local/bin/kube-scheduler \
         --kubeconfig=/var/lib/kubelet/kubeconfig \
         --leader-elect=true \
-        --master=http://127.0.0.1:8080 \
         --profiling=false \
         --v=2
       Restart=on-failure
