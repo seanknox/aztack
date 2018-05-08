@@ -137,12 +137,12 @@ resource "azurerm_virtual_machine" "controller" {
   }
 
   provisioner "file" {
-    source      = "${ path.module }/../../.secrets/${ var.name }/node${ count.index + 1 }.${ var.internal-tld }.pem"
+    source      = "${ path.module }/../../.secrets/${ var.name }/controller${ count.index + 1 }.${ var.internal-tld }.pem"
     destination = "/home/ubuntu/kubelet.crt"
   }
 
   provisioner "file" {
-    source      = "${ path.module }/../../.secrets/${ var.name }/node${ count.index + 1 }.${ var.internal-tld }-key.pem"
+    source      = "${ path.module }/../../.secrets/${ var.name }/controller${ count.index + 1 }.${ var.internal-tld }-key.pem"
     destination = "/home/ubuntu/kubelet.key"
   }
 
