@@ -46,7 +46,7 @@ Packer step generates an Azure VHD with:
 	- [ ] Pod to cluster service
 - Azure/Cloud Provider
   - [ ] Service w/Load Balancer working
-  - [ ] PVCs working
+  - [x] PVCs working
   - [x] Azure DNS
   - [ ] Explicit MSI definition
 
