@@ -41,6 +41,10 @@ variable "bootstrap_token" {
   type = "string"
 }
 
+variable "azure" {
+  type = "map"
+}
+
 variable "depends-id" {}
 
 output "depends-id" {

@@ -12,7 +12,7 @@ data "template_file" "cloud-config" {
     INTERNAL_IP           = "${azurerm_network_interface.controller.*.private_ip_address[count.index]}"
     DNS_SERVICE_IP        = "${ var.dns-service-ip }"
     POD_CIDR              = "${ var.pod-cidr }"
-    LOCATION              = "${ var.location }"
+    LOCATION              = "${ lower(join("", split(" ", "${ var.location} "))) }"
     SERVICE_IP_RANGE      = "${ var.service-cidr }"
     SUBSCRIPTION_ID       = "${ var.azure["subscription_id"]}"
     TENANT_ID             = "${ var.azure["tenant_id"]}"

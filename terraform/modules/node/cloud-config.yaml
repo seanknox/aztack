@@ -14,6 +14,36 @@ write_files:
     content: |
       [Service]
       Environment="KUBELET_EXTRA_ARGS=--container-runtime=remote --runtime-request-timeout=15m --container-runtime-endpoint=unix:///run/containerd/containerd.sock"
+  - path: "/etc/kubernetes/azure.json"
+    permissions: "0755"
+    content: |
+      {
+        "cloud":"AzurePublicCloud",
+        "tenantId": "${TENANT_ID}",
+        "subscriptionId": "${SUBSCRIPTION_ID}",
+        "aadClientId": "${CLIENT_ID}",
+        "aadClientSecret": "${CLIENT_SECRET}",
+        "location": "${LOCATION}",
+        "resourceGroup": "${NAME}",
+        "routeTableName": "k8s-controller-routetable",
+        "subnetName": "private",
+        "vnetName": "${NAME}",
+        "vnetResourceGroup": "",
+        "primaryAvailabilitySetName": "${AVAILABILITY_SET_NAME}",
+        "cloudProviderBackoff": false,
+        "cloudProviderBackoffRetries": 0,
+        "cloudProviderBackoffExponent": 0,
+        "cloudProviderBackoffDuration": 0,
+        "cloudProviderBackoffJitter": 0,
+        "cloudProviderRatelimit": false,
+        "cloudProviderRateLimitQPS": 0,
+        "cloudProviderRateLimitBucket": 0,
+        "useManagedIdentityExtension": false,
+        "useInstanceMetadata": true,
+        "providerVaultName": "",
+        "providerKeyName": "k8s",
+        "providerKeyVersion": ""
+      }
   - path: "/etc/systemd/system/kubelet.service"
     permissions: "0755"
     content: |
@@ -31,6 +61,8 @@ write_files:
         --authorization-mode=Webhook \
         --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf \
         --client-ca-file=/etc/kubernetes/ssl/ca.pem \
+        --cloud-config=/etc/kubernetes/azure.json \
+        --cloud-provider=azure \
         --cluster-dns=${DNS_SERVICE_IP} \
         --cluster-domain=cluster.local \
         --container-runtime=remote \

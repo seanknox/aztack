@@ -146,6 +146,7 @@ module "node" {
   # variables
   name                 = "${ var.name }"
   location             = "${ var.location }"
+  azure                = "${ var.azure }"
   node_count           = "${ var.node_count }"
   dns-service-ip       = "${ var.dns-service-ip }"
   pod-cidr             = "${ var.cidr["pods"] }"
