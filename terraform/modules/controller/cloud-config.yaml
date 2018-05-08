@@ -12,9 +12,11 @@ write_files:
         "aadClientSecret": "${CLIENT_SECRET}",
         "location": "${LOCATION}",
         "resourceGroup": "${NAME}",
+        "routeTableName": "k8s-controller-routetable",
         "subnetName": "private",
         "vnetName": "${NAME}",
         "vnetResourceGroup": "",
+        "primaryAvailabilitySetName": "${AVAILABILITY_SET_NAME}",
         "cloudProviderBackoff": false,
         "cloudProviderBackoffRetries": 0,
         "cloudProviderBackoffExponent": 0,
@@ -24,7 +26,10 @@ write_files:
         "cloudProviderRateLimitQPS": 0,
         "cloudProviderRateLimitBucket": 0,
         "useManagedIdentityExtension": false,
-        "useInstanceMetadata": true
+        "useInstanceMetadata": true,
+        "providerVaultName": "",
+        "providerKeyName": "k8s",
+        "providerKeyVersion": ""
       }
   - path: "/etc/systemd/system/kube-apiserver.service"
     permissions: "0755"
