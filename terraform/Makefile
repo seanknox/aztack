@@ -26,7 +26,7 @@ export AZURE_LOCATION       		 ?= westus2
 export KUBE_API_PUBLIC_FQDN      := $(CLUSTER_NAME).$(AZURE_LOCATION).cloudapp.azure.com
 
 export AZURE_VM_KEY_NAME    ?= $(CLUSTER_NAME)
-export AZURE_VM_KEY_PATH    := ${DIR_KEY_PAIR}/${AZURE_VM_KEY_NAME}.pem
+export AZURE_VM_KEY_PATH    := ${DIR_KEY_PAIR}/$(CLUSTER_NAME)/${AZURE_VM_KEY_NAME}.pem
 export AZURE_VHD_URI 				?= https://acstackimages.blob.core.windows.net/system/Microsoft.Compute/Images/acs-vhds/acstack-1525808221-osDisk.f5e23d02-6f87-4076-836a-d681112f6f73.vhd
 export INTERNAL_TLD         := ${CLUSTER_NAME}.acs
 
