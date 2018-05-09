@@ -11,5 +11,5 @@ mv kubelet{.crt,.key} /var/lib/kubelet/pki/
 
 # reinitialize daemons and start etcd + kube components
 sudo systemctl daemon-reload
-sudo systemctl enable kube-apiserver kube-controller-manager kube-scheduler kubelet
-sudo systemctl start kube-apiserver kube-controller-manager kube-scheduler kubelet
+sudo systemctl enable kube-apiserver kube-controller-manager kube-scheduler kubelet kube-proxy
+sudo systemctl start kube-apiserver kube-controller-manager kube-scheduler kubelet kube-proxy
