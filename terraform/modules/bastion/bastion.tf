@@ -75,11 +75,11 @@ resource "azurerm_virtual_machine" "bastion" {
 }
 
 data "template_file" "ssh-private-key" {
-  template = "${ file( "${ path.module }/../../.keypair/${ var.name }.pem" )}"
+  template = "${ file( "${ path.module }/../../.keypair/${ var.name }/${ var.name }.pem" )}"
 }
 
 data "template_file" "ssh-pub-key" {
-  template = "${ file( "${ path.module }/../../.keypair/${ var.name }.pem.pub" )}"
+  template = "${ file( "${ path.module }/../../.keypair/${ var.name}/${ var.name }.pem.pub" )}"
 }
 
 resource "null_resource" "dummy_dependency" {

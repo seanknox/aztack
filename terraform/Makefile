@@ -92,6 +92,8 @@ clean: destroy delete-keypair
 	@-rm -rf build/${CLUSTER_NAME}
 	@-rm -rf tmp ||:
 	@-rm -rf ${DIR_SSL}/${CLUSTER_NAME} ||:
+	@-kubectl config delete-cluster cluster-${CLUSTER_NAME}
+	@-kubectl config delete-context ${CLUSTER_NAME}
 
 ## create tls bootstrap config
 create-tls-bootstrap-config:
