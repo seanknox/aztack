@@ -7,7 +7,7 @@ resource "azurerm_dns_a_record" "A-node" {
   ttl                 = 300
 
   records = [
-    "${ azurerm_network_interface.pod.*.private_ip_address[count.index] }",
+    "${ azurerm_network_interface.node.*.private_ip_address[count.index] }",
   ]
 }
 
@@ -38,13 +38,21 @@ resource "azurerm_virtual_machine" "node" {
   resource_group_name = "${ var.resource_group_name }"
 
   network_interface_ids = [
+    "${azurerm_network_interface.node.*.id[count.index]}",
     "${azurerm_network_interface.pod.*.id[count.index]}",
   ]
 
-  availability_set_id              = "${azurerm_availability_set.nodeavset.id}"
-  vm_size                          = "Standard_DS1_v2"
-  count                            = "${ var.node_count }"
-  delete_os_disk_on_termination    = true
+  primary_network_interface_id = "${azurerm_network_interface.node.*.id[count.index]}"
+
+  availability_set_id = "${azurerm_availability_set.nodeavset.id}"
+  vm_size             = "Standard_DS1_v2"
+
+  count = "${ var.node_count }"
+
+  # Uncomment this line to delete the OS disk automatically when deleting the VM
+  delete_os_disk_on_termination = true
+
+  # Uncomment this line to delete the data disks automatically when deleting the VM
   delete_data_disks_on_termination = true
 
   storage_image_reference {
@@ -90,7 +98,7 @@ resource "azurerm_virtual_machine" "node" {
   }
 
   connection {
-    host                = "${azurerm_network_interface.pod.*.private_ip_address[count.index]}"
+    host                = "${azurerm_network_interface.node.*.private_ip_address[count.index]}"
     bastion_host        = "${ var.bastion-ip }"
     bastion_private_key = "${ data.template_file.ssh-private-key.rendered }"
     user                = "ubuntu"
@@ -138,7 +146,6 @@ resource "azurerm_virtual_machine" "node" {
       "sudo rm /home/ubuntu/prepare_node.sh",
     ]
   }
-
   tags {
     environment = "staging"
   }

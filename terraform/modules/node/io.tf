@@ -52,5 +52,5 @@ output "depends-id" {
 }
 
 output "node_private_ips" {
-  value = "${azurerm_network_interface.pod.*.private_ip_address}"
+  value = "${azurerm_network_interface.node.*.private_ip_address}"
 }
