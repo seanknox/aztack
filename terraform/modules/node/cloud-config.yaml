@@ -77,7 +77,7 @@ write_files:
         --keep-terminated-pod-volumes=false \
         --kubeconfig=/var/lib/kubelet/kubeconfig \
         --network-plugin=cni \
-        --max-pods=50 \
+        --max-pods=110 \
         --node-labels=kubernetes.io/role=node,nodepool=nodepool1,storageprofile=managed,storagetier=Standard_LRS,kubernetes.azure.com/cluster=${NAME} \
         --non-masquerade-cidr=${POD_CIDR} \
         --pod-infra-container-image=k8s-gcrio.azureedge.net/pause-amd64:3.1 \
