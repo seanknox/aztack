@@ -1,5 +1,9 @@
 variable "name" {}
-variable "cidr" {}
+
+variable "cidr" {
+  type = "map"
+}
+
 variable "location" {}
 variable "resource_group_name" {}
 variable "depends-id" {}

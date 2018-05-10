@@ -22,7 +22,7 @@ module "vnet" {
   # variables
   name     = "${ var.name }"
   location = "${ var.location }"
-  cidr     = "${ var.cidr["vnet"] }"
+  cidr     = "${ var.cidr }"
 
   # modules
   resource_group_name = "${ module.rg.name }"
@@ -123,7 +123,7 @@ module "controller" {
   etcd-ips             = "${ var.etcd-ips }"
   master-ips           = "${ var.master-ips }"
   dns-service-ip       = "${ var.dns-service-ip }"
-  pod-cidr             = "${ var.cidr["pods"] }"
+  pod-cidr             = "${ var.cidr["pod"] }"
   service-cidr         = "${ var.cidr["service-cluster"] }"
   azure                = "${ var.azure }"
   internal-tld         = "${ var.internal-tld }"
@@ -149,7 +149,7 @@ module "node" {
   azure                = "${ var.azure }"
   node_count           = "${ var.node_count }"
   dns-service-ip       = "${ var.dns-service-ip }"
-  pod-cidr             = "${ var.cidr["pods"] }"
+  pod-cidr             = "${ var.cidr["pod"] }"
   internal-tld         = "${ var.internal-tld }"
   kube-api-internal-ip = "${ var.kube-api-internal-ip }"
   bootstrap_token      = "${ var.bootstrap_token }"

@@ -31,22 +31,22 @@ export AZURE_VHD_URI 				?= https://acstackimages.blob.core.windows.net/system/M
 export INTERNAL_TLD         := ${CLUSTER_NAME}.acs
 
 export HYPERKUBE_IMAGE      ?= quay.io/coreos/hyperkube
-export HYPERKUBE_TAG        ?= v1.9.6_coreos.0
+export HYPERKUBE_TA
 
-export CIDR_VNET            ?= 10.0.0.0/15
-export CIDR_MASTER          ?= 10.0.10.0/24
-export CIDR_NODE        	  ?= 10.0.20.0/24
-export CIDR_ETCD        	  ?= 10.0.30.0/24
-export CIDR_VNET            ?= 10.0.0.0/15
-export CIDR_PODS            ?= 10.1.0.0/16
-export CIDR_SERVICE_CLUSTER ?= 10.3.0.0/24
+export CIDR_VNET            ?= 10.0.0.0/8
+export CIDR_CONTROLLER      ?= 10.10.0.0/24
+export CIDR_NODE        	  ?= 10.20.0.0/24
+export CIDR_ETCD        	  ?= 10.30.0.0/24
+export CIDR_DMZ        	    ?= 10.254.250.0/24
+export CIDR_PODS            ?= 10.240.0.0/16
+export CIDR_SERVICE_CLUSTER ?= 10.0.0.0/16
 
-export K8S_SERVICE_IP       ?= 10.3.0.1
-export K8S_DNS_IP           ?= 10.3.0.10
-export KUBE_API_INTERNAL_IP	?= 10.0.10.250
+export K8S_SERVICE_IP       ?= 10.0.0.1
+export K8S_DNS_IP           ?= 10.0.0.10
+export KUBE_API_INTERNAL_IP	?= 10.10.0.250
 
-export ETCD_IPS           	?= 10.0.30.10,10.0.30.11,10.0.30.12
-export MASTER_IPS           ?= 10.0.10.247,10.0.10.248,10.0.10.249
+export ETCD_IPS           	?= 10.30.0.10,10.30.0.11,10.30.0.12
+export MASTER_IPS           ?= 10.10.0.247,10.10.0.248,10.10.0.249
 
 # Alternative:
 # CIDR_PODS ?= "172.15.0.0/16"
