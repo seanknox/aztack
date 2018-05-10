@@ -9,9 +9,8 @@ echo "Subscription ID: ${SUBSCRIPTION_ID}"
 echo "Service Principal Path: ${SETTINGS_JSON}"
 
 if [ -a "${SETTINGS_JSON}" ]; then
-	client_id=`cat ${SETTINGS_JSON} | jq -r .appId`
-	client_secret=`cat ${SETTINGS_JSON} | jq -r .password`
-	tenant_id=`cat ${SETTINGS_JSON} | jq -r .tenant`
+	echo "Existing credentials file found."
+	exit 0
 else
 	echo "Service principal file not found! Generating one @ ${SETTINGS_JSON}"
 	az ad sp create-for-rbac -n acstack-packer$(date +%s) -o json > ${SETTINGS_JSON}
