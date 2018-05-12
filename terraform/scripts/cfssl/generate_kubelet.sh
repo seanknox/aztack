@@ -27,12 +27,12 @@ CSR=$(cat <<EOF
 EOF
 )
 
-echo "$CSR" > $CFSSL_DIR/$instance-csr.json
+echo "$CSR" > $SECRETS_DIR/$instance-csr.json
 
 cfssl gencert -ca=$SECRETS_DIR/ca.pem \
     -ca-key=$SECRETS_DIR/ca-key.pem \
     -config=$CFSSL_DIR/ca-config.json \
 		-hostname=${instance} \
     -profile=kubernetes \
-		 $CFSSL_DIR/$instance-csr.json | cfssljson -bare $SECRETS_DIR/${instance}
+		 $SECRETS_DIR/$instance-csr.json | cfssljson -bare $SECRETS_DIR/${instance}
 
