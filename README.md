@@ -10,47 +10,19 @@ Still WIP
 
 Packer step generates an Azure VHD with:
 
-|Software     |Version    |
-|---  |---  |
-|Ubuntu     |17.10    |
-|cri-containerd     |1.0.0-rc.2    |
-|containerd     |v1.0.0-6    |
-|runc     |1.0.0-rc4+dev    |
-|etcd     |3.1.0-1    |
-|kubectl  | 1.10.2    |
-|kube-apiserver | 1.10.2    |
-|kube-controller-manager  | 1.10.2    |
-|kube-scheduler | 1.10.2   |
-|azure CNI | v1.0.4   |
+**Software**|**Version**
+-----|-----
+Ubuntu|17.10
+cri-containerd|1.0.0.0-rc.2
+containerd|v1.0.0-6
+runc|1.0.0-rc4+dev
+etcd|v3.3.4
+Kubernetes|v1.10.2
+Azure-CNI|v1.0.4
 
 ### Kubernetes build out status
 
-- control plane
-  - [x] controllers/etcd
-  - [x] separate etcd from controllers
-  - [ ] certs for etcd
-	- [x] certs for api and clients
-  - [x] separate controllers and nodes into different subnets
-	- [ ] add NSGs
-		- [ ] apiserver
-		- [ ] etcd
-		- [ ] nodes
-- nodes
-  - [x] token/TLS bootstrap of kubelet https://kubernetes.io/docs/admin/kubelet-tls-bootstrapping/
-  - [x] CNI can run pods
-  - [x] kube-proxy on nodes
-- [x] bastion host
-- Cluster networking
-	- [x] Pod-to-pod communication
-  - [ ] Outbound internet
-	- [ ] Pod to cluster service
-- Azure/Cloud Provider
-  - [ ] Service w/Load Balancer working
-  - [x] PVCs working
-  - [x] Azure DNS
-  - [ ] Explicit MSI definition
-
-## Prep
+See [STATUS.md](STATUS.md) for WIP status of the project.
 
 - [Install Packer](https://packer.io/docs/installation.html)
 - [Install Terraform](https://www.terraform.io/intro/getting-started/install.html)
