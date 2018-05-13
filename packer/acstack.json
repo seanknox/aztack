@@ -45,8 +45,23 @@
     },
     {
       "type": "file",
-      "source": "./prepare-vhd.sh",
-      "destination": "/home/packer/prepare-vhd.sh"
+      "source": "./cleanup-vhd.sh",
+      "destination": "/home/packer/cleanup-vhd.sh"
+    },
+    {
+      "type": "file",
+      "source": "./install-cri.sh",
+      "destination": "/home/packer/install-cri.sh"
+    },
+    {
+      "type": "file",
+      "source": "./install-cni.sh",
+      "destination": "/home/packer/install-cni.sh"
+    },
+    {
+      "type": "file",
+      "source": "./install-kubernetes.sh",
+      "destination": "/home/packer/install-kubernetes.sh"
     },
     {
       "type": "file",
@@ -55,36 +70,18 @@
     },
     {
       "type": "file",
-      "source": "./acs-engine/kubernetes_mountetcd.sh",
-      "destination": "/opt/azure/containers/kubernetes_mountetcd.sh"
-    },
-    {
-      "type": "file",
-      "source": "./acs-engine/kubernetesmastercustomscript.sh",
-      "destination": "/opt/azure/containers/kubernetesmastercustomscript.sh"
-    },
-    {
-      "type": "file",
-      "source": "./acs-engine/kubernetesmastergenerateproxycertscript.sh",
-      "destination": "/opt/azure/containers/kubernetesmastergenerateproxycertscript.sh"
-    },
-    {
-      "type": "file",
-      "source": "./acs-engine/kubernetesprovisionsource.sh",
-      "destination": "/opt/azure/containers/provision_source.sh"
-    },
-    {
-      "type": "file",
       "source": "./docker/daemon.json",
-      "destination": "$HOME/daemon.json"
+      "destination": "/home/packer/daemon.json"
     },
     {
       "type": "shell",
       "inline": [
-        "sudo /bin/bash -eux /home/packer/prepare-vhd.sh",
+				"sudo /bin/bash -eux /home/packer/install-cri.sh",
+        "sudo /bin/bash -eux /home/packer/install-cni.sh",
+        "sudo /bin/bash -eux /home/packer/install-kubernetes.sh",
         "sudo /bin/bash -eux /home/packer/install-etcd.sh",
-        "sudo mv $HOME/daemon.json /etc/docker",
-        "rm /home/packer/prepare-vhd.sh /home/packer/install-etcd.sh "
+        "sudo /bin/bash -eux /home/packer/cleanup-vhd.sh",
+        "rm /home/packer/*.sh"
       ]
     }
   ]
