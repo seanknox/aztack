@@ -64,5 +64,5 @@ sudo iptables -t nat -A POSTROUTING -m iprange ! --dst-range 168.63.129.16 -m ad
 sudo netplan apply
 sudo systemctl daemon-reload
 sudo systemctl restart systemd-resolved
-sudo systemctl enable containerd kubelet kube-proxy
-sudo systemctl start containerd kubelet kube-proxy
+sudo systemctl enable kubelet kube-proxy
+sudo systemctl start kubelet kube-proxy
