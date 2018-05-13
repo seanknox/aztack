@@ -13,7 +13,7 @@ Packer step generates an Azure VHD with:
 **Software**|**Version**
 -----|-----
 Ubuntu|17.10
-cri-containerd|1.0.0.0-rc.2
+cri-containerd|1.0.0.0
 containerd|v1.0.0-6
 runc|1.0.0-rc4+dev
 etcd|v3.3.4

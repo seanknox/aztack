@@ -34,7 +34,7 @@ sudo mv kube-apiserver kube-controller-manager kube-scheduler kubelet kube-proxy
 wget -q --show-progress --https-only --timestamping \
 	"https://github.com/Azure/azure-container-networking/releases/download/${cni_release_tag}/azure-vnet-cni-linux-amd64-${cni_release_tag}.tgz" \
 	"https://github.com/containernetworking/plugins/releases/download/v0.6.0/cni-plugins-amd64-v0.6.0.tgz" \
-	"https://storage.googleapis.com/cri-containerd-release/cri-containerd-1.1.0-rc.2.linux-amd64.tar.gz"
+	"https://storage.googleapis.com/cri-containerd-release/cri-containerd-1.1.0.linux-amd64.tar.gz"
 
 # Create CNI conf and bin directories
 sudo mkdir -p \
@@ -44,7 +44,7 @@ sudo mkdir -p \
 # Install CNI
 sudo tar -xvf cni-plugins-amd64-v0.6.0.tgz -C /opt/cni/bin/
 sudo tar -xvf azure-vnet-cni-linux-amd64-${cni_release_tag}.tgz
-sudo tar -xvf cri-containerd-1.1.0-rc.2.linux-amd64.tar.gz -C /
+sudo tar -xvf cri-containerd-1.1.0.linux-amd64.tar.gz -C /
 sudo mv azure-vnet azure-vnet-ipam /opt/cni/bin
 sudo mv 10-azure.conflist /etc/cni/net.d
 
