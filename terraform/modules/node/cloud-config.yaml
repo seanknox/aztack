@@ -9,6 +9,11 @@ write_files:
         ethernets:
           eth1:
             dhcp4: true
+  - path: "/etc/systemd/system/kubelet.service.d/0-containerd.conf"
+    permissions: "0755"
+    content: |
+      [Service]
+      Environment="KUBELET_EXTRA_ARGS=--container-runtime=remote --runtime-request-timeout=15m --container-runtime-endpoint=unix:///run/containerd/containerd.sock"
   - path: "/etc/kubernetes/azure.json"
     permissions: "0755"
     content: |
@@ -45,8 +50,8 @@ write_files:
       [Unit]
       Description=Kubernetes Kubelet
       Documentation=https://github.com/kubernetes/kubernetes
-      After=docker.service
-      Requires=docker.service
+      After=containerd.service
+      Requires=containerd.service
 
       [Service]
       ExecStart=/usr/local/bin/kubelet \
@@ -60,6 +65,8 @@ write_files:
         --cloud-provider=azure \
         --cluster-dns=${DNS_SERVICE_IP} \
         --cluster-domain=cluster.local \
+        --container-runtime=remote \
+        --container-runtime-endpoint=unix:///run/containerd/containerd.sock \
         --enforce-node-allocatable=pods \
         --eviction-hard=memory.available<100Mi,nodefs.available<10%,nodefs.inodesFree<5% \
         --feature-gates=Accelerators=true \
