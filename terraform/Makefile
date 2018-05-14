@@ -49,7 +49,8 @@ export K8S_DNS_IP           ?= 10.0.0.10
 export KUBE_API_INTERNAL_IP	?= 10.10.0.250
 
 export ETCD_IPS           	?= 10.30.0.10,10.30.0.11,10.30.0.12
-export MASTER_IPS           ?= 10.10.0.247,10.10.0.248,10.10.0.249
+export MASTER_IPS           ?= 10.240.0.247,10.240.0.248,10.240.0.249
+export NODE_COUNT 					?= 1
 
 # Alternative:
 # CIDR_PODS ?= "172.15.0.0/16"

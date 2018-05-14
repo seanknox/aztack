@@ -39,7 +39,6 @@ resource "azurerm_virtual_machine" "node" {
 
   network_interface_ids = [
     "${azurerm_network_interface.node.*.id[count.index]}",
-    "${azurerm_network_interface.pod.*.id[count.index]}",
   ]
 
   primary_network_interface_id = "${azurerm_network_interface.node.*.id[count.index]}"
@@ -146,6 +145,7 @@ resource "azurerm_virtual_machine" "node" {
       "sudo rm /home/ubuntu/prepare_node.sh",
     ]
   }
+
   tags {
     environment = "staging"
   }
