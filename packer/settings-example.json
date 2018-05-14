@@ -5,6 +5,7 @@
   "subscription_id": "",
   "resource_group_name": "ACStackImages",
   "managed_image_resource_group_name": "ACStackImages",
+  "storage_account_name": "",
   "location": "West US 2",
   "vm_size": "Standard_D2_v2"
 }
