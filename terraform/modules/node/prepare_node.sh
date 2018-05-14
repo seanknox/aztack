@@ -58,7 +58,7 @@ kubectl config use-context default --kubeconfig=/var/lib/kube-proxy/kube-proxy.k
 sudo sed -i -- 's/#DNS=/DNS=168.63.129.16/g' /etc/systemd/resolved.conf
 
 # Hack to SNAT non-Azure traffic
-sudo iptables -t nat -A POSTROUTING -m iprange ! --dst-range 168.63.129.16 -m addrtype ! --dst-type local ! -d 10.0.0.0/15 -j MASQUERADE
+sudo iptables -t nat -A POSTROUTING -m iprange ! --dst-range 168.63.129.16 -m addrtype ! --dst-type local ! -d 10.0.0.0/8 -j MASQUERADE
 
 # reinitialize daemons and start kube components
 sudo netplan apply
