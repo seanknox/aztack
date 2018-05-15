@@ -47,14 +47,13 @@ During the build process, Packer creates temporary Azure resources as it builds 
 
 #### Edit Packer settings
 
-Edit `packer/settings.json` with required settings such as your subscription id.
-
-- To generate credentials: `az ad sp create-for-rbac --query "{ client_id: appId, client_secret: password, tenant_id: tenant }" -o json`
-- To get your subscription id: `az account show --query "{ subscription_id: id }" -o json`
+Run the following to set environment variable used to generate `packer/settings.json` with required settings such as your subscription id and to create a storage account for the new vhd.
 
 ```sh
+export AZURE_RESOURCE_GROUP_NAME=
+export storage_account_name=
 cd packer
-packer build -var-file=settings.json acstack.json
+make build
 ```
 
 ## Terraform

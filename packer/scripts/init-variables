@@ -8,6 +8,22 @@ SUBSCRIPTION_ID=${SUBSCRIPTION_ID:-`az account show -o json --query="id" | tr -d
 echo "Subscription ID: ${SUBSCRIPTION_ID}"
 echo "Service Principal Path: ${SETTINGS_JSON}"
 
+if [ -z "${storage_account_name}" ]; then
+	echo "storage_account_name was not set!"
+	exit 1
+else
+	avail=$(az storage account check-name -n ${storage_account_name} -o json | jq -r .nameAvailable)
+	if $avail ; then
+		echo "creating new storage account ${storage_account_name}"
+		az storage account create -n $storage_account_name -g $AZURE_RESOURCE_GROUP_NAME
+		echo "creating new container system"
+		key=$(az storage account keys list -n $storage_account_name -g $AZURE_RESOURCE_GROUP_NAME | jq -r '.[0].value')
+		az storage container create --name system --public-access container --account-key=$key --account-name=$storage_account_name
+	else
+		echo "storage account ${storage_account_name} already exist."
+	fi
+fi
+
 if [ -a "${SETTINGS_JSON}" ]; then
 	echo "Existing credentials file found."
 	exit 0
@@ -42,6 +58,7 @@ cat <<EOF > settings.json
   "tenant_id":      "${tenant_id}",
   "resource_group_name": "${AZURE_RESOURCE_GROUP_NAME}",
   "location": "${AZURE_LOCATION}",
+  "storage_account_name": "${storage_account_name}",
   "vm_size": "${AZURE_VM_SIZE}"
 }
 EOF
