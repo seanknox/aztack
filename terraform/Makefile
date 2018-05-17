@@ -102,7 +102,6 @@ clean: destroy delete-keypair
 ## create tls bootstrap config
 create-tls-bootstrap-config:
 	@scripts/create-bootstrap-rbac
-	@scripts/create-bootstrap-configmap
 	@scripts/create-bootstrap-secret
 
 ## create kube-system addons
