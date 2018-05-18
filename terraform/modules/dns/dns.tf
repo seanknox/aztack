@@ -1,17 +1,4 @@
-resource "null_resource" "enable_dns_ext" {
-  # Enable private zone extension
-  provisioner "local-exec" {
-    on_failure = "continue"
-
-    command = <<EOF
-        az extension add --name dns
-      EOF
-  }
-}
-
 resource "null_resource" "dns_zone" {
-  depends_on = ["null_resource.enable_dns_ext"]
-
   # Create private DNS zone that resolves automatically in the vnet
   provisioner "local-exec" {
     command = <<EOF
