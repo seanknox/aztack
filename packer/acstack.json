@@ -25,8 +25,8 @@
       "os_type": "Linux",
       "image_publisher": "Canonical",
       "image_offer": "UbuntuServer",
-      "image_sku": "17.10",
-
+      "image_sku": "16.04-LTS",
+      "image_version": "latest",
       "azure_tags": {
         "dept": "Azure Container Service"
       },
@@ -76,7 +76,7 @@
     {
       "type": "shell",
       "inline": [
-				"sudo /bin/bash -eux /home/packer/install-cri.sh",
+        "sudo /bin/bash -eux /home/packer/install-cri.sh",
         "sudo /bin/bash -eux /home/packer/install-cni.sh",
         "sudo /bin/bash -eux /home/packer/install-kubernetes.sh",
         "sudo /bin/bash -eux /home/packer/install-etcd.sh",
