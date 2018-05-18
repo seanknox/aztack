@@ -20,7 +20,7 @@ echo $HYPERKUBE_IMAGE
 echo $HYPERKUBE_TAG
 
 SUBSCRIPTION_ID=${SUBSCRIPTION_ID:-`az account show -o json --query="id" | tr -d '"'`}
-SP_PATH=${SP_PATH:-~/.azure/acstack-sp-${SUBSCRIPTION_ID}.json}
+SP_PATH=${SP_PATH:-~/.azure/atack-sp-${SUBSCRIPTION_ID}.json}
 TOKEN_ID=$(cat /dev/urandom | env LC_CTYPE=C tr -dc 'a-f0-9' | fold -w 6 | head -n 1)
 TOKEN_CONTENT=$(cat /dev/urandom | env LC_CTYPE=C tr -dc 'a-f0-9' | fold -w 16 | head -n 1)
 BOOTSTRAP_TOKEN="${TOKEN_ID}.${TOKEN_CONTENT}"

@@ -12,7 +12,7 @@ export AZURE_RESOURCE_GROUP_NAME	    ?= ACStackImages
 export AZURE_VM_SIZE 									?= Standard_D2_v2
 
 build: init
-	@packer build -var-file=settings.json acstack.json
+	@packer build -var-file=settings.json atack.json
 
 init:
 	@./scripts/init-variables

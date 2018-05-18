@@ -1,4 +1,4 @@
-# ACStack
+# atack
 
 Provision a Kubernetes cluster with [Packer](https://packer.io) and [Terraform](https://www.terraform.io) on Azure Resource Manager. Inspired by Kelsey Hightower's [kubestack](https://github.com/kelseyhightower/kubestack) and the [tack](https://github.com/kz8s/tack) project.
 
@@ -31,13 +31,18 @@ See [STATUS.md](STATUS.md) for WIP status of the project.
 
 Instead of provisioning a VM at boot time, we use Packer to create an immutable image based on a source image. Currently only Ubuntu is supported.
 
+```shell
+cd packer
+storage_account_name=atack make build
+```
+
 Running the packer commands below will create the following image:
 
 ```sh
-acstack-ubuntu-17.10-{{timestamp}}
+atack-ubuntu-17.10-{{timestamp}}
 ```
 
-### Create the ACStack Base Image
+### Create the atack Base Image
 
 #### Create resource group
 

@@ -1,28 +1,28 @@
-resource "azurerm_storage_account" "acstack" {
-  name                     = "acstack${ var.name }"
+resource "azurerm_storage_account" "atack" {
+  name                     = "atack${ var.name }"
   resource_group_name      = "${ var.resource_group_name }"
   location                 = "${ var.location }"
   account_tier             = "Standard"
   account_replication_type = "LRS"
 }
 
-resource "azurerm_storage_container" "acstack" {
+resource "azurerm_storage_container" "atack" {
   name                  = "vhds"
   resource_group_name   = "${ var.resource_group_name }"
-  storage_account_name  = "${ azurerm_storage_account.acstack.name }"
+  storage_account_name  = "${ azurerm_storage_account.atack.name }"
   container_access_type = "private"
 }
 
-resource "azurerm_storage_blob" "acstack" {
-  name = "acstack.vhd"
+resource "azurerm_storage_blob" "atack" {
+  name = "atack.vhd"
 
   resource_group_name    = "${ var.resource_group_name }"
-  storage_account_name   = "${ azurerm_storage_account.acstack.name }"
-  storage_container_name = "${ azurerm_storage_container.acstack.name }"
+  storage_account_name   = "${ azurerm_storage_account.atack.name }"
+  storage_container_name = "${ azurerm_storage_container.atack.name }"
   source_uri             = "${ var.azure_vhd_uri }"
 }
 
-resource "azurerm_image" "acs" {
+resource "azurerm_image" "atack" {
   name                = "${ var.name }-image"
   location            = "${ var.location }"
   resource_group_name = "${ var.resource_group_name }"
@@ -30,13 +30,13 @@ resource "azurerm_image" "acs" {
   os_disk {
     os_type  = "Linux"
     os_state = "Generalized"
-    blob_uri = "${ azurerm_storage_blob.acstack.url }"
+    blob_uri = "${ azurerm_storage_blob.atack.url }"
     size_gb  = 30
   }
 }
 
 resource "null_resource" "dummy_dependency" {
   depends_on = [
-    "azurerm_image.acs",
+    "azurerm_image.atack",
   ]
 }
