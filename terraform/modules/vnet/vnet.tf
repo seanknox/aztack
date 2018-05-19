@@ -12,6 +12,5 @@ resource "null_resource" "dummy_dependency" {
     "azurerm_subnet.node",
     "azurerm_subnet.etcd",
     "azurerm_subnet.dmz",
-    "azurerm_subnet.pod",
   ]
 }

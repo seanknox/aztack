@@ -29,12 +29,3 @@ resource "azurerm_subnet" "dmz" {
 
   address_prefix = "${ var.cidr["dmz"]}"
 }
-
-resource "azurerm_subnet" "pod" {
-  name                 = "pod"
-  resource_group_name  = "${ var.resource_group_name }"
-  virtual_network_name = "${ azurerm_virtual_network.main.name }"
-
-  # 10.0.0.0/15 -> 10.1.0.0/16
-  address_prefix = "${ var.cidr["pod"]}"
-}

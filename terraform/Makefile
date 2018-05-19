@@ -30,7 +30,7 @@ export AZURE_VM_KEY_PATH    := ${DIR_KEY_PAIR}/$(CLUSTER_NAME)/${AZURE_VM_KEY_NA
 # docker.io
 # export AZURE_VHD_URI 				?= https://acstackimages.blob.core.windows.net/system/Microsoft.Compute/Images/acs-vhds/acstack-1526251964-osDisk.7fdd6d44-e3bd-4020-8033-47877b422c07.vhd
 # cri/containerd/runc
-export AZURE_VHD_URI 				?= https://acstack.blob.core.windows.net/system/Microsoft.Compute/Images/acs-vhds/acstack-1526603173-osDisk.5ae30689-6400-4a36-b4f0-728dbd0728fb.vhd
+export AZURE_VHD_URI 				?= https://atack.blob.core.windows.net/system/Microsoft.Compute/Images/atack-vhds/atack-1526674778-osDisk.be03a407-d029-457b-8c64-02a8b0441850.vhd
 export INTERNAL_TLD         := ${CLUSTER_NAME}.atack
 
 export HYPERKUBE_IMAGE      ?= quay.io/coreos/hyperkube
@@ -41,7 +41,7 @@ export CIDR_CONTROLLER      ?= 10.10.0.0/24
 export CIDR_NODE        	  ?= 10.20.0.0/24
 export CIDR_ETCD        	  ?= 10.30.0.0/24
 export CIDR_DMZ        	    ?= 10.254.250.0/24
-export CIDR_PODS            ?= 10.240.0.0/16
+export CIDR_PODS            ?= 192.168.0.0/16
 export CIDR_SERVICE_CLUSTER ?= 10.0.0.0/16
 
 export K8S_SERVICE_IP       ?= 10.0.0.1
@@ -49,7 +49,7 @@ export K8S_DNS_IP           ?= 10.0.0.10
 export KUBE_API_INTERNAL_IP	?= 10.10.0.250
 
 export ETCD_IPS           	?= 10.30.0.10,10.30.0.11,10.30.0.12
-export MASTER_IPS           ?= 10.240.0.247,10.240.0.248,10.240.0.249
+export MASTER_IPS           ?= 10.10.0.247,10.10.0.248,10.10.0.249
 export NODE_COUNT 					?= 1
 
 # Alternative:

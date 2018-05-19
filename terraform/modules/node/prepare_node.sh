@@ -54,15 +54,9 @@ kubectl config set-context default \
 
 kubectl config use-context default --kubeconfig=/var/lib/kube-proxy/kube-proxy.kubeconfig
 
-# Hack to prevent CNI from disabling DNS resolver
-sudo sed -i -- 's/#DNS=/DNS=168.63.129.16/g' /etc/systemd/resolved.conf
-
 # Hack to SNAT non-Azure traffic
 sudo iptables -t nat -A POSTROUTING -m iprange ! --dst-range 168.63.129.16 -m addrtype ! --dst-type local ! -d 10.0.0.0/8 -j MASQUERADE
 
 # reinitialize daemons and start kube components
-sudo netplan apply
-sudo systemctl daemon-reload
-sudo systemctl restart systemd-resolved
 sudo systemctl enable kubelet kube-proxy
 sudo systemctl start kubelet kube-proxy

@@ -35,7 +35,3 @@ output "etcd-subnet-id" {
 output "dmz-subnet-id" {
   value = "${ azurerm_subnet.dmz.id }"
 }
-
-output "pod-subnet-id" {
-  value = "${ azurerm_subnet.pod.id }"
-}

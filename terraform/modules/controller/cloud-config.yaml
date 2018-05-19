@@ -91,7 +91,7 @@ write_files:
 
       [Service]
       ExecStart=/usr/local/bin/kube-controller-manager \
-        --allocate-node-cidrs=false \
+        --allocate-node-cidrs=true \
         --cloud-config=/etc/kubernetes/azure.json \
         --cloud-provider=azure \
         --cluster-cidr=${POD_CIDR} \
