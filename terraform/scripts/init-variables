@@ -19,6 +19,11 @@ echo $ETCD_IPS
 echo $HYPERKUBE_IMAGE
 echo $HYPERKUBE_TAG
 
+if [[ -e "build/${CLUSTER_NAME}/terraform.tfvars" ]]; then
+	echo "Existing .tfvars found. Skipping..."
+	exit 0
+fi
+
 SUBSCRIPTION_ID=${SUBSCRIPTION_ID:-`az account show -o json --query="id" | tr -d '"'`}
 SP_PATH=${SP_PATH:-~/.azure/atack-sp-${SUBSCRIPTION_ID}.json}
 TOKEN_ID=$(cat /dev/urandom | env LC_CTYPE=C tr -dc 'a-f0-9' | fold -w 6 | head -n 1)

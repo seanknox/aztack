@@ -27,7 +27,7 @@ get: ; terraform get
 init: terraform.tfvars
 
 ## terraform plan
-plan: get init
+plan: get
 	cd build/$(CLUSTER_NAME)
 	terraform init
 	terraform validate -var-file=build/$(CLUSTER_NAME)/terraform.tfvars
