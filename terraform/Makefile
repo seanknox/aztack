@@ -22,8 +22,8 @@ export DIR_KUBECONFIG := .kube
 
 # ∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨
 
-export AZURE_LOCATION       		 ?= westus2
-export KUBE_API_PUBLIC_FQDN      := $(CLUSTER_NAME).$(AZURE_LOCATION).cloudapp.azure.com
+export LOCATION       		 ?= westus2
+export KUBE_API_PUBLIC_FQDN      := $(CLUSTER_NAME).$(LOCATION).cloudapp.azure.com
 
 export AZURE_VM_KEY_NAME    ?= $(CLUSTER_NAME)
 export AZURE_VM_KEY_PATH    := ${DIR_KEY_PAIR}/$(CLUSTER_NAME)/${AZURE_VM_KEY_NAME}.pem
@@ -32,9 +32,6 @@ export AZURE_VM_KEY_PATH    := ${DIR_KEY_PAIR}/$(CLUSTER_NAME)/${AZURE_VM_KEY_NA
 # cri/containerd/runc
 export AZURE_VHD_URI 				?= https://atack.blob.core.windows.net/system/Microsoft.Compute/Images/atack-vhds/atack-1526674778-osDisk.be03a407-d029-457b-8c64-02a8b0441850.vhd
 export INTERNAL_TLD         := ${CLUSTER_NAME}.atack
-
-export HYPERKUBE_IMAGE      ?= quay.io/coreos/hyperkube
-export HYPERKUBE_TA
 
 export CIDR_VNET            ?= 10.0.0.0/8
 export CIDR_CONTROLLER      ?= 10.10.0.0/24
@@ -52,17 +49,57 @@ export ETCD_IPS           	?= 10.30.0.10,10.30.0.11,10.30.0.12
 export MASTER_IPS           ?= 10.20.0.247,10.20.0.248,10.20.0.249
 export NODE_COUNT 					?= 1
 
+ifndef CLUSTER_NAME
+$(error CLUSTER_NAME is not set)
+endif
+
 # Alternative:
 # CIDR_PODS ?= "172.15.0.0/16"
 # CIDR_SERVICE_CLUSTER ?= "172.16.0.0/24"
 # K8S_SERVICE_IP ?= 172.16.0.1
 # K8S_DNS_IP ?= 172.16.0.10
 
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# This file must exist before starting the container or it gets created as a
+# directory. This is done automatically in the prereqs target
+export SP_PATH := $(HOME)/.azure/atack-sp.json
+export DOCKER_SP_PATH := /root/$(HCP_NAME).json
 
-ifndef CLUSTER_NAME
-$(error CLUSTER_NAME is not set)
-endif
+# Wrap the makefile shell in a Docker container
+# by setting the SHELL variable. We store the
+# original value for later so that targets can
+# override the wrapped shell and use the host instead
+# i.e. `mytarget : SHELL := $(LOCAL_SHELL)`.
+LOCAL_SHELL := $(SHELL)
+DOCKER_IMAGE ?= atack
+DOCKER_CODE_PATH := /src
+DOCKER_ARGS ?= -it --rm \
+	-v ${HOME}/.azure:/root/.azure \
+	-v ${PWD}:${DOCKER_CODE_PATH} -w ${DOCKER_CODE_PATH} \
+	-v ${SP_PATH}:${DOCKER_SP_PATH} \
+	-e CLUSTER_NAME=${CLUSTER_NAME} \
+	-e LOCATION=${LOCATION} \
+	-e SP_PATH=${DOCKER_SP_PATH} \
+	-e AZURE_VHD_URI=${AZURE_VHD_URI} \
+	-e INTERNAL_TLD=${INTERNAL_TLD} \
+	-e CIDR_VNET=${CIDR_VNET} \
+	-e CIDR_CONTROLLER=${CIDR_CONTROLLER} \
+	-e CIDR_NODE=${CIDR_NODE} \
+	-e CIDR_ETCD=${CIDR_ETCD} \
+	-e CIDR_DMZ=${CIDR_DMZ} \
+	-e CIDR_PODS=${CIDR_PODS} \
+	-e CIDR_SERVICE_CLUSTER=${CIDR_SERVICE_CLUSTER} \
+	-e K8S_SERVICE_IP=${K8S_SERVICE_IP} \
+	-e K8S_DNS_IP=${K8S_DNS_IP} \
+	-e KUBE_API_PUBLIC_FQDN=${KUBE_API_PUBLIC_FQDN} \
+	-e KUBE_API_INTERNAL_IP=${KUBE_API_INTERNAL_IP} \
+	-e MASTER_IPS=${MASTER_IPS} \
+	-e ETCD_IPS=${ETCD_IPS} \
+	-e NODE_COUNT=${NODE_COUNT}
+SHELL := docker run ${DOCKER_ARGS} ${DOCKER_IMAGE} /bin/bash
+
+export TERRAFORM_DIR := ./build
+
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .addons: ; @scripts/do-task "initialize add-ons" ./scripts/init-addons
 
@@ -123,7 +160,10 @@ create-kubeconfig: ; @scripts/do-task "create kubeconfig" \
 ## start proxy and open kubernetes dashboard
 dashboard: ; @./scripts/dashboard
 
-prereqs: ; @scripts/do-task "checking prerequisities" scripts/prereqs
+prereqs : SHELL := $(LOCAL_SHELL)
+prereqs:
+	touch $(SP_PATH)
+	docker build -t $(DOCKER_IMAGE) .
 
 ## ssh into hostname=host
 ssh: ; @scripts/ssh "ssh $(hostname).$(INTERNAL_TLD)"
