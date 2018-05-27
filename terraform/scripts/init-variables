@@ -14,23 +14,25 @@ SUBSCRIPTION_ID=${SUBSCRIPTION_ID:-`az account show -o json --query="id" | tr -d
 TOKEN_ID=$(cat /dev/urandom | env LC_CTYPE=C tr -dc 'a-f0-9' | fold -w 6 | head -n 1)
 TOKEN_CONTENT=$(cat /dev/urandom | env LC_CTYPE=C tr -dc 'a-f0-9' | fold -w 16 | head -n 1)
 BOOTSTRAP_TOKEN="${TOKEN_ID}.${TOKEN_CONTENT}"
+SP_NAME="azure-stack-sp"
 
 echo "Subscription ID: ${SUBSCRIPTION_ID}"
 echo "Location: ${LOCATION}"
 echo "Cluster Name: ${CLUSTER_NAME}"
 echo "Service Principal Path: ${SP_PATH}"
 
-if [ -a "${SP_PATH}" ]; then
-	client_id=`cat ${SP_PATH} | jq -r .appId`
-	client_secret=`cat ${SP_PATH} | jq -r .password`
-	tenant_id=`cat ${SP_PATH} | jq -r .tenant`
-else
-	echo "Service principal file not found! Generating one @ ${SP_PATH}"
-	az ad sp create-for-rbac -n azure-stack-sp-${TOKEN_ID} -o json > ${SP_PATH}
-	client_id=`cat ${SP_PATH} | jq -r .appId`
-	client_secret=`cat ${SP_PATH} | jq -r .password`
-	tenant_id=`cat ${SP_PATH} | jq -r .tenant`
+# If it doesn't already exist, create it
+if ! az ad sp show --id "http://${SP_NAME}" > /dev/null 2>&1 ; then
+		echo "Creating a service principal with name '${SP_NAME}' and placing into ${SP_PATH}"
+		az ad sp create-for-rbac -n "${SP_NAME}" > "${SP_PATH}"
+else # just fetch it
+		echo "Service principal '${SP_NAME}' was found but no file exists. Regenerating credentials and placing into ${SP_PATH}"
+		az ad sp credential reset --name "${SP_NAME}" > "${SP_PATH}"
 fi
+
+client_id=`cat ${SP_PATH} | jq -r .appId`
+client_secret=`cat ${SP_PATH} | jq -r .password`
+tenant_id=`cat ${SP_PATH} | jq -r .tenant`
 
 if [ -z "${client_id}" ]; then
 	echo "client_id was not set! Something happened when generating the service principal or when trying to read the sp file!"

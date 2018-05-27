@@ -62,7 +62,7 @@ endif
 # This file must exist before starting the container or it gets created as a
 # directory. This is done automatically in the prereqs target
 export SP_PATH := $(HOME)/.azure/atack-sp.json
-export DOCKER_SP_PATH := /root/$(HCP_NAME).json
+export DOCKER_SP_PATH := /root/$(CLUSTER_NAME).json
 
 # Wrap the makefile shell in a Docker container
 # by setting the SHELL variable. We store the
