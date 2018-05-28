@@ -1,3 +1,17 @@
+DIR := ${CURDIR}
+
+SHELL := docker run --volumes-from=ssh-agent -e SSH_AUTH_SOCK=/.ssh-agent/socket ${DOCKER_ARGS} ${DOCKER_IMAGE} /bin/bash
+
+shell : SHELL := $(LOCAL_SHELL)
+mount-ssh-container : SHELL := $(LOCAL_SHELL)
+
+shell: mount-ssh-container
+	docker run --volumes-from=ssh-agent -e SSH_AUTH_SOCK=/.ssh-agent/socket ${DOCKER_ARGS} ${DOCKER_IMAGE} /bin/bash
+
+mount-ssh-container:
+	docker run -d --name=ssh-agent nardeas/ssh-agent > /dev/null 2>&1  || true
+	docker run --rm --volumes-from=ssh-agent -v $(DIR)/.keypair/$(CLUSTER_NAME):/root/.ssh/ -it nardeas/ssh-agent ssh-add /root/.ssh/$(CLUSTER_NAME).pem
+
 .terraform: ; cd $(TERRAFORM_DIR) && terraform get
 
 module.%:
@@ -7,7 +21,7 @@ module.%:
 	@sleep 5.2
 
 ## terraform apply
-apply: plan
+apply: plan mount-ssh-container
 	@echo "${BLUE}❤ terraform apply - commencing${NC}"
 	terraform apply -state-out=$(TERRAFORM_DIR)/$(CLUSTER_NAME)/terraform.tfstate $(TERRAFORM_DIR)/$(CLUSTER_NAME)/terraform.tfplan
 	@echo "${GREEN}✓ make $@ - success${NC}"
