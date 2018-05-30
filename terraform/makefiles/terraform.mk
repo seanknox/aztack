@@ -1,6 +1,6 @@
 DIR := ${CURDIR}
 
-SHELL := docker run --volumes-from=ssh-agent -e SSH_AUTH_SOCK=/.ssh-agent/socket ${DOCKER_ARGS} ${DOCKER_IMAGE} /bin/bash
+SHELL := docker rm -f ssh-agent > /dev/null 2>&1  || true; docker run -d --name=ssh-agent nardeas/ssh-agent > /dev/null 2>&1  || true; docker run --volumes-from=ssh-agent -e SSH_AUTH_SOCK=/.ssh-agent/socket ${DOCKER_ARGS} ${DOCKER_IMAGE} /bin/bash
 
 shell : SHELL := $(LOCAL_SHELL)
 mount-ssh-container : SHELL := $(LOCAL_SHELL)
@@ -9,7 +9,6 @@ shell: mount-ssh-container
 	docker run --volumes-from=ssh-agent -e SSH_AUTH_SOCK=/.ssh-agent/socket ${DOCKER_ARGS} ${DOCKER_IMAGE} /bin/bash
 
 mount-ssh-container:
-	docker run -d --name=ssh-agent nardeas/ssh-agent > /dev/null 2>&1  || true
 	docker run --rm --volumes-from=ssh-agent -v $(DIR)/.keypair/$(CLUSTER_NAME):/root/.ssh/ -it nardeas/ssh-agent ssh-add /root/.ssh/$(CLUSTER_NAME).pem
 
 .terraform: ; cd $(TERRAFORM_DIR) && terraform get

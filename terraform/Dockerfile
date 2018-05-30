@@ -11,12 +11,12 @@ COPY --from=0 /go/bin/cfssl /usr/bin/cfssl
 COPY --from=0 /go/bin/cfssljson /usr/bin/cfssljson
 
 RUN apt-get update \
-	&& apt-get install -y curl apt-transport-https gnupg openssh-client \
+	&& apt-get install -y curl apt-transport-https gnupg openssh-client build-essential \
 	&& echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ bionic main" \
 	| tee /etc/apt/sources.list.d/azure-cli.list \
-	&& apt-key adv --keyserver packages.microsoft.com --recv-keys 52E16F86FEE04B979B07E28DB02C46DF417A0893 \
+	&& curl -L https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
 	&& apt-get update \
-	&& apt-get install -y unzip jq azure-cli \
+	&& apt-get install -y unzip jq build-essential azure-cli \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV TERRAFORM_VERSION=0.11.7

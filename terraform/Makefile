@@ -76,6 +76,7 @@ DOCKER_ARGS ?= -it --rm \
 	-v ${HOME}/.azure:/root/.azure \
 	-v ${PWD}:${DOCKER_CODE_PATH} -w ${DOCKER_CODE_PATH} \
 	-v ${SP_PATH}:${DOCKER_SP_PATH} \
+	-v ${HOME}/.kube:/root/.kube \
 	-e CLUSTER_NAME=${CLUSTER_NAME} \
 	-e LOCATION=${LOCATION} \
 	-e SP_PATH=${DOCKER_SP_PATH} \
@@ -94,19 +95,26 @@ DOCKER_ARGS ?= -it --rm \
 	-e KUBE_API_INTERNAL_IP=${KUBE_API_INTERNAL_IP} \
 	-e MASTER_IPS=${MASTER_IPS} \
 	-e ETCD_IPS=${ETCD_IPS} \
-	-e NODE_COUNT=${NODE_COUNT}
+	-e NODE_COUNT=${NODE_COUNT} \
+	-e DIR_KEY_PAIR=${DIR_KEY_PAIR} \
+	-e DIR_SECRETS=${DIR_SECRETS} \
+	-e DIR_SSL=${DIR_SSL} \
+	-e DIR_KUBECONFIG=${DIR_KUBECONFIG}
 SHELL := docker run ${DOCKER_ARGS} ${DOCKER_IMAGE} /bin/bash
 
 export TERRAFORM_DIR := ./build
+
+post-terraform : SHELL := $(LOCAL_SHELL)
+ssh : SHELL := $(LOCAL_SHELL)
+ssh-bastion : SHELL := $(LOCAL_SHELL)
 
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .addons: ; @scripts/do-task "initialize add-ons" ./scripts/init-addons
 
 ## generate key-pair, variables and then `terraform apply`
-all: prereqs create-keypair create-certs init apply
+build: prereqs create-keypair create-certs init apply
 	@echo "${GREEN}✓ terraform portion of 'make all' has completed ${NC}\n"
-	@$(MAKE) post-terraform
 
 .PHONY: post-terraform
 post-terraform:
