@@ -1,6 +1,6 @@
 #!/bin/bash -ux
 
-KUBE_API_INTERNAL_IP=$1
+KUBE_API_INTERNAL_FQDN=$1
 BOOTSTRAP_TOKEN=$2
 HOSTNAME=$3
 
@@ -19,7 +19,7 @@ rm /home/ubuntu/*{.pem,.crt,.key}
 sudo kubectl config set-cluster kubernetes \
   --certificate-authority=/etc/kubernetes/ssl/ca.pem \
   --embed-certs=true \
-  --server=https://${KUBE_API_INTERNAL_IP}:6443 \
+  --server=https://${KUBE_API_INTERNAL_FQDN}:6443 \
 	--kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf
 
 sudo kubectl config set-credentials \
@@ -38,7 +38,7 @@ sudo kubectl config use-context default --kubeconfig=/etc/kubernetes/bootstrap-k
 ## Setup kube-proxy
 kubectl config set-cluster kubernetes \
   --certificate-authority=/etc/kubernetes/ssl/ca.pem   --embed-certs=true \
-	--server=https://${KUBE_API_INTERNAL_IP}:6443 \
+	--server=https://${KUBE_API_INTERNAL_FQDN}:6443 \
 	--kubeconfig=/var/lib/kube-proxy/kube-proxy.kubeconfig
 
 kubectl config set-credentials kube-proxy \

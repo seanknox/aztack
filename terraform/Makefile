@@ -31,7 +31,7 @@ export AZURE_VM_KEY_PATH    := ${DIR_KEY_PAIR}/$(CLUSTER_NAME)/${AZURE_VM_KEY_NA
 # export AZURE_VHD_URI 				?= https://acstackimages.blob.core.windows.net/system/Microsoft.Compute/Images/acs-vhds/acstack-1526251964-osDisk.7fdd6d44-e3bd-4020-8033-47877b422c07.vhd
 # cri/containerd/runc
 export AZURE_VHD_URI 				?= "https://atack.blob.core.windows.net/system/Microsoft.Compute/Images/atack-vhds/atack-1527648840-osDisk.f5b8b8c9-33c4-4db2-ab38-49f6a5a12c16.vhd?se=2018-06-30T03%3A05%3A57Z&sig=%2BeKUXJ5T%2FdECyjMRvBJ6RNaZqVhP1tKYqfh%2BQbrvBRo%3D&sp=r&spr=https%2Chttp&sr=b&sv=2016-05-31"
-export INTERNAL_TLD         := ${CLUSTER_NAME}.atack
+export INTERNAL_TLD         := $(CLUSTER_NAME).atack
 
 export CIDR_VNET            ?= 10.0.0.0/8
 export CIDR_CONTROLLER      ?= 10.10.0.0/24
@@ -44,6 +44,7 @@ export CIDR_SERVICE_CLUSTER ?= 10.0.0.0/16
 export K8S_SERVICE_IP       ?= 10.0.0.1
 export K8S_DNS_IP           ?= 10.0.0.10
 export KUBE_API_INTERNAL_IP	?= 10.10.0.250
+export KUBE_API_INTERNAL_FQDN      := kube-apiserver.$(INTERNAL_TLD)
 
 export ETCD_IPS           	?= 10.30.0.10,10.30.0.11,10.30.0.12
 export MASTER_IPS           ?= 10.20.0.247,10.20.0.248,10.20.0.249
@@ -92,6 +93,7 @@ DOCKER_ARGS ?= -it --rm \
 	-e K8S_SERVICE_IP=${K8S_SERVICE_IP} \
 	-e K8S_DNS_IP=${K8S_DNS_IP} \
 	-e KUBE_API_PUBLIC_FQDN=${KUBE_API_PUBLIC_FQDN} \
+	-e KUBE_API_INTERNAL_FQDN=${KUBE_API_INTERNAL_FQDN} \
 	-e KUBE_API_INTERNAL_IP=${KUBE_API_INTERNAL_IP} \
 	-e MASTER_IPS=${MASTER_IPS} \
 	-e ETCD_IPS=${ETCD_IPS} \

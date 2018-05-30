@@ -51,6 +51,7 @@ variable "location" {
 
 variable "kube-api-public-fqdn" {}
 variable "kube-api-internal-ip" {}
+variable "kube-api-internal-fqdn" {}
 
 variable "bootstrap_token" {}
 

@@ -138,10 +138,8 @@ resource "azurerm_virtual_machine" "node" {
   }
 
   provisioner "remote-exec" {
-    on_failure = "continue"
-
     inline = [
-      "sudo /bin/bash -eux /home/ubuntu/prepare_node.sh ${ var.kube-api-internal-ip } ${ var.bootstrap_token } node${ count.index + 1 }.${ var.internal-tld }",
+      "sudo /bin/bash -eux /home/ubuntu/prepare_node.sh ${ var.kube-api-internal-fqdn } ${ var.bootstrap_token } node${ count.index + 1 }.${ var.internal-tld }",
       "sudo rm /home/ubuntu/prepare_node.sh",
     ]
   }

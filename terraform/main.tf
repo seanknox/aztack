@@ -33,9 +33,10 @@ module "dns" {
   depends-id = "${ module.rg.depends-id }"
 
   # variables
-  etcd-ips     = "${ var.etcd-ips }"
-  internal-tld = "${ var.internal-tld }"
-  name         = "${ var.name }"
+  etcd-ips       = "${ var.etcd-ips }"
+  controller-ips = "${ var.master-ips }"
+  internal-tld   = "${ var.internal-tld }"
+  name           = "${ var.name }"
 
   # modules
   resource_group_name = "${ module.rg.name }"
@@ -144,15 +145,15 @@ module "node" {
   depends-id = "${ module.bastion.depends-id }"
 
   # variables
-  name                 = "${ var.name }"
-  location             = "${ var.location }"
-  azure                = "${ var.azure }"
-  node_count           = "${ var.node_count }"
-  dns-service-ip       = "${ var.dns-service-ip }"
-  pod-cidr             = "${ var.cidr["pod"] }"
-  internal-tld         = "${ var.internal-tld }"
-  kube-api-internal-ip = "${ var.kube-api-internal-ip }"
-  bootstrap_token      = "${ var.bootstrap_token }"
+  name                   = "${ var.name }"
+  location               = "${ var.location }"
+  azure                  = "${ var.azure }"
+  node_count             = "${ var.node_count }"
+  dns-service-ip         = "${ var.dns-service-ip }"
+  pod-cidr               = "${ var.cidr["pod"] }"
+  internal-tld           = "${ var.internal-tld }"
+  kube-api-internal-fqdn = "${ var.kube-api-internal-fqdn }"
+  bootstrap_token        = "${ var.bootstrap_token }"
 
   # modules
   private-subnet-id   = "${ module.vnet.node-subnet-id }"

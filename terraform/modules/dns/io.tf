@@ -1,7 +1,8 @@
+variable "controller-ips" {}
 variable "etcd-ips" {}
 variable "internal-tld" {}
 variable "name" {}
-variable "resource_group_name" { }
+variable "resource_group_name" {}
 variable "depends-id" {}
 
 output "depends-id" {

@@ -31,7 +31,7 @@ variable "resource_group_name" {
   type = "string"
 }
 
-variable "kube-api-internal-ip" {
+variable "kube-api-internal-fqdn" {
   type = "string"
 }
 

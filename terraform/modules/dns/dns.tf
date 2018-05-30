@@ -30,13 +30,13 @@ resource "azurerm_dns_a_record" "A-etcds" {
   ]
 }
 
-resource "azurerm_dns_cname_record" "CNAME-controller" {
+resource "azurerm_dns_a_record" "A-kube-apiserver" {
   depends_on          = ["null_resource.dns_zone"]
-  name                = "controller"
+  name                = "kube-apiserver"
   zone_name           = "${ var.internal-tld }"
   resource_group_name = "${ var.resource_group_name }"
   ttl                 = 300
-  record              = "etcd.${ var.internal-tld }"
+  records             = ["${ split(",", var.controller-ips) }"]
 }
 
 resource "azurerm_dns_srv_record" "etcd-client-tcp" {
