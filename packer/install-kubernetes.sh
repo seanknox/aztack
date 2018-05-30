@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-kubernetes_release_tag="v1.10.2"
+kubernetes_release_tag="v1.10.3"
 
 export DEBIAN_FRONTEND=noninteractive
 apt_flags=(-o "Dpkg::Options::=--force-confnew" -qy)
