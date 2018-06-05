@@ -19,7 +19,9 @@ data "template_file" "cloud-config" {
     CLIENT_ID              = "${ var.azure["client_id"]}"
     CLIENT_SECRET          = "${ var.azure["client_secret"]}"
     NAME                   = "${ var.name }"
-    AVAILABILITY_SET_NAME  = "${ azurerm_availability_set.controlleravset.name }"
+    AVAILABILITY_SET_NAME  = "nodeavset"
     NETWORK_SECURITY_GROUP = "controller-nsg"
+    SUBNET_NAME            = "private"
+    ROUTE_TABLE_NAME       = "k8s-controller-routetable"
   }
 }
