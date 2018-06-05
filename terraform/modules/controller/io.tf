@@ -14,6 +14,7 @@ variable "internal-tld" {}
 variable "resource_group_name" {}
 variable "kube-api-internal-ip" {}
 variable "bootstrap_token" {}
+variable "load_balancer_ip" {}
 variable "depends-id" {}
 
 variable "backend_pool_ids" {

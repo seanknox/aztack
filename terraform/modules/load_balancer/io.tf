@@ -17,6 +17,10 @@ output "private_backend_pool_id" {
   value = "${azurerm_lb_backend_address_pool.private_backend_pool.id}"
 }
 
-# output "public_load_balancer_ip" {
-#   value = "${azurerm_public_ip.lbpip.ip_address}"
-# }
+output "public_load_balancer_fqdn" {
+  value = "${azurerm_public_ip.lbpip.fqdn}"
+}
+
+output "public_load_balancer_ip" {
+  value = "${azurerm_public_ip.lbpip.ip_address}"
+}

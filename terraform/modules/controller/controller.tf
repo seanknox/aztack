@@ -14,6 +14,24 @@ resource "azurerm_network_interface" "controller" {
   }
 }
 
+resource "azurerm_network_security_group" "controller" {
+  name                = "controller-nsg"
+  location            = "${ var.location }"
+  resource_group_name = "${ var.resource_group_name }"
+
+  security_rule {
+    name                       = "kube-api"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "8443"
+    source_address_prefix      = "*"
+    destination_address_prefix = "${ var.load_balancer_ip }"
+  }
+}
+
 resource "azurerm_dns_a_record" "A-controllers" {
   count = "${ var.master_count }"
 

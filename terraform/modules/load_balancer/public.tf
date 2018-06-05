@@ -2,12 +2,8 @@ resource "azurerm_public_ip" "lbpip" {
   name                         = "lbpip"
   location                     = "${ var.location }"
   resource_group_name          = "${ var.resource_group_name }"
-  public_ip_address_allocation = "dynamic"
+  public_ip_address_allocation = "static"
   domain_name_label            = "${ var.name }"
-
-  tags {
-    environment = "test"
-  }
 }
 
 resource "azurerm_lb" "extlb" {
@@ -56,5 +52,6 @@ resource "null_resource" "dummy_dependency" {
   depends_on = [
     "azurerm_lb.extlb",
     "azurerm_lb.intlb",
+    "azurerm_public_ip.lbpip",
   ]
 }

@@ -137,6 +137,7 @@ module "controller" {
   image_id            = "${ module.image.image_id }"
   bastion-ip          = "${ module.bastion.public-ip }"
   backend_pool_ids    = ["${ module.load_balancer.public_backend_pool_id }", "${ module.load_balancer.private_backend_pool_id }"]
+  load_balancer_ip    = "${module.load_balancer.public_load_balancer_ip}"
   resource_group_name = "${ module.rg.name }"
 }
 
