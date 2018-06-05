@@ -2,23 +2,21 @@
 
 Provision a Kubernetes cluster with [Packer](https://packer.io) and [Terraform](https://www.terraform.io) on Azure Resource Manager. Inspired by Kelsey Hightower's [kubestack](https://github.com/kelseyhightower/kubestack) and the [tack](https://github.com/kz8s/tack) project.
 
-## Status
+Creates a Kubernetes cluster on Azure with
 
-Still WIP
-
-### Packer
-
-Packer step generates an Azure VHD with:
+- 3x Controllers
+- 3x etcd
+- 1x node (by default)
 
 **Software**|**Version**
 -----|-----
-Ubuntu|17.10
+Ubuntu|16.04
 cri-containerd|1.0.0.0
 containerd|v1.0.0-6
 runc|1.0.0-rc4+dev
 etcd|v3.3.4
-Kubernetes|v1.10.2
-Azure-CNI|v1.0.4
+Kubernetes|v1.10.3
+Calico|v3.1.2
 
 ### Kubernetes build out status
 
@@ -29,17 +27,11 @@ See [STATUS.md](STATUS.md) for WIP status of the project.
 
 ## Packer Images
 
-Instead of provisioning a VM at boot time, we use Packer to create an immutable image based on a source image. Currently only Ubuntu is supported.
+We use Packer to create an immutable image based on a source image based on Ubuntu 16.04.
 
 ```shell
 cd packer
-storage_account_name=atack make build
-```
-
-Running the packer commands below will create the following image:
-
-```sh
-atack-ubuntu-17.10-{{timestamp}}
+make build
 ```
 
 ### Create the atack Base Image
@@ -47,8 +39,6 @@ atack-ubuntu-17.10-{{timestamp}}
 #### Create resource group
 
 During the build process, Packer creates temporary Azure resources as it builds the source VM. To capture that source VM for use as an image, you must define a resource group. The output from the Packer build process is stored in this resource group.
-
-- `az group create -n myResourceGroup -l westus2`
 
 #### Edit Packer settings
 
@@ -63,37 +53,28 @@ make build
 
 ## Terraform
 
-Terraform will be used to declare and provision a Kubernetes cluster.
+Terraform is used to declare and provision a Kubernetes cluster. Terraform runs entirely in a Docker container. The following generates Azure credentials and other required configuration and builds infra on Terraform.
 
-### Prep
-
-TBD
-
-
-### Provision the Kubernetes Cluster
-
-```
+```shell
 cd terraform
-CLUSTER_NAME=mycluster make all # generates Azure credentials and other required configuration and builds infra on Terraform
+CLUSTER_NAME=mycluster make build post-terraform
 ```
-
 
 ### Resize the number of worker nodes
 
-Edit `terraform/terraform.tfvars`. Set `node_count` to the desired value:
+Edit `build/$(CLUSTER_NAME)/terraform.tfvars`. Set `node_count` to the desired value, e.g.
 
-```
+```shell
 node_count = 5
 ```
 
 Apply the changes:
 
-```
-terraform plan
+```shell
 terraform apply
 ```
 
-```
+```shell
 Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
 
 The state of your infrastructure has been saved to the path

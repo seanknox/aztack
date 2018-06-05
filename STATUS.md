@@ -1,14 +1,3 @@
-**Software**|**Version**
------|-----
-Ubuntu|17.10
-cri-containerd|1.0.0.0
-containerd|v1.0.0-6
-runc|1.0.0-rc4+dev
-etcd|v3.3.4
-Kubernetes|v1.10.2
-Azure-CNI|v1.0.4
-
-
 **Control Plane**|**Status**|**Notes**
 :-----:|:-----:|:-----:
 Separate controllers from etcd|:white\_check\_mark: |controller and etcd running on different VMs
@@ -39,15 +28,15 @@ kube-proxy|:white\_check\_mark: |
 :-----:|:-----:|:-----:
 Pod-to-pod communication|:white\_check\_mark: |
 CNI enabled (azure-CNI)|:white\_check\_mark: |
-Pod outbound internet|:x:|Pods cannot reach hosts on Internet
-Pod to cluster service net|:x:|Pods cannot reach cluster service IPs (including apiserver)
+Pod outbound internet|:white\_check\_mark:|
+Pod to cluster service net|:white\_check\_mark:|
 All VMs on private network|:white\_check\_mark: |
 Bastion host|:white\_check\_mark: |
 
 **Cloud Provider / Azure**|**Status**|**Notes**
 :-----:|:-----:|:-----:
 PVCs working|:white\_check\_mark: |
-Service of type LoadBalancer working|:x:|
+Service of type LoadBalancer working|:white\_check\_mark:|
 Azure DNS for VM hostnames|:white\_check\_mark: |
 Azure NSGs for apiserver|TBD|
 Azure NSGs for etcd|TBD|
