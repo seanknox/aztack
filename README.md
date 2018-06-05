@@ -1,4 +1,4 @@
-# atack (pronounced "ey-tack")
+# aztack
 
 Provision a Kubernetes cluster with [Packer](https://packer.io) and [Terraform](https://www.terraform.io) on Azure Resource Manager. Inspired by Kelsey Hightower's [kubestack](https://github.com/kelseyhightower/kubestack) and the [tack](https://github.com/kz8s/tack) project.
 
@@ -64,7 +64,7 @@ cd packer
 make build
 ```
 
-### Create the atack Base Image
+### Create the aztack Base Image
 
 #### Create resource group
 

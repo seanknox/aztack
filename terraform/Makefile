@@ -30,8 +30,8 @@ export AZURE_VM_KEY_PATH    := ${DIR_KEY_PAIR}/$(CLUSTER_NAME)/${AZURE_VM_KEY_NA
 # docker.io
 # export AZURE_VHD_URI 				?= https://acstackimages.blob.core.windows.net/system/Microsoft.Compute/Images/acs-vhds/acstack-1526251964-osDisk.7fdd6d44-e3bd-4020-8033-47877b422c07.vhd
 # cri/containerd/runc
-export AZURE_VHD_URI 				?= "https://atack.blob.core.windows.net/system/Microsoft.Compute/Images/atack-vhds/atack-1527648840-osDisk.f5b8b8c9-33c4-4db2-ab38-49f6a5a12c16.vhd?se=2018-06-30T03%3A05%3A57Z&sig=%2BeKUXJ5T%2FdECyjMRvBJ6RNaZqVhP1tKYqfh%2BQbrvBRo%3D&sp=r&spr=https%2Chttp&sr=b&sv=2016-05-31"
-export INTERNAL_TLD         := $(CLUSTER_NAME).atack
+export AZURE_VHD_URI 				?= "https://aztack.blob.core.windows.net/system/Microsoft.Compute/Images/aztack-vhds/aztack-1527648840-osDisk.f5b8b8c9-33c4-4db2-ab38-49f6a5a12c16.vhd?se=2018-06-30T03%3A05%3A57Z&sig=%2BeKUXJ5T%2FdECyjMRvBJ6RNaZqVhP1tKYqfh%2BQbrvBRo%3D&sp=r&spr=https%2Chttp&sr=b&sv=2016-05-31"
+export INTERNAL_TLD         := $(CLUSTER_NAME).aztack
 
 export CIDR_VNET            ?= 10.0.0.0/8
 export CIDR_CONTROLLER      ?= 10.10.0.0/24
@@ -62,7 +62,7 @@ endif
 
 # This file must exist before starting the container or it gets created as a
 # directory. This is done automatically in the prereqs target
-export SP_PATH := $(HOME)/.azure/atack-sp.json
+export SP_PATH := $(HOME)/.azure/aztack-sp.json
 export DOCKER_SP_PATH := /root/$(CLUSTER_NAME).json
 
 # Wrap the makefile shell in a Docker container
@@ -71,7 +71,7 @@ export DOCKER_SP_PATH := /root/$(CLUSTER_NAME).json
 # override the wrapped shell and use the host instead
 # i.e. `mytarget : SHELL := $(LOCAL_SHELL)`.
 LOCAL_SHELL := $(SHELL)
-DOCKER_IMAGE ?= atack
+DOCKER_IMAGE ?= aztack
 DOCKER_CODE_PATH := /src
 DOCKER_ARGS ?= -it --rm \
 	-v ${HOME}/.azure:/root/.azure \

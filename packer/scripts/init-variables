@@ -4,7 +4,7 @@ CDIR=$(dirname "${BASH_SOURCE}")
 
 SETTINGS_JSON="${SETTINGS_JSON:-./settings.json}"
 SUBSCRIPTION_ID="${SUBSCRIPTION_ID:-`az account show -o json --query="id" | tr -d '"'`}"
-STORAGE_ACCOUNT_NAME="atack"
+STORAGE_ACCOUNT_NAME="aztack"
 
 echo "Subscription ID: ${SUBSCRIPTION_ID}"
 echo "Service Principal Path: ${SETTINGS_JSON}"
@@ -25,7 +25,7 @@ if [ -a "${SETTINGS_JSON}" ]; then
 	exit 0
 else
 	echo "Service principal file not found! Generating one @ ${SETTINGS_JSON}"
-	az ad sp create-for-rbac -n atack-packer$(date +%s) -o json > ${SETTINGS_JSON}
+	az ad sp create-for-rbac -n aztack-packer$(date +%s) -o json > ${SETTINGS_JSON}
 	client_id=`cat ${SETTINGS_JSON} | jq -r .appId`
 	client_secret=`cat ${SETTINGS_JSON} | jq -r .password`
 	tenant_id=`cat ${SETTINGS_JSON} | jq -r .tenant`

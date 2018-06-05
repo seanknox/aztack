@@ -9,5 +9,5 @@ output "depends-id" {
 }
 
 output "image_id" {
-  value = "${ azurerm_image.atack.id }"
+  value = "${ azurerm_image.aztack.id }"
 }
