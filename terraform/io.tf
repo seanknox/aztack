@@ -80,7 +80,7 @@ output "location" {
 }
 
 output "kube-api-public-fqdn" {
-  value = "${ var.kube-api-public-fqdn }"
+  value = "${ module.controller.kube-api-public-fqdn }"
 }
 
 output "kube-api-internal-ip" {

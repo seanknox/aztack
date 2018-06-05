@@ -1,3 +1,35 @@
+resource "azurerm_public_ip" "controller" {
+  name                         = "controller${ count.index + 1 }"
+  location                     = "${ var.location }"
+  resource_group_name          = "${ var.resource_group_name }"
+  public_ip_address_allocation = "static"
+  domain_name_label            = "kubeapi${ count.index + 1}-${ var.resource_group_name }"
+
+  count = "${ var.master_count }"
+}
+
+resource "azurerm_network_security_group" "controller" {
+  name                = "controller-nsg"
+  location            = "${ var.location }"
+  resource_group_name = "${ var.resource_group_name }"
+
+  security_rule {
+    name                       = "kube-api"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "8443"
+    source_address_prefix      = "*"
+    destination_address_prefix = "${azurerm_public_ip.controller.*.ip_address[0]}"
+  }
+
+  tags {
+    environment = "Production"
+  }
+}
+
 resource "azurerm_network_interface" "controller" {
   name                = "controller${ count.index + 1 }"
   location            = "${ var.location }"
@@ -6,11 +38,11 @@ resource "azurerm_network_interface" "controller" {
   count = "${ var.master_count }"
 
   ip_configuration {
-    name                                    = "private"
-    subnet_id                               = "${ var.private-subnet-id }"
-    private_ip_address_allocation           = "static"
-    private_ip_address                      = "${ element(split(",", var.master-ips), count.index) }"
-    load_balancer_backend_address_pools_ids = ["${ var.backend_pool_ids }"]
+    name                          = "private"
+    subnet_id                     = "${ var.private-subnet-id }"
+    private_ip_address_allocation = "static"
+    private_ip_address            = "${ element(split(",", var.master-ips), count.index) }"
+    public_ip_address_id          = "${azurerm_public_ip.controller.*.id[count.index]}"
   }
 }
 
