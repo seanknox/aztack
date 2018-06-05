@@ -16,6 +16,7 @@ write_files:
         "subnetName": "private",
         "vnetName": "${NAME}",
         "vnetResourceGroup": "",
+        "securityGroupName": "${NETWORK_SECURITY_GROUP}",
         "primaryAvailabilitySetName": "${AVAILABILITY_SET_NAME}",
         "cloudProviderBackoff": false,
         "cloudProviderBackoffRetries": 0,
