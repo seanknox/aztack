@@ -3,9 +3,23 @@ resource "azurerm_public_ip" "bastion" {
   location                     = "${ var.location }"
   resource_group_name          = "${ var.resource_group_name }"
   public_ip_address_allocation = "static"
+}
 
-  tags {
-    environment = "test"
+resource "azurerm_network_security_group" "bastion" {
+  name                = "bastion-nsg"
+  location            = "${ var.location }"
+  resource_group_name = "${ var.resource_group_name }"
+
+  security_rule {
+    name                       = "ssh"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "${azurerm_public_ip.bastion.ip_address}"
   }
 }
 
