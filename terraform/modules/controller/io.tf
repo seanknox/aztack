@@ -16,6 +16,10 @@ variable "kube-api-internal-ip" {}
 variable "bootstrap_token" {}
 variable "depends-id" {}
 
+variable "backend_pool_ids" {
+  type = "list"
+}
+
 variable "azure" {
   type = "map"
 }
@@ -26,8 +30,4 @@ output "depends-id" {
 
 output "controller_private_ips" {
   value = "${azurerm_network_interface.controller.*.private_ip_address}"
-}
-
-output "kube-api-public-fqdn" {
-  value = "${azurerm_public_ip.controller.*.fqdn[0]}"
 }

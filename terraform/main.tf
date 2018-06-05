@@ -67,6 +67,20 @@ module "image" {
   resource_group_name = "${ module.rg.name }"
 }
 
+module "load_balancer" {
+  source     = "./modules/load_balancer"
+  depends-id = "${ module.vnet.depends-id }"
+
+  # variables
+  name                 = "${ var.name }"
+  location             = "${ var.location }"
+  kube-api-internal-ip = "${ var.kube-api-internal-ip }"
+
+  # modules
+  private-subnet-id   = "${ module.vnet.controller-subnet-id }"
+  resource_group_name = "${ module.rg.name }"
+}
+
 module "bastion" {
   source     = "./modules/bastion"
   depends-id = "${ module.dns.depends-id }"
@@ -122,6 +136,7 @@ module "controller" {
   storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
   image_id            = "${ module.image.image_id }"
   bastion-ip          = "${ module.bastion.public-ip }"
+  backend_pool_ids    = ["${ module.load_balancer.public_backend_pool_id }", "${ module.load_balancer.private_backend_pool_id }"]
   resource_group_name = "${ module.rg.name }"
 }
 

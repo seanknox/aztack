@@ -23,7 +23,7 @@ export DIR_KUBECONFIG := .kube
 # ∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨∨
 
 export LOCATION       		 ?= westus2
-export KUBE_API_PUBLIC_FQDN      := kubeapi1-$(CLUSTER_NAME).$(LOCATION).cloudapp.azure.com
+export KUBE_API_PUBLIC_FQDN      := $(CLUSTER_NAME).$(LOCATION).cloudapp.azure.com
 
 export AZURE_VM_KEY_NAME    ?= $(CLUSTER_NAME)
 export AZURE_VM_KEY_PATH    := ${DIR_KEY_PAIR}/$(CLUSTER_NAME)/${AZURE_VM_KEY_NAME}.pem
