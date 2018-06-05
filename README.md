@@ -18,46 +18,13 @@ etcd|v3.3.4
 Kubernetes|v1.10.3
 Calico|v3.1.2
 
-### Kubernetes build out status
-
-See [STATUS.md](STATUS.md) for WIP status of the project.
-
-- [Install Packer](https://packer.io/docs/installation.html)
-- [Install Terraform](https://www.terraform.io/intro/getting-started/install.html)
-
-## Packer Images
-
-We use Packer to create an immutable image based on a source image based on Ubuntu 16.04.
-
-```shell
-cd packer
-make build
-```
-
-### Create the atack Base Image
-
-#### Create resource group
-
-During the build process, Packer creates temporary Azure resources as it builds the source VM. To capture that source VM for use as an image, you must define a resource group. The output from the Packer build process is stored in this resource group.
-
-#### Edit Packer settings
-
-Run the following to set environment variable used to generate `packer/settings.json` with required settings such as your subscription id and to create a storage account for the new vhd.
-
-```sh
-export AZURE_RESOURCE_GROUP_NAME=
-export storage_account_name=
-cd packer
-make build
-```
-
 ## Terraform
 
 Terraform is used to declare and provision a Kubernetes cluster. Terraform runs entirely in a Docker container. The following generates Azure credentials and other required configuration and builds infra on Terraform.
 
 ```shell
-cd terraform
-CLUSTER_NAME=mycluster make build post-terraform
+$ cd terraform
+$ CLUSTER_NAME=<NAME OF CLUSTER> make build post-terraform
 ```
 
 ### Resize the number of worker nodes
@@ -85,3 +52,22 @@ use the `terraform show` command.
 State path: terraform.tfstate
 
 ```
+
+## Packer Images
+
+We use Packer to create an immutable image based on a source image based on Ubuntu 16.04. A prebuilt image is already provided for you, but if you wish to build yourself or change the image::
+
+```shell
+cd packer
+make build
+```
+
+### Create the atack Base Image
+
+#### Create resource group
+
+During the build process, Packer creates temporary Azure resources as it builds the source VM. To capture that source VM for use as an image, you must define a resource group. The output from the Packer build process is stored in this resource group.
+
+#### Edit Packer settings
+
+Run the following to set environment variable used to generate `packer/settings.json` with required settings such as your subscription id and to create a storage account for the new vhd.
