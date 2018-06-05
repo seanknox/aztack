@@ -79,6 +79,11 @@ resource "azurerm_availability_set" "controlleravset" {
   managed                      = true
 }
 
+resource "random_string" "password" {
+  length  = 16
+  special = true
+}
+
 resource "azurerm_virtual_machine" "controller" {
   name                  = "controller${ count.index + 1 }.${ var.internal-tld }"
   location              = "${ var.location }"
@@ -118,7 +123,7 @@ resource "azurerm_virtual_machine" "controller" {
   os_profile {
     computer_name  = "controller${ count.index + 1 }.${ var.internal-tld }"
     admin_username = "ubuntu"
-    admin_password = "Kangaroo-jeremiah-thereon1!"
+    admin_password = "${random_string.password.result}"
 
     custom_data = "${element(data.template_file.cloud-config.*.rendered, count.index)}"
   }
