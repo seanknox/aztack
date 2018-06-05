@@ -18,6 +18,8 @@ etcd|v3.3.4
 Kubernetes|v1.10.3
 Calico|v3.1.2
 
+More details of the cluster specs can be found in [STATUS.md](STATUS.md)
+
 ## Terraform
 
 Terraform is used to declare and provision a Kubernetes cluster. Terraform runs entirely in a Docker container. The following generates Azure credentials and other required configuration and builds infra on Terraform.
