@@ -75,7 +75,7 @@ DOCKER_IMAGE ?= aztack
 DOCKER_CODE_PATH := /src
 DOCKER_ARGS ?= -it --rm \
 	-v ${HOME}/.azure:/root/.azure \
-	-v ${PWD}:${DOCKER_CODE_PATH} -w ${DOCKER_CODE_PATH} \
+	-v ${PWD}/terraform:${DOCKER_CODE_PATH} -w ${DOCKER_CODE_PATH} \
 	-v ${SP_PATH}:${DOCKER_SP_PATH} \
 	-v ${HOME}/.kube:/root/.kube \
 	-e CLUSTER_NAME=${CLUSTER_NAME} \
@@ -183,7 +183,7 @@ ssh-bastion: ; @scripts/ssh
 
 wait-for-cluster: ; @scripts/do-task "wait-for-cluster" scripts/wait-for-cluster
 
-include makefiles/*.mk
+include terraform/makefiles/*.mk
 
 .DEFAULT_GOAL := help
 .PHONY: all clean create-addons create-admin-certificate create-busybox

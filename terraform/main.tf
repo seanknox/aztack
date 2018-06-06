@@ -95,71 +95,80 @@ module "bastion" {
   resource_group_name = "${ module.rg.name }"
 }
 
-module "etcd" {
-  source     = "./modules/etcd"
-  depends-id = "${ module.bastion.depends-id }"
+# module "etcd" {
+#   source     = "./modules/etcd"
+#   depends-id = "${ module.bastion.depends-id }"
 
-  # variables
-  name         = "${ var.name }"
-  location     = "${ var.location }"
-  etcd-ips     = "${ var.etcd-ips }"
-  internal-tld = "${ var.internal-tld }"
 
-  # modules
-  private-subnet-id   = "${ module.vnet.etcd-subnet-id }"
-  storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
-  image_id            = "${ module.image.image_id }"
-  bastion-ip          = "${ module.bastion.public-ip }"
-  resource_group_name = "${ module.rg.name }"
-}
+#   # variables
+#   name         = "${ var.name }"
+#   location     = "${ var.location }"
+#   etcd-ips     = "${ var.etcd-ips }"
+#   internal-tld = "${ var.internal-tld }"
 
-module "controller" {
-  source     = "./modules/controller"
-  depends-id = "${ module.bastion.depends-id }"
 
-  # variables
-  name                 = "${ var.name }"
-  location             = "${ var.location }"
-  master_count         = "${ var.master_count }"
-  etcd-ips             = "${ var.etcd-ips }"
-  master-ips           = "${ var.master-ips }"
-  dns-service-ip       = "${ var.dns-service-ip }"
-  pod-cidr             = "${ var.cidr["pod"] }"
-  service-cidr         = "${ var.cidr["service-cluster"] }"
-  azure                = "${ var.azure }"
-  internal-tld         = "${ var.internal-tld }"
-  kube-api-internal-ip = "${ var.kube-api-internal-ip }"
-  bootstrap_token      = "${ var.bootstrap_token}"
+#   # modules
+#   private-subnet-id   = "${ module.vnet.etcd-subnet-id }"
+#   storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
+#   image_id            = "${ module.image.image_id }"
+#   bastion-ip          = "${ module.bastion.public-ip }"
+#   resource_group_name = "${ module.rg.name }"
+# }
 
-  # modules
-  private-subnet-id   = "${ module.vnet.node-subnet-id }"
-  storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
-  image_id            = "${ module.image.image_id }"
-  bastion-ip          = "${ module.bastion.public-ip }"
-  backend_pool_ids    = ["${ module.load_balancer.public_backend_pool_id }", "${ module.load_balancer.private_backend_pool_id }"]
-  load_balancer_ip    = "${module.load_balancer.public_load_balancer_ip}"
-  resource_group_name = "${ module.rg.name }"
-}
 
-module "node" {
-  source     = "./modules/node"
-  depends-id = "${ module.bastion.depends-id }"
+# module "controller" {
+#   source     = "./modules/controller"
+#   depends-id = "${ module.bastion.depends-id }"
 
-  # variables
-  name                   = "${ var.name }"
-  location               = "${ var.location }"
-  azure                  = "${ var.azure }"
-  node_count             = "${ var.node_count }"
-  dns-service-ip         = "${ var.dns-service-ip }"
-  pod-cidr               = "${ var.cidr["pod"] }"
-  internal-tld           = "${ var.internal-tld }"
-  kube-api-internal-fqdn = "${ var.kube-api-internal-fqdn }"
-  bootstrap_token        = "${ var.bootstrap_token }"
 
-  # modules
-  private-subnet-id   = "${ module.vnet.node-subnet-id }"
-  storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
-  image_id            = "${ module.image.image_id }"
-  bastion-ip          = "${ module.bastion.public-ip }"
-  resource_group_name = "${ module.rg.name }"
-}
+#   # variables
+#   name                 = "${ var.name }"
+#   location             = "${ var.location }"
+#   master_count         = "${ var.master_count }"
+#   etcd-ips             = "${ var.etcd-ips }"
+#   master-ips           = "${ var.master-ips }"
+#   dns-service-ip       = "${ var.dns-service-ip }"
+#   pod-cidr             = "${ var.cidr["pod"] }"
+#   service-cidr         = "${ var.cidr["service-cluster"] }"
+#   azure                = "${ var.azure }"
+#   internal-tld         = "${ var.internal-tld }"
+#   kube-api-internal-ip = "${ var.kube-api-internal-ip }"
+#   bootstrap_token      = "${ var.bootstrap_token}"
+
+
+#   # modules
+#   private-subnet-id   = "${ module.vnet.node-subnet-id }"
+#   storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
+#   image_id            = "${ module.image.image_id }"
+#   bastion-ip          = "${ module.bastion.public-ip }"
+#   backend_pool_ids    = ["${ module.load_balancer.public_backend_pool_id }", "${ module.load_balancer.private_backend_pool_id }"]
+#   load_balancer_ip    = "${module.load_balancer.public_load_balancer_ip}"
+#   resource_group_name = "${ module.rg.name }"
+# }
+
+
+# module "node" {
+#   source     = "./modules/node"
+#   depends-id = "${ module.bastion.depends-id }"
+
+
+#   # variables
+#   name                   = "${ var.name }"
+#   location               = "${ var.location }"
+#   azure                  = "${ var.azure }"
+#   node_count             = "${ var.node_count }"
+#   dns-service-ip         = "${ var.dns-service-ip }"
+#   pod-cidr               = "${ var.cidr["pod"] }"
+#   internal-tld           = "${ var.internal-tld }"
+#   kube-api-internal-fqdn = "${ var.kube-api-internal-fqdn }"
+#   bootstrap_token        = "${ var.bootstrap_token }"
+
+
+#   # modules
+#   private-subnet-id   = "${ module.vnet.node-subnet-id }"
+#   storage_endpoint    = "${ module.storage_account.primary_blob_endpoint }"
+#   image_id            = "${ module.image.image_id }"
+#   bastion-ip          = "${ module.bastion.public-ip }"
+#   resource_group_name = "${ module.rg.name }"
+# }
+

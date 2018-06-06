@@ -25,13 +25,31 @@ More details of the cluster specs can be found in [STATUS.md](STATUS.md)
 Terraform is used to declare and provision a Kubernetes cluster. Terraform runs entirely in a Docker container. The following generates Azure credentials and other required configuration and builds infra on Terraform.
 
 ```shell
-$ cd terraform
 $ CLUSTER_NAME=<NAME OF CLUSTER> make build post-terraform
+terraform get
+- module.rg
+- module.vnet
+- module.dns
+- module.storage_account
+- module.image
+- module.load_balancer
+- module.bastion
+terraform init
+Initializing modules...
+- module.rg
+- module.vnet
+- module.dns
+- module.storage_account
+- module.image
+- module.load_balancer
+- module.bastion
+
+Initializing provider plugins...
 ```
 
 ### Resize the number of worker nodes
 
-Edit `build/$(CLUSTER_NAME)/terraform.tfvars`. Set `node_count` to the desired value, e.g.
+Edit `terraform/build/$(CLUSTER_NAME)/terraform.tfvars`. Set `node_count` to the desired value, e.g.
 
 ```shell
 node_count = 5
@@ -40,7 +58,7 @@ node_count = 5
 Apply the changes:
 
 ```shell
-terraform apply
+$ CLUSTER_NAME=<NAME OF CLUSTER> make apply
 ```
 
 ```shell

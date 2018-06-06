@@ -102,14 +102,14 @@ output "ips" {
   }"
 }
 
-output "vm_ips" {
-  value = "${
-    map(
-      "node_private_ips", "${ module.node.node_private_ips }",
-      "controller_private_ips", "${ module.controller.controller_private_ips }"
-    )
-  }"
-}
+# output "vm_ips" {
+#   value = "${
+#     map(
+#       "node_private_ips", "${ module.node.node_private_ips }",
+#       "controller_private_ips", "${ module.controller.controller_private_ips }"
+#     )
+#   }"
+# }
 
 output "bootstrap_token" {
   value = "${ var.bootstrap_token }"
