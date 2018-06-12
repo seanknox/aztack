@@ -11,7 +11,7 @@ export AZURE_LOCATION       		 			?= West US 2
 export AZURE_RESOURCE_GROUP_NAME	    ?= ACStackImages
 export AZURE_VM_SIZE 									?= Standard_D2_v2
 
-build: init
+build:
 	@packer build -var-file=settings.json aztack.json
 
 init:
