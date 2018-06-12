@@ -75,19 +75,43 @@ State path: terraform.tfstate
 
 ## Packer Images
 
-We use Packer to create an immutable image based on a source image based on Ubuntu 16.04. A prebuilt image is already provided for you, but if you wish to build yourself or change the image::
+We use Packer to create an immutable image based on a source image based on Ubuntu 16.04. A prebuilt image is already provided for you, but if you wish to build yourself or change the image:
 
-```shell
-cd packer
-make build
-```
-
-### Create the aztack Base Image
-
-#### Create resource group
+### Create resource group
 
 During the build process, Packer creates temporary Azure resources as it builds the source VM. To capture that source VM for use as an image, you must define a resource group. The output from the Packer build process is stored in this resource group.
 
-#### Edit Packer settings
+### Initialize settings
 
-Run the following to set environment variable used to generate `packer/settings.json` with required settings such as your subscription id and to create a storage account for the new vhd.
+```shell
+$ cd packer
+$ make init
+
+storage name: aztack1528763526
+{
+  "subscription_id":  "e766d9ee-d3d9-4b63-a912-8963dcfdf655",
+  "client_id": "...",
+  "client_secret": "...",
+  "tenant_id":      "72f988bf-86f1-41af-91ab-2d7cd011db47",
+  "resource_group_name": "ACStackImages",
+  "location": "West US 2",
+  "storage_account_name": "aztack1528763526",
+  "vm_size": "Standard_D2_v2"
+}
+```
+
+### Build VHD image
+
+```shell
+$ make build
+Build 'azure-arm' finished.
+
+==> Builds finished. The artifacts of successful builds are:
+--> azure-arm: Azure.ResourceManagement.VMImage:
+
+StorageAccountLocation: westus2
+OSDiskUri: https://aztack1528763526.blob.core.windows.net/system/Microsoft.Compute/Images/aztack-vhds/aztack-1528763664-osDisk.1f8be1f6-22ad-4b18-b3b3-3fe27dcfada0.vhd
+OSDiskUriReadOnlySas: https://aztack1528763526.blob.core.windows.net/system/Microsoft.Compute/Images/aztack-vhds/aztack-1528763664-osDisk.1f8be1f6-22ad-4b18-b3b3-3fe27dcfada0.vhd?se=2018-07-12T00%3A46%3A43Z&sig=oSl%2BNkAEl%2FYEENeIy1Ckd9%2FgAqdAtV%2FktrdbHx3bXJ8%3D&sp=r&spr=https%2Chttp&sr=b&sv=2016-05-31
+TemplateUri: https://aztack1528763526.blob.core.windows.net/system/Microsoft.Compute/Images/aztack-vhds/aztack-1528763664-vmTemplate.1f8be1f6-22ad-4b18-b3b3-3fe27dcfada0.json
+TemplateUriReadOnlySas: https://aztack1528763526.blob.core.windows.net/system/Microsoft.Compute/Images/aztack-vhds/aztack-1528763664-vmTemplate.1f8be1f6-22ad-4b18-b3b3-3fe27dcfada0.json?se=2018-07-12T00%3A46%3A43Z&sig=ctdIO2s0GvBA9cA7zt6OAjQU9OY4YuVKBZIpf%2BhK0%2Bg%3D&sp=r&spr=https%2Chttp&sr=b&sv=2016-05-31
+```

@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-calico_release_tag="v3.1.2"
+calico_release_tag="v3.1.3"
 cni_plugins_release_tag="v0.7.1"
 
 # Download CNI networking components
