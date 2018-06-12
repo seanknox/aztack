@@ -14,9 +14,9 @@ Ubuntu|16.04
 cri-containerd|1.0.0.0
 containerd|v1.0.0-6
 runc|1.0.0-rc4+dev
-etcd|v3.3.4
-Kubernetes|v1.10.3
-Calico|v3.1.2
+etcd|v3.3.7
+Kubernetes|v1.10.4
+Calico|v3.1.3
 
 More details of the cluster specs can be found in [STATUS.md](STATUS.md)
 
